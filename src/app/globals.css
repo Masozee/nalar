@@ -1,26 +1,231 @@
 @import "tailwindcss";
+/* We can remove this since we're importing fonts via Next.js now */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap'); */
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #005354;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+  --accent: #E8A117;
+  --accent-foreground: #ffffff;
+  --teal: #008080;
+  --teal-foreground: #ffffff;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --radius: 0;
+  
+  /* Animation durations */
+  --transition-fast: 150ms;
+  --transition-normal: 250ms;
+  --transition-slow: 400ms;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* Removing dark mode support as requested */
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --primary: #005354;
+    --primary-foreground: #ffffff;
+    --secondary: #27272a;
+    --secondary-foreground: #ededed;
+    --accent: #E8A117;
+    --accent-foreground: #ffffff;
+    --teal: #008080;
+    --teal-foreground: #ffffff;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --card: #18181b;
+    --card-foreground: #ededed;
+    --border: #27272a;
+    --input: #27272a;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  font-family: 'Playfair Display', serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+  color: var(--primary);
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+  color: var(--teal);
+}
+
+h5 {
+  font-size: 1rem;
+  color: var(--teal);
+}
+
+p {
+  margin-bottom: 1.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+a {
+  color: var(--teal);
+  text-decoration: none;
+  transition: color var(--transition-normal) ease-in-out;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+button {
+  font-family: 'Inter', sans-serif;
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-teal {
+  color: var(--teal);
+}
+
+/* Additional utility classes for backgrounds */
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.bg-teal {
+  background-color: var(--teal);
+}
+
+/* Button color corrections */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.btn-primary:hover {
+  background-color: color-mix(in srgb, var(--primary) 90%, black);
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.btn-accent:hover {
+  background-color: color-mix(in srgb, var(--accent) 90%, black);
+}
+
+.btn-teal {
+  background-color: var(--teal);
+  color: var(--teal-foreground);
+}
+
+.btn-teal:hover {
+  background-color: color-mix(in srgb, var(--teal) 90%, black);
+}
+
+/* Border animations and improvements */
+.border-animate-left {
+  position: relative;
+  overflow: hidden;
+}
+
+.border-animate-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background-color: var(--accent);
+  transition: height var(--transition-normal) ease;
+}
+
+.border-animate-left:hover::before {
+  height: 100%;
+}
+
+.border-animate-top {
+  position: relative;
+  border-top: 4px solid transparent;
+  transition: border-color var(--transition-normal) ease;
+}
+
+.border-animate-top:hover {
+  border-top-color: var(--accent);
+}
+
+.border-glow {
+  box-shadow: 0 0 0 1px rgba(0, 83, 84, 0.1);
+  transition: box-shadow var(--transition-normal) ease, transform var(--transition-normal) ease;
+}
+
+.border-glow:hover {
+  box-shadow: 0 0 0 2px var(--accent), 0 10px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.card-hover {
+  transition: all var(--transition-normal) ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.border-pulse {
+  animation: border-pulse 2s infinite;
+}
+
+@keyframes border-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(232, 161, 23, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(232, 161, 23, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(232, 161, 23, 0);
+  }
 }
