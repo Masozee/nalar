@@ -24,11 +24,12 @@ const Hero = () => {
             <div className="inline-block bg-accent px-4 py-2 mb-4">
               <span className="text-xl font-bold">CSIS Indonesia</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              Advancing <span className="text-accent">Policy Research</span> for Indonesia's Future
+            <h1 className="text-4xl font-bold leading-tight tracking-tight text-primary sm:text-5xl sm:leading-tight md:text-6xl md:leading-tight mb-6">
+              Centre for Strategic and <br className="hidden sm:inline" />
+              International Studies
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-100">
-              Centre for Strategic and International Studies - providing evidence-based research since 1971
+            <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-8">
+              Indonesia&apos;s premier think tank providing evidence-based policy research and analysis since 1971.
             </p>
             <div className="flex flex-wrap gap-4">
               <button className="text-primary px-6 py-3 text-lg font-medium inline-flex items-center bg-white hover:bg-gray-100 transition-colors">

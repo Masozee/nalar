@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiCalendar, FiMapPin, FiClock, FiUsers } from 'react-icons/fi';
+import { FiArrowRight, FiCalendar, FiMapPin, FiUsers } from 'react-icons/fi';
 
 const events = [
   {

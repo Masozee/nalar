@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiBarChart2, FiGlobe, FiPieChart, FiTrendingUp, FiUsers } from 'react-icons/fi';
+import { FiArrowRight, FiBarChart2, FiGlobe, FiPieChart, FiTrendingUp } from 'react-icons/fi';
 
 const dashboards = [
   {

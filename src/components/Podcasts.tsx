@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiPlay, FiHeadphones, FiClock, FiCalendar, FiUser } from 'react-icons/fi';
+import { FiArrowRight, FiPlay, FiHeadphones, FiClock, FiCalendar } from 'react-icons/fi';
 
 const podcasts = [
   {

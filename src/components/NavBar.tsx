@@ -278,7 +278,7 @@ const NavBar = () => {
                       />
                     </div>
                     <div>
-                      <h4 className="font-medium text-primary hover:text-accent transition-colors">Indonesia's Economic Outlook 2024</h4>
+                      <h4 className="font-medium text-primary hover:text-accent transition-colors">Indonesia&apos;s Economic Outlook 2024</h4>
                       <p className="text-sm text-gray-500">Economics • May 10, 2024</p>
                     </div>
                   </div>
@@ -292,7 +292,7 @@ const NavBar = () => {
                       />
                     </div>
                     <div>
-                      <h4 className="font-medium text-primary hover:text-accent transition-colors">ASEAN's Strategic Position in US-China Relations</h4>
+                      <h4 className="font-medium text-primary hover:text-accent transition-colors">ASEAN&apos;s Strategic Position in US-China Relations</h4>
                       <p className="text-sm text-gray-500">International Relations • April 28, 2024</p>
                     </div>
                   </div>
