@@ -21,8 +21,32 @@ export const metadata: Metadata = {
   description: "Indonesia's premier think tank for economics, international relations, and politics",
   keywords: "CSIS, Indonesia, think tank, economics, international relations, politics, research",
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-icon.png',
+    icon: '/favicon.png',
+    apple: '/favicon.png',
+  },
+  metadataBase: new URL('https://csis-indonesia.vercel.app'), // Replace with your actual domain
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://csis-indonesia.vercel.app',
+    siteName: 'CSIS Indonesia',
+    title: 'CSIS Indonesia | Center for Strategic and International Studies',
+    description: "Indonesia's premier think tank for economics, international relations, and politics",
+    images: [
+      {
+        url: '/bg/muska-create-5MvNlQENWDM-unsplash.png',
+        width: 1200,
+        height: 630,
+        alt: 'CSIS Indonesia',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CSIS Indonesia | Center for Strategic and International Studies',
+    description: "Indonesia's premier think tank for economics, international relations, and politics",
+    images: ['/bg/muska-create-5MvNlQENWDM-unsplash.png'],
+    creator: '@CSISIndonesia',
   },
 };
 
@@ -34,8 +58,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={playfair.className}>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link rel="icon" href="/favicon.png" sizes="any" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
       </head>
       <body className={`${inter.className} antialiased min-h-screen`}>
         {children}

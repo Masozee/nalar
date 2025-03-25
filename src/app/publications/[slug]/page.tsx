@@ -108,7 +108,7 @@ const PUBLICATIONS: Publication[] = [
       
       <p>Indonesia's strategic position in the Indo-Pacific offers significant opportunities for enhanced regional influence, provided Jakarta can navigate the complexities of great power competition while maintaining cohesion within ASEAN. By pursuing a balanced, principled, yet pragmatic approach to regional challenges, Indonesia can effectively advance its national interests while contributing to regional stability and prosperity.</p>
     `,
-    image: '/bg/isaac-struna-rjJHmBCHIU8-unsplash.png',
+    image: '/bg/muska-create-5MvNlQENWDM-unsplash.png',
     topics: ['Foreign Policy', 'Regional Cooperation', 'Indo-Pacific Strategy', 'ASEAN', 'South China Sea'],
     download: '/documents/policy-brief-indonesia-foreign-policy.pdf',
     references: [
@@ -140,7 +140,7 @@ const PUBLICATIONS: Publication[] = [
     authorTitle: 'Head of Economics Department',
     date: 'April 28, 2024',
     excerpt: 'Examining the opportunities and challenges presented by ASEAN\'s digital integration initiatives for Indonesia\'s economy.',
-    image: '/bg/fabian-kurz-XO5cK6-qrLg-unsplash.png',
+    image: '/bg/frank-mouland-e4mYPf_JUIk-unsplash.png',
     topics: ['Digital Economy', 'ASEAN', 'Economic Integration'],
     download: '/documents/asean-digital-integration.pdf',
   },
@@ -154,7 +154,7 @@ const PUBLICATIONS: Publication[] = [
     authorTitle: 'Senior Researcher',
     date: 'March 15, 2024',
     excerpt: 'Analysis of recent developments in the South China Sea and implications for regional security architecture.',
-    image: '/bg/matt-artz-pH6-ACaPdnk-unsplash.png',
+    image: '/bg/shubham-dhage-mjl0yIdSi18-unsplash.jpg',
     topics: ['Maritime Security', 'South China Sea', 'Regional Disputes'],
     download: '/documents/south-china-sea-security.pdf',
   },
@@ -168,7 +168,7 @@ const PUBLICATIONS: Publication[] = [
     authorTitle: 'Senior Economist',
     date: 'February 28, 2024',
     excerpt: 'Examining opportunities for enhanced economic cooperation between Indonesia and the European Union.',
-    image: '/bg/sergey-pesterev-JV78PVf3gGI-unsplash.png',
+    image: '/bg/getty-images-AoJ2_pyNoYc-unsplash.jpg',
     topics: ['Trade', 'International Economics', 'EU Relations'],
     download: '/documents/indonesia-eu-relations.pdf',
   }
