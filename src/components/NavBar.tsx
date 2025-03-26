@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiMenu, FiX, FiSearch } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -81,6 +82,29 @@ const NavBar = () => {
     }
   };
 
+  // Add animation variants for menu items
+  const menuItemVariants = {
+    hover: {
+      scale: 1.05,
+      transition: {
+        duration: 0.2,
+        ease: 'easeInOut'
+      }
+    }
+  };
+
+  // Add animation to the logo
+  const logoVariants = {
+    hover: {
+      scale: 1.05,
+      rotate: -2,
+      transition: {
+        duration: 0.3,
+        ease: 'easeInOut'
+      }
+    }
+  };
+
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -93,13 +117,15 @@ const NavBar = () => {
         <div className="flex justify-between h-24">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center">
-              <Image 
-                src="/logo.png" 
-                alt="CSIS Indonesia Logo" 
-                width={90} 
-                height={25} 
-                priority
-              />
+              <motion.div whileHover="hover" variants={logoVariants}>
+                <Image 
+                  src="/logo-max.png" 
+                  alt="CSIS Indonesia Logo" 
+                  width={100} 
+                  height={35} 
+                  priority
+                />
+              </motion.div>
             </Link>
           </div>
           
@@ -108,7 +134,9 @@ const NavBar = () => {
             {navItems.map((item) => (
               <div key={item.name} className="relative">
                 {item.hasDropdown ? (
-                  <button
+                  <motion.button
+                    whileHover="hover"
+                    variants={menuItemVariants}
                     onClick={() => togglePublicationsMenu()}
                     className={`text-base font-medium transition-colors flex items-center ${
                       activeItem === item.name 
@@ -117,130 +145,189 @@ const NavBar = () => {
                     }`}
                   >
                     {item.name}
-                    <svg
-                      className={`ml-1 h-4 w-4 transition-transform ${publicationsMenuOpen ? 'rotate-180' : ''}`}
+                    <motion.svg
+                      animate={{ rotate: publicationsMenuOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="ml-1 h-4 w-4"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
+                    </motion.svg>
+                  </motion.button>
                 ) : (
-                  <Link 
-                    href={item.href}
-                    onClick={() => handleNavClick(item.name)}
-                    className={`text-base font-medium transition-colors ${
-                      activeItem === item.name 
-                        ? 'text-accent border-b-2 border-accent' 
-                        : 'text-primary hover:text-teal'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
+                  <motion.div whileHover="hover" variants={menuItemVariants}>
+                    <Link 
+                      href={item.href}
+                      onClick={() => handleNavClick(item.name)}
+                      className={`text-base font-medium transition-colors ${
+                        activeItem === item.name 
+                          ? 'text-accent border-b-2 border-accent' 
+                          : 'text-primary hover:text-teal'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
                 )}
               </div>
             ))}
             
             {/* Search button */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               onClick={toggleSearch}
               className="p-2 text-primary hover:text-accent transition-colors"
               aria-label="Search"
             >
               <FiSearch className="h-5 w-5" />
-            </button>
+            </motion.button>
           </div>
           
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-4">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={toggleSearch}
               className="p-2 text-primary hover:text-accent transition-colors"
               aria-label="Search"
             >
               <FiSearch className="h-5 w-5" />
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={toggleMenu}
               className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-accent hover:bg-gray-100/50 focus:outline-none"
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
-              {isOpen ? (
-                <FiX className="block h-6 w-6" aria-hidden="true" />
-              ) : (
-                <FiMenu className="block h-6 w-6" aria-hidden="true" />
-              )}
-            </button>
+              <AnimatePresence mode="wait">
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <FiX className="block h-6 w-6" aria-hidden="true" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: -90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <FiMenu className="block h-6 w-6" aria-hidden="true" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} bg-white/95 backdrop-blur-md shadow-lg`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {navItems.map((item) => (
-            item.hasDropdown ? (
-              <div key={item.name}>
-                <button
-                  onClick={() => togglePublicationsMenu()}
-                  className={`w-full text-left block px-3 py-2 text-lg font-medium ${
-                    activeItem === item.name 
-                      ? 'text-accent bg-gray-100/50' 
-                      : 'text-primary hover:text-teal hover:bg-gray-100/30'
-                  } flex justify-between items-center`}
-                >
-                  {item.name}
-                  <svg
-                    className={`h-4 w-4 transition-transform ${publicationsMenuOpen ? 'rotate-180' : ''}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                
-                {publicationsMenuOpen && (
-                  <div className="pl-4 space-y-1 mt-1">
-                    {publicationCategories.slice(0, 4).map((category) => (
-                      <Link
-                        key={category.name}
-                        href={category.href}
-                        onClick={() => handleNavClick(item.name)}
-                        className="block px-3 py-2 text-base text-gray-600 hover:text-accent"
-                      >
-                        {category.name}
-                      </Link>
-                    ))}
-                    <Link
-                      href="/publications/categories"
-                      onClick={() => handleNavClick(item.name)}
-                      className="block px-3 py-2 text-base text-accent font-medium"
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            className="md:hidden bg-white/95 backdrop-blur-md shadow-lg"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {navItems.map((item) => (
+                item.hasDropdown ? (
+                  <div key={item.name}>
+                    <motion.button
+                      whileHover={{ x: 5 }}
+                      onClick={() => togglePublicationsMenu()}
+                      className={`w-full text-left block px-3 py-2 text-lg font-medium ${
+                        activeItem === item.name 
+                          ? 'text-accent bg-gray-100/50' 
+                          : 'text-primary hover:text-teal hover:bg-gray-100/30'
+                      } flex justify-between items-center`}
                     >
-                      View All Categories
-                    </Link>
+                      {item.name}
+                      <motion.svg
+                        animate={{ rotate: publicationsMenuOpen ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </motion.svg>
+                    </motion.button>
+                    
+                    <AnimatePresence>
+                      {publicationsMenuOpen && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="pl-4 space-y-1 mt-1"
+                        >
+                          {publicationCategories.slice(0, 4).map((category) => (
+                            <motion.div
+                              key={category.name}
+                              whileHover={{ x: 5 }}
+                            >
+                              <Link
+                                href={category.href}
+                                onClick={() => handleNavClick(item.name)}
+                                className="block px-3 py-2 text-base text-gray-600 hover:text-accent"
+                              >
+                                {category.name}
+                              </Link>
+                            </motion.div>
+                          ))}
+                          <motion.div whileHover={{ x: 5 }}>
+                            <Link
+                              href="/publications/categories"
+                              onClick={() => handleNavClick(item.name)}
+                              className="block px-3 py-2 text-base text-accent font-medium"
+                            >
+                              View All Categories
+                            </Link>
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                )}
-              </div>
-            ) : (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => handleNavClick(item.name)}
-                className={`block px-3 py-2 text-lg font-medium ${
-                  activeItem === item.name 
-                    ? 'text-accent bg-gray-100/50' 
-                    : 'text-primary hover:text-teal hover:bg-gray-100/30'
-                }`}
-              >
-                {item.name}
-              </Link>
-            )
-          ))}
-        </div>
-      </div>
+                ) : (
+                  <motion.div
+                    key={item.name}
+                    whileHover={{ x: 5 }}
+                  >
+                    <Link
+                      href={item.href}
+                      onClick={() => handleNavClick(item.name)}
+                      className={`block px-3 py-2 text-lg font-medium ${
+                        activeItem === item.name 
+                          ? 'text-accent bg-gray-100/50' 
+                          : 'text-primary hover:text-teal hover:bg-gray-100/30'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
+                )
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Publications Mega Menu (Desktop) */}
       {publicationsMenuOpen && (
@@ -333,40 +420,95 @@ const NavBar = () => {
       )}
 
       {/* Search Popup */}
-      {searchOpen && (
-        <div 
-          ref={searchRef}
-          className="absolute top-20 left-0 w-full bg-white shadow-sm border-t border-gray-200 z-50"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex items-center border-b border-gray-300 pb-2">
-              <FiSearch className="h-5 w-5 text-gray-400 mr-3" />
-              <input 
-                type="text" 
-                placeholder="Search publications, events, experts..." 
-                className="w-full outline-none text-lg"
-                autoFocus
-              />
-              <button 
-                onClick={toggleSearch}
-                className="text-gray-400 hover:text-gray-600"
+      <AnimatePresence>
+        {searchOpen && (
+          <motion.div 
+            ref={searchRef}
+            className="absolute top-20 left-0 w-full bg-white shadow-sm border-t border-gray-200 z-50"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const searchInput = e.currentTarget.querySelector('input');
+                  const query = searchInput?.value.trim();
+                  if (query) {
+                    window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                  }
+                  toggleSearch();
+                }}
+                className="flex items-center border-b border-gray-300 pb-2"
               >
-                <FiX className="h-5 w-5" />
-              </button>
+                <FiSearch className="h-5 w-5 text-gray-400 mr-3" />
+                <input 
+                  type="text" 
+                  placeholder="Search publications, events, experts..." 
+                  className="w-full outline-none text-lg"
+                  autoFocus
+                />
+                <motion.button 
+                  type="button"
+                  onClick={toggleSearch}
+                  className="text-gray-400 hover:text-gray-600"
+                  whileHover={{ scale: 1.2, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <FiX className="h-5 w-5" />
+                </motion.button>
+              </form>
+              <motion.div 
+                className="mt-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.3 }}
+              >
+                <h3 className="text-sm font-medium text-gray-500 mb-2">POPULAR SEARCHES</h3>
+                <div className="flex flex-wrap gap-2">
+                  <a 
+                    href="/search?q=Southeast%20Asia"
+                    onClick={toggleSearch}
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                  >
+                    Southeast Asia
+                  </a>
+                  <a 
+                    href="/search?q=Indonesia%20Economy"
+                    onClick={toggleSearch}
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                  >
+                    Indonesia Economy
+                  </a>
+                  <a 
+                    href="/search?q=US-China%20Relations"
+                    onClick={toggleSearch}
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                  >
+                    US-China Relations
+                  </a>
+                  <a 
+                    href="/search?q=Maritime%20Security"
+                    onClick={toggleSearch}
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                  >
+                    Maritime Security
+                  </a>
+                  <a 
+                    href="/search?q=Digital%20Economy"
+                    onClick={toggleSearch}
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                  >
+                    Digital Economy
+                  </a>
+                </div>
+              </motion.div>
             </div>
-            <div className="mt-4">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">POPULAR SEARCHES</h3>
-              <div className="flex flex-wrap gap-2">
-                <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm">Southeast Asia</button>
-                <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm">Indonesia Economy</button>
-                <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm">US-China Relations</button>
-                <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm">Maritime Security</button>
-                <button className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm">Digital Economy</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Bottom accent line */}
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-200"></div>

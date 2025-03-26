@@ -1,90 +1,134 @@
 'use client';
 
+import { useCallback } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiArrowRight } from 'react-icons/fi';
+import FadeIn from '@/components/animations/FadeIn';
 
-const Hero = () => {
+export default function Hero() {
+  const handleScrollDown = useCallback(() => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+  }, []);
+
   return (
-    <section className="py-12 md:py-20 bg-primary relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/pattern.svg')] bg-repeat"></div>
+    <section className="relative h-screen min-h-[650px] max-h-[800px] w-full overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/bg/muska-create-5MvNlQENWDM-unsplash.png"
+          alt="CSIS Indonesia - Think Tank"
+          fill
+          priority
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/60"></div>
       </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Text content */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-white"
-          >
-            <div className="inline-block bg-accent px-4 py-2 mb-4">
-              <span className="text-xl font-bold">CSIS Indonesia</span>
-            </div>
-            <h1 className="text-4xl font-bold leading-tight tracking-tight text-primary sm:text-5xl sm:leading-tight md:text-6xl md:leading-tight mb-6">
-              Centre for Strategic and <br className="hidden sm:inline" />
-              International Studies
-            </h1>
-            <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-8">
-              Indonesia&apos;s premier think tank providing evidence-based policy research and analysis since 1971.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <button className="text-primary px-6 py-3 text-lg font-medium inline-flex items-center bg-white hover:bg-gray-100 transition-colors">
-                Our Research <FiArrowRight className="ml-2" />
-              </button>
-              <button className="border-2 border-white text-white px-6 py-3 text-lg font-medium inline-flex items-center hover:bg-white/10 transition-colors">
-                About CSIS
-              </button>
-            </div>
-          </motion.div>
-          
-          {/* Image/Stats */}
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
+        <div className="max-w-3xl">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
           >
-            <div className="aspect-[4/3] relative bg-white shadow-2xl">
-              <Image 
-                src="/indonesia-map.jpg" 
-                alt="Indonesia Map" 
-                layout="fill"
-                objectFit="cover"
-                priority
-              />
-              <div className="absolute top-0 left-0 bg-accent text-white py-2 px-4">
-                Featured
-              </div>
-            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+              Indonesia&apos;s Premier <span className="text-accent">Think Tank</span> for Policy Research
+            </h1>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <p className="text-xl text-white/90 mb-8 max-w-2xl">
+              Providing strategic analysis and policy recommendations on economics, politics, and international relations in Indonesia and Southeast Asia since 1971.
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            className="flex flex-wrap gap-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <Link 
+              href="/publications" 
+              className="bg-accent hover:bg-accent/90 text-white py-3 px-6 font-medium flex items-center group"
+            >
+              Our Research
+              <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+            </Link>
             
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="bg-teal text-white p-4">
-                <div className="text-3xl font-bold">50+</div>
-                <div className="text-sm">Years of Research Excellence</div>
-              </div>
-              <div className="bg-accent text-white p-4">
-                <div className="text-3xl font-bold">300+</div>
-                <div className="text-sm">Policy Publications</div>
-              </div>
-              <div className="bg-white text-primary p-4">
-                <div className="text-3xl font-bold">45+</div>
-                <div className="text-sm">Research Fellows</div>
-              </div>
-              <div className="bg-white text-primary p-4">
-                <div className="text-3xl font-bold">80+</div>
-                <div className="text-sm">Global Partnerships</div>
-              </div>
-            </div>
+            <Link 
+              href="/about" 
+              className="bg-white/10 hover:bg-white/20 text-white py-3 px-6 font-medium flex items-center group backdrop-blur-sm"
+            >
+              About CSIS
+              <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </motion.div>
         </div>
+        
+        {/* Scroll down indicator */}
+        <motion.div 
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          onClick={handleScrollDown}
+          whileHover={{ y: 5 }}
+        >
+          <span className="text-white/80 text-sm mb-2">Scroll Down</span>
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-center justify-center">
+            <motion.div 
+              className="w-1.5 h-3 bg-white rounded-full"
+              animate={{ 
+                y: [0, 12, 0],
+              }}
+              transition={{ 
+                repeat: Infinity, 
+                duration: 1.5,
+                ease: "easeInOut"
+              }}
+            />
+          </div>
+        </motion.div>
       </div>
+      
+      {/* Floating stats */}
+      <FadeIn 
+        className="absolute bottom-10 right-10 z-20 hidden lg:block" 
+        delay={0.8} 
+        direction="left"
+      >
+        <div className="bg-white/10 backdrop-blur-md p-6 max-w-xs">
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <p className="text-accent text-4xl font-bold">50+</p>
+              <p className="text-white text-sm">Years of Experience</p>
+            </div>
+            <div>
+              <p className="text-accent text-4xl font-bold">300+</p>
+              <p className="text-white text-sm">Publications</p>
+            </div>
+            <div>
+              <p className="text-accent text-4xl font-bold">40+</p>
+              <p className="text-white text-sm">Research Experts</p>
+            </div>
+            <div>
+              <p className="text-accent text-4xl font-bold">120+</p>
+              <p className="text-white text-sm">Global Partners</p>
+            </div>
+          </div>
+        </div>
+      </FadeIn>
     </section>
   );
-};
-
-export default Hero; 
+} 

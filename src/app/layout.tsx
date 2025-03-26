@@ -3,6 +3,10 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import AnimationProvider from "@/providers/AnimationProvider";
+import ScrollProgress from "@/components/animations/ScrollProgress";
+import NavBar from "@/components/NavBar";
+import BackToTop from "@/components/BackToTop";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -62,9 +66,14 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/favicon.png" />
       </head>
       <body className={`${inter.className} antialiased min-h-screen`}>
-        {children}
+        <NavBar />
+        <ScrollProgress />
+        <AnimationProvider>
+          {children}
+        </AnimationProvider>
         <SpeedInsights />
         <Analytics />
+        <BackToTop />
       </body>
     </html>
   );
