@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiPlayCircle, FiYoutube, FiFileText, FiFilter, FiX } from "react-icons/fi";
-import { AnimatePresence, motion } from "framer-motion";
 
 // Sample media data
 const mediaItems = [

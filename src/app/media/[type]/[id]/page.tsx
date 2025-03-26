@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiArrowLeft, FiCalendar, FiClock, FiUser, FiTag, FiShare2 } from 'react-icons/fi';
-import { motion } from 'framer-motion';
 
 // Sample media data (same as in the main Media page)
 const mediaItems = [
@@ -86,17 +85,38 @@ const mediaItems = [
   }
 ];
 
+interface MediaItem {
+  id: string;
+  title: string;
+  type: string;
+  date: string;
+  duration?: string;
+  image: string;
+  category: string;
+  speakers: string[];
+  description: string;
+  tags?: string[];
+  audioSrc?: string;
+  transcript?: string;
+  speakerBios?: {
+    [key: string]: string;
+  };
+  youtubeId?: string;
+  source?: string;
+  externalLink?: string;
+}
+
 export default function MediaDetailPage() {
   const params = useParams();
   const { type, id } = params;
   
-  const [mediaItem, setMediaItem] = useState<any>(null);
-  const [relatedItems, setRelatedItems] = useState<any[]>([]);
+  const [mediaItem, setMediaItem] = useState<MediaItem | null>(null);
+  const [relatedItems, setRelatedItems] = useState<MediaItem[]>([]);
   
   useEffect(() => {
     // Find the current media item
     const currentItem = mediaItems.find(item => item.id === id);
-    setMediaItem(currentItem);
+    setMediaItem(currentItem as MediaItem | null);
     
     // Find related items (same category or with shared tags)
     if (currentItem) {
@@ -107,7 +127,7 @@ export default function MediaDetailPage() {
           currentItem.tags.some(tag => item.tags.includes(tag))))
       ).slice(0, 3);
       
-      setRelatedItems(related);
+      setRelatedItems(related as MediaItem[]);
     }
   }, [id, type]);
   
