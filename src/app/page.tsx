@@ -1,6 +1,5 @@
 'use client';
 
-import NavBar from "@/components/NavBar";
 import Hero from "@/components/Hero";
 import Publications from "@/components/Publications";
 import News from "@/components/News";
@@ -13,7 +12,6 @@ import FadeIn from "@/components/animations/FadeIn";
 export default function Home() {
   return (
     <>
-      <NavBar />
       <main>
         <Hero />
         <div className="pt-20">

@@ -36,8 +36,9 @@ export default function ScrollProgress({
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0"
+      className="fixed left-0 right-0"
       style={{
+        top: 'var(--navbar-height, 64px)',
         height,
         backgroundColor: color,
         transformOrigin: '0%',

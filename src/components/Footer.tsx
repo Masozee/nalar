@@ -125,22 +125,22 @@ function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/experts" className="text-white/80 hover:text-white">
+                  <Link href="/experts" className="text-white hover:text-white">
                     Our Experts
                   </Link>
                 </li>
                 <li>
-                  <Link href="/publications" className="text-white/80 hover:text-white">
+                  <Link href="/publications" className="text-white hover:text-white">
                     Publications
                   </Link>
                 </li>
                 <li>
-                  <Link href="/events" className="text-white/80 hover:text-white">
+                  <Link href="/events" className="text-white hover:text-white">
                     Events
                   </Link>
                 </li>
                 <li>
-                  <Link href="/careers" className="text-white/80 hover:text-white">
+                  <Link href="/careers" className="text-white hover:text-white">
                     Careers
                   </Link>
                 </li>
@@ -154,27 +154,27 @@ function Footer() {
               <h3 className="text-lg font-semibold mb-4">Research Areas</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/research/economics" className="text-white/80 hover:text-white">
+                  <Link href="/research/economics" className="text-white hover:text-white">
                     Economics
                   </Link>
                 </li>
                 <li>
-                  <Link href="/research/politics" className="text-white/80 hover:text-white">
+                  <Link href="/research/politics" className="text-white hover:text-white">
                     Politics
                   </Link>
                 </li>
                 <li>
-                  <Link href="/research/international-relations" className="text-white/80 hover:text-white">
+                  <Link href="/research/international-relations" className="text-white hover:text-white">
                     International Relations
                   </Link>
                 </li>
                 <li>
-                  <Link href="/research/security" className="text-white/80 hover:text-white">
+                  <Link href="/research/security" className="text-white hover:text-white">
                     Security
                   </Link>
                 </li>
                 <li>
-                  <Link href="/research/social-policy" className="text-white/80 hover:text-white">
+                  <Link href="/research/social-policy" className="text-white hover:text-white">
                     Social Policy
                   </Link>
                 </li>
@@ -188,16 +188,16 @@ function Footer() {
               <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
               <ul className="space-y-4">
                 <li className="flex">
-                  <FiMapPin className="mt-1 mr-2 flex-shrink-0 text-white/80" />
-                  <span className="text-white/80">The Jakarta Post Building, Jl. Palmerah Barat 142-143, Jakarta 10270, Indonesia</span>
+                  <FiMapPin className="mt-1 mr-2 flex-shrink-0 text-white" />
+                  <span className="text-white">The Jakarta Post Building, Jl. Palmerah Barat 142-143, Jakarta 10270, Indonesia</span>
                 </li>
                 <li className="flex">
-                  <FiPhone className="mt-1 mr-2 flex-shrink-0 text-white/80" />
-                  <span className="text-white/80">+62 21 5365 4601</span>
+                  <FiPhone className="mt-1 mr-2 flex-shrink-0 text-white" />
+                  <span className="text-white">+62 21 5365 4601</span>
                 </li>
                 <li className="flex">
-                  <FiMail className="mt-1 mr-2 flex-shrink-0 text-white/80" />
-                  <span className="text-white/80">info@csis.or.id</span>
+                  <FiMail className="mt-1 mr-2 flex-shrink-0 text-white" />
+                  <span className="text-white">info@csis.or.id</span>
                 </li>
               </ul>
             </div>
@@ -211,13 +211,13 @@ function Footer() {
               © {currentYear} CSIS Indonesia. All rights reserved.
             </p>
             <div className="flex space-x-6">
-              <Link href="/privacy-policy" className="text-white/80 hover:text-white text-sm">
+              <Link href="/privacy-policy" className="text-white hover:text-white text-sm">
                 Privacy Policy
               </Link>
-              <Link href="/terms-of-service" className="text-white/80 hover:text-white text-sm">
+              <Link href="/terms-of-service" className="text-white hover:text-white text-sm">
                 Terms of Service
               </Link>
-              <Link href="/faq" className="text-white/80 hover:text-white text-sm">
+              <Link href="/faq" className="text-white hover:text-white text-sm">
                 FAQ
               </Link>
             </div>

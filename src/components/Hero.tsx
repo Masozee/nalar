@@ -16,7 +16,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-screen min-h-[650px] max-h-[800px] w-full overflow-hidden">
+    <section className="relative h-screen min-h-[650px] max-h-[800px] w-full overflow-hidden pt-16 lg:pt-28">
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -31,7 +31,7 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
-        <div className="max-w-3xl">
+        <div className="max-w-3xl mt-[-16px] lg:mt-[-28px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

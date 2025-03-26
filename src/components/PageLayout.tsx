@@ -16,7 +16,7 @@ function PageLayout({ title, description, heroImage, children }: PageLayoutProps
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section with better positioning */}
-      <div className="relative w-full mt-20" style={{ height: '300px' }}>
+      <div className="relative w-full mt-16 lg:mt-28" style={{ height: '300px' }}>
         <Image
           src={heroImage || '/bg/muska-create-5MvNlQENWDM-unsplash.png'}
           alt={title}
