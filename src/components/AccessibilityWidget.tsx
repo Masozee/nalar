@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiSettings } from 'react-icons/fi';
 import { IoMdEye } from 'react-icons/io';
@@ -12,31 +12,78 @@ type AccessibilityFeature = {
   name: string;
   icon: React.ReactNode;
   action: () => void;
+  isActive: () => boolean;
+};
+
+type AccessibilitySettings = {
+  'high-contrast'?: boolean;
+  'font-size'?: string;
+  'dyslexia-font'?: boolean;
+  'reduced-motion'?: boolean;
 };
 
 export default function AccessibilityWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeFeatures, setActiveFeatures] = useState<AccessibilitySettings>({});
+  
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const savedSettings = localStorage.getItem('accessibility-settings');
+    if (savedSettings) {
+      const settings = JSON.parse(savedSettings) as AccessibilitySettings;
+      setActiveFeatures(settings);
+      
+      // Apply saved settings
+      if (settings['high-contrast']) {
+        document.documentElement.classList.add('high-contrast');
+      }
+      
+      if (settings['font-size']) {
+        document.documentElement.style.fontSize = settings['font-size'];
+      }
+      
+      if (settings['dyslexia-font']) {
+        document.body.classList.add('dyslexia-friendly');
+      }
+      
+      if (settings['reduced-motion']) {
+        document.documentElement.classList.add('reduced-motion');
+      }
+    }
+  }, []);
+  
+  // Save settings to localStorage
+  const saveSettings = (settingsUpdate: Partial<AccessibilitySettings>) => {
+    const newSettings = { ...activeFeatures, ...settingsUpdate };
+    setActiveFeatures(newSettings);
+    localStorage.setItem('accessibility-settings', JSON.stringify(newSettings));
+  };
   
   // Handle high contrast mode
   const toggleHighContrast = () => {
-    document.documentElement.classList.toggle('high-contrast');
+    const isActive = document.documentElement.classList.toggle('high-contrast');
+    saveSettings({ 'high-contrast': isActive });
   };
   
   // Handle font size
   const increaseFontSize = () => {
     const html = document.documentElement;
     const currentSize = parseFloat(window.getComputedStyle(html).fontSize);
-    html.style.fontSize = `${currentSize * 1.1}px`;
+    const newSize = `${currentSize * 1.1}px`;
+    html.style.fontSize = newSize;
+    saveSettings({ 'font-size': newSize });
   };
   
   // Handle dyslexia-friendly font
   const toggleDyslexiaFont = () => {
-    document.body.classList.toggle('dyslexia-friendly');
+    const isActive = document.body.classList.toggle('dyslexia-friendly');
+    saveSettings({ 'dyslexia-font': isActive });
   };
   
   // Handle reduced motion
   const toggleReducedMotion = () => {
-    document.documentElement.classList.toggle('reduced-motion');
+    const isActive = document.documentElement.classList.toggle('reduced-motion');
+    saveSettings({ 'reduced-motion': isActive });
   };
   
   const accessibilityFeatures: AccessibilityFeature[] = [
@@ -44,43 +91,50 @@ export default function AccessibilityWidget() {
       id: 'visual-contrast',
       name: 'High Contrast',
       icon: <IoMdEye className="w-5 h-5" />,
-      action: toggleHighContrast
+      action: toggleHighContrast,
+      isActive: () => document.documentElement.classList.contains('high-contrast')
     },
     {
       id: 'visual-text',
       name: 'Larger Text',
       icon: <IoMdEye className="w-5 h-5" />,
-      action: increaseFontSize
+      action: increaseFontSize,
+      isActive: () => !!activeFeatures['font-size']
     },
     {
       id: 'hearing',
       name: 'Captions',
       icon: <MdHearing className="w-5 h-5" />,
-      action: () => alert('Captions feature would be enabled in a full implementation')
+      action: () => alert('Captions feature would be enabled in a full implementation'),
+      isActive: () => false
     },
     {
       id: 'motor',
       name: 'Keyboard Nav',
       icon: <FaHandPaper className="w-5 h-5" />,
-      action: () => alert('Keyboard navigation feature would be enabled in a full implementation')
+      action: () => alert('Keyboard navigation feature would be enabled in a full implementation'),
+      isActive: () => false
     },
     {
       id: 'cognitive',
       name: 'Dyslexia Font',
       icon: <FaBrain className="w-5 h-5" />,
-      action: toggleDyslexiaFont
+      action: toggleDyslexiaFont,
+      isActive: () => document.body.classList.contains('dyslexia-friendly')
     },
     {
       id: 'epilepsy',
       name: 'Reduce Motion',
       icon: <FaFlask className="w-5 h-5" />,
-      action: toggleReducedMotion
+      action: toggleReducedMotion,
+      isActive: () => document.documentElement.classList.contains('reduced-motion')
     },
     {
       id: 'elderly',
       name: 'Larger UI',
       icon: <FaUser className="w-5 h-5" />,
-      action: () => alert('Larger UI elements feature would be enabled in a full implementation')
+      action: () => alert('Larger UI elements feature would be enabled in a full implementation'),
+      isActive: () => false
     }
   ];
 
@@ -96,15 +150,19 @@ export default function AccessibilityWidget() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="absolute bottom-16 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 min-w-[250px]"
+            className="absolute bottom-16 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 w-[320px]"
           >
-            <h3 className="font-semibold mb-2 text-gray-800 dark:text-white">Accessibility Options</h3>
-            <div className="grid grid-cols-2 gap-2">
+            <h3 className="font-semibold mb-3 text-gray-800 dark:text-white">Accessibility Options</h3>
+            <div className="grid grid-cols-2 gap-3">
               {accessibilityFeatures.map(feature => (
                 <button
                   key={feature.id}
                   onClick={feature.action}
-                  className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md flex items-center"
+                  className={`w-full text-left px-3 py-2 rounded-md flex items-center ${
+                    feature.isActive() 
+                      ? 'bg-accent text-white' 
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-white'
+                  }`}
                 >
                   <span className="mr-2">{feature.icon}</span>
                   {feature.name}
