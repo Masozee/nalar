@@ -253,22 +253,43 @@ button {
 
 /* Accessibility styles */
 .high-contrast {
-  --background: #000000;
+  --background: #005354;
   --foreground: #ffffff;
-  --primary: #00ffff;
-  --primary-foreground: #000000;
-  --secondary: #000000;
+  --primary: #005354;
+  --primary-foreground: #ffffff;
+  --secondary: #005354;
   --secondary-foreground: #ffffff;
-  --accent: #ffff00;
-  --accent-foreground: #000000;
-  --teal: #00ffff;
-  --teal-foreground: #000000;
-  --muted: #000000;
+  --accent: #E8A117;
+  --accent-foreground: #ffffff;
+  --teal: #008080;
+  --teal-foreground: #ffffff;
+  --muted: #005354;
   --muted-foreground: #ffffff;
-  --card: #000000;
+  --card: #005354;
   --card-foreground: #ffffff;
   --border: #ffffff;
   --input: #ffffff;
+}
+
+.high-contrast nav,
+.high-contrast header,
+.high-contrast footer,
+.high-contrast .card,
+.high-contrast button:not(.bg-accent):not([aria-label="Accessibility options"]) {
+  background-color: #005354 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast a,
+.high-contrast h1,
+.high-contrast h2,
+.high-contrast h3,
+.high-contrast h4,
+.high-contrast h5,
+.high-contrast h6,
+.high-contrast p,
+.high-contrast span:not(.bg-accent *) {
+  color: #ffffff !important;
 }
 
 .dyslexia-friendly {
