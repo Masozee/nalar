@@ -250,3 +250,64 @@ button {
     box-shadow: 0 0 0 0 rgba(232, 161, 23, 0);
   }
 }
+
+/* Accessibility styles */
+.high-contrast {
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #00ffff;
+  --primary-foreground: #000000;
+  --secondary: #000000;
+  --secondary-foreground: #ffffff;
+  --accent: #ffff00;
+  --accent-foreground: #000000;
+  --teal: #00ffff;
+  --teal-foreground: #000000;
+  --muted: #000000;
+  --muted-foreground: #ffffff;
+  --card: #000000;
+  --card-foreground: #ffffff;
+  --border: #ffffff;
+  --input: #ffffff;
+}
+
+.dyslexia-friendly {
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+}
+
+.dyslexia-friendly h1,
+.dyslexia-friendly h2,
+.dyslexia-friendly h3,
+.dyslexia-friendly h4,
+.dyslexia-friendly h5,
+.dyslexia-friendly h6,
+.dyslexia-friendly p,
+.dyslexia-friendly button,
+.dyslexia-friendly a,
+.dyslexia-friendly li,
+.dyslexia-friendly span {
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive !important;
+}
+
+html.reduced-motion *,
+html.reduced-motion *::before,
+html.reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  transition-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

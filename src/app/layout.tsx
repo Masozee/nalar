@@ -7,6 +7,7 @@ import AnimationProvider from "@/providers/AnimationProvider";
 import ScrollProgress from "@/components/animations/ScrollProgress";
 import NavBar from "@/components/NavBar";
 import BackToTop from "@/components/BackToTop";
+import AccessibilityWidget from "@/components/AccessibilityWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,20 +22,20 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "CSIS Indonesia | Center for Strategic and International Studies",
+  title: "CSIS Indonesia | Centre for Strategic and International Studies",
   description: "Indonesia's premier think tank for economics, international relations, and politics",
   keywords: "CSIS, Indonesia, think tank, economics, international relations, politics, research",
   icons: {
     icon: '/favicon.png',
     apple: '/favicon.png',
   },
-  metadataBase: new URL('https://csis-indonesia.vercel.app'), // Replace with your actual domain
+  metadataBase: new URL('https://beta.csis.or.id'), // Replace with your actual domain
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://csis-indonesia.vercel.app',
+    url: 'https://beta.csis.or.id',
     siteName: 'CSIS Indonesia',
-    title: 'CSIS Indonesia | Center for Strategic and International Studies',
+    title: 'CSIS Indonesia | Centre for Strategic and International Studies',
     description: "Indonesia's premier think tank for economics, international relations, and politics",
     images: [
       {
@@ -47,7 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CSIS Indonesia | Center for Strategic and International Studies',
+    title: 'CSIS Indonesia | Centre for Strategic and International Studies',
     description: "Indonesia's premier think tank for economics, international relations, and politics",
     images: ['/bg/muska-create-5MvNlQENWDM-unsplash.png'],
     creator: '@CSISIndonesia',
@@ -74,6 +75,7 @@ export default function RootLayout({
         <SpeedInsights />
         <Analytics />
         <BackToTop />
+        <AccessibilityWidget />
       </body>
     </html>
   );

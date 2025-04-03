@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import FadeIn from './animations/FadeIn';
 import Footer from './Footer';
+import AccessibilityWidget from './AccessibilityWidget';
 import { memo } from 'react';
 
 interface PageLayoutProps {
@@ -47,6 +48,9 @@ function PageLayout({ title, description, heroImage, children }: PageLayoutProps
 
       {/* Footer */}
       <Footer />
+      
+      {/* Accessibility Widget */}
+      <AccessibilityWidget />
     </div>
   );
 }
