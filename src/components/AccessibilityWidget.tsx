@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSettings } from 'react-icons/fi';
+import { FiSettings, FiRefreshCw } from 'react-icons/fi';
 import { IoMdEye } from 'react-icons/io';
 import { MdHearing } from 'react-icons/md';
 import { FaHandPaper, FaBrain, FaFlask, FaUser } from 'react-icons/fa';
@@ -57,6 +57,23 @@ export default function AccessibilityWidget() {
     const newSettings = { ...activeFeatures, ...settingsUpdate };
     setActiveFeatures(newSettings);
     localStorage.setItem('accessibility-settings', JSON.stringify(newSettings));
+  };
+  
+  // Reset all accessibility settings
+  const resetAllSettings = () => {
+    // Remove all accessibility classes
+    document.documentElement.classList.remove('high-contrast');
+    document.documentElement.classList.remove('reduced-motion');
+    document.body.classList.remove('dyslexia-friendly');
+    
+    // Reset font size
+    document.documentElement.style.fontSize = '';
+    
+    // Clear localStorage
+    localStorage.removeItem('accessibility-settings');
+    
+    // Reset state
+    setActiveFeatures({});
   };
   
   // Handle high contrast mode
@@ -152,7 +169,17 @@ export default function AccessibilityWidget() {
             exit={{ opacity: 0, scale: 0.8 }}
             className="absolute bottom-16 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 w-[320px]"
           >
-            <h3 className="font-semibold mb-3 text-gray-800 dark:text-white">Accessibility Options</h3>
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="font-semibold text-gray-800 dark:text-white">Accessibility Options</h3>
+              <button 
+                onClick={resetAllSettings}
+                className="text-sm px-2 py-1 bg-red-100 text-red-600 hover:bg-red-200 rounded-md flex items-center"
+                title="Reset all accessibility settings"
+              >
+                <FiRefreshCw className="w-4 h-4 mr-1" />
+                Reset
+              </button>
+            </div>
             <div className="grid grid-cols-2 gap-3">
               {accessibilityFeatures.map(feature => (
                 <button

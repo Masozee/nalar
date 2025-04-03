@@ -271,15 +271,32 @@ button {
   --input: #ffffff;
 }
 
+/* Base high contrast styles - apply to all elements */
+.high-contrast * {
+  border-color: #ffffff !important;
+}
+
+/* Background elements */
+.high-contrast body,
 .high-contrast nav,
 .high-contrast header,
 .high-contrast footer,
+.high-contrast main,
+.high-contrast section,
+.high-contrast article,
+.high-contrast aside,
+.high-contrast div:not(.bg-accent),
+.high-contrast form,
 .high-contrast .card,
+.high-contrast .bg-white,
+.high-contrast .bg-secondary,
+.high-contrast [class*="bg-gray"],
 .high-contrast button:not(.bg-accent):not([aria-label="Accessibility options"]) {
   background-color: #005354 !important;
   color: #ffffff !important;
 }
 
+/* Text elements */
 .high-contrast a,
 .high-contrast h1,
 .high-contrast h2,
@@ -288,8 +305,36 @@ button {
 .high-contrast h5,
 .high-contrast h6,
 .high-contrast p,
-.high-contrast span:not(.bg-accent *) {
+.high-contrast span:not(.bg-accent *),
+.high-contrast li,
+.high-contrast label,
+.high-contrast input,
+.high-contrast textarea,
+.high-contrast select {
   color: #ffffff !important;
+}
+
+/* Links should be underlined for better accessibility */
+.high-contrast a {
+  text-decoration: underline !important;
+}
+
+/* Maintain contrast for form elements */
+.high-contrast input,
+.high-contrast textarea,
+.high-contrast select {
+  background-color: #003a3b !important;
+  border: 2px solid #ffffff !important;
+}
+
+/* Inverted elements (white boxes) */
+.high-contrast .inverted-contrast {
+  background-color: #ffffff !important;
+  color: #005354 !important;
+}
+
+.high-contrast .inverted-contrast * {
+  color: #005354 !important;
 }
 
 .dyslexia-friendly {
