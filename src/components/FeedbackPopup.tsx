@@ -42,8 +42,8 @@ export default function FeedbackPopup() {
   };
   
   const handleSurveyClick = () => {
-    // In a real implementation, this would link to the survey
-    window.open('https://example.com/feedback-survey', '_blank');
+    // Open the CSIS survey link
+    window.open('https://csis.or.id/O/webSurvey', '_blank');
     // We don't close the popup here, so user can access it again if needed
   };
   
