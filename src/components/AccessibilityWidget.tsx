@@ -309,8 +309,8 @@ export default function AccessibilityWidget() {
             
             if (feedbackButton) {
               feedbackButton.addEventListener('click', () => {
-                const event = new CustomEvent('openFeedbackPopup');
-                document.dispatchEvent(event);
+                // Directly open the survey link instead of dispatching an event
+                window.open('https://csis.or.id/O/webSurvey', '_blank');
               });
             }
           }
@@ -615,8 +615,8 @@ export default function AccessibilityWidget() {
         <div style={{ position: 'relative', width: '56px', height: '56px', overflow: 'visible', pointerEvents: 'auto' }}>
           <motion.button
             onClick={() => {
-              const event = new CustomEvent('openFeedbackPopup');
-              document.dispatchEvent(event);
+              // Directly open the survey link instead of dispatching an event
+              window.open('https://csis.or.id/O/webSurvey', '_blank');
             }}
             className="accessibility-fixed-button"
             style={{ 

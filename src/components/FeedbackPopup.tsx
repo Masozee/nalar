@@ -2,70 +2,41 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiMessageSquare } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
 
 export default function FeedbackPopup() {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [hasBeenShown, setHasBeenShown] = useState(false);
-  
-  useEffect(() => {
-    // Show popup after 3 seconds if it hasn't been shown before
-    if (!hasBeenShown) {
-      const timer = setTimeout(() => {
-        setIsExpanded(true);
-        setHasBeenShown(true);
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [hasBeenShown]);
-  
-  useEffect(() => {
-    // Listen for the custom event from AccessibilityWidget
-    const handleOpenFeedback = () => {
-      setIsExpanded(true);
-    };
-    
-    document.addEventListener('openFeedbackPopup', handleOpenFeedback);
-    
-    return () => {
-      document.removeEventListener('openFeedbackPopup', handleOpenFeedback);
-    };
-  }, []);
+  const [isExpanded, setIsExpanded] = useState(true);
   
   const handleClose = () => {
     setIsExpanded(false);
   };
   
-  const handleOpenPopup = () => {
-    setIsExpanded(true);
-  };
-  
   const handleSurveyClick = () => {
     // Open the CSIS survey link
     window.open('https://csis.or.id/O/webSurvey', '_blank');
-    // We don't close the popup here, so user can access it again if needed
+    // Optionally close the popup after clicking survey
+    // setIsExpanded(false);
   };
   
   return (
     <>
-      {/* No longer need the minimized button since we'll call from AccessibilityWidget */}
+      {/* No longer need the minimized button */}
       
-      {/* Expanded feedback popup - now on the right side */}
+      {/* Expanded feedback popup - now centered */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25 }}
-            className="fixed right-0 bottom-24 z-40 w-72 shadow-lg rounded-l-lg bg-white dark:bg-gray-800 border-t border-l border-b border-gray-200 dark:border-gray-700"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-80 shadow-lg rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
           >
             <div className="p-4 relative">
               <button 
                 onClick={handleClose}
                 className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
-                aria-label="Minimize feedback popup"
+                aria-label="Close notice"
               >
                 <FiX className="w-4 h-4" />
               </button>
