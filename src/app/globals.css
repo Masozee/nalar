@@ -345,17 +345,23 @@ button {
 .high-contrast .custom-report {
   background-color: #005354 !important;
   border: 2px solid #ffffff !important;
+  color: #ffffff !important;
 }
 
 .high-contrast .dashboard-image {
-  border-bottom: 1px solid #ffffff !important;
+  /* display: none !important; */ /* REMOVED: Allow image to show */
+  display: block !important; /* Ensure it's displayed */
+  opacity: 1 !important; /* Ensure full opacity */
+  border: 1px solid #ffffff !important; /* Add border for visibility */
 }
 
 .high-contrast .bg-gradient-to-t,
 .high-contrast [style*="linear-gradient"],
 .high-contrast .dashboard-overlay {
-  background: #005354 !important;
-  border-bottom: 1px solid #ffffff !important;
+  /* background: linear-gradient(to top, rgba(0, 83, 84, 0.9), rgba(0, 83, 84, 0.5)) !important; */
+  background: none !important; /* Remove overlay background */
+  border-bottom: none !important;
+  color: #ffffff !important;
 }
 
 /* Text elements */
@@ -515,10 +521,9 @@ html.reduced-motion *::after {
 }
 
 .larger-text button,
-.larger-text a,
 .larger-text-2x button,
-.larger-text-2x a,
 .larger-text-3x button,
+.larger-text-2x a,
 .larger-text-3x a {
   font-size: calc(1rem * var(--text-size-multiplier));
 }
@@ -795,19 +800,92 @@ html.reduced-motion *::after {
   background-color: #004344 !important;
 }
 
-/* Monochrome mode */
+/* Completely revised monochrome implementation */
 .monochrome {
+  /* Apply filter to the body instead */
+  --grayscale-filter: grayscale(100%);
+}
+
+/* Target specific elements for grayscale instead of everything */
+.monochrome body > *:not(#accessibility-buttons-container) {
+  filter: var(--grayscale-filter) !important;
+}
+
+/* Exclude the fixed buttons from grayscale and ensure they're properly positioned */
+.monochrome #accessibility-buttons-container,
+.monochrome #accessibility-buttons-container * {
+  filter: none !important;
+  position: fixed !important;
+  transform: none !important;
+}
+
+.monochrome #accessibility-buttons-container {
+  right: 0 !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  z-index: 9999 !important;
+}
+
+/* Add a positional anchor that can't be affected by other styles */
+body::after {
+  content: '';
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1px;
+  width: 1px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+}
+
+/* Force buttons to align to this anchor in monochrome mode */
+.monochrome #accessibility-buttons-container {
+  position: fixed !important;
+  top: 50% !important;
+  right: 0 !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Ensure buttons are clickable and visible in all modes */
+[aria-label="Accessibility options"],
+[aria-label="Provide feedback"] {
+  background-color: var(--accent) !important;
+  color: #000000 !important;
+  border: 2px solid var(--accent) !important;
+  display: flex !important;
+  position: relative !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  z-index: 999 !important;
+}
+
+/* Exclude accessibility buttons from any transforms or filters */
+.monochrome *:not(
+  [aria-label="Accessibility options"], 
+  [aria-label="Provide feedback"],
+  .fixed.right-0.top-1\/2,
+  .fixed.right-0.top-1\/2 *
+) {
   filter: grayscale(100%) !important;
 }
 
-.monochrome * {
-  filter: grayscale(100%) !important;
-}
-
-.monochrome img,
-.monochrome video,
-.monochrome svg {
-  filter: grayscale(100%) !important;
+/* Force visible in monochrome */
+.monochrome .fixed.right-0.top-1\/2,
+.monochrome [aria-label="Accessibility options"],
+.monochrome [aria-label="Provide feedback"] {
+  filter: none !important;
+  position: fixed !important;
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 /* Hide images mode */
@@ -1218,9 +1296,11 @@ html:where(:not(:empty)) [aria-label="Provide feedback"] {
   filter: brightness(0) !important;
 }
 
-/* Ensure accessibility buttons are consistently visible in high contrast mode */
+/* Ensure accessibility buttons are consistently visible in all modes */
 .high-contrast [aria-label="Accessibility options"],
-.high-contrast [aria-label="Provide feedback"] {
+.high-contrast [aria-label="Provide feedback"],
+.monochrome [aria-label="Accessibility options"],
+.monochrome [aria-label="Provide feedback"] {
   background-color: var(--accent) !important;
   color: #000000 !important;
   border: 2px solid #ffffff !important;
@@ -1230,10 +1310,217 @@ html:where(:not(:empty)) [aria-label="Provide feedback"] {
   visibility: visible !important;
 }
 
-/* Ensure container is visible */
-.high-contrast .fixed.right-0.top-1\/2 {
+/* Ensure container is visible in all accessibility modes */
+.high-contrast .fixed.right-0.top-1\/2,
+.monochrome .fixed.right-0.top-1\/2 {
   display: flex !important;
   z-index: 200 !important;
   opacity: 1 !important;
   visibility: visible !important;
+}
+
+/* Fix monochrome display issue */
+.monochrome .fixed.right-0.top-1\/2 .bg-white,
+.monochrome .fixed.right-0.top-1\/2 .text-primary,
+.monochrome .fixed.right-0.top-1\/2 .text-gray-600 {
+  display: none;
+}
+
+/* Accessibility fixed buttons - always visible and interactive in all modes */
+.accessibility-fixed-button {
+  z-index: 9999 !important;
+  position: fixed !important;
+  display: flex !important;
+  pointer-events: auto !important;
+}
+
+.accessibility-fixed-button:hover .button-text {
+  opacity: 1 !important;
+}
+
+.accessibility-fixed-button:hover .button-tooltip {
+  opacity: 1 !important;
+}
+
+/* Ensure buttons are excluded from mode transformations */
+.monochrome *:not(#accessibility-buttons-container *) {
+  filter: grayscale(100%);
+}
+
+.high-contrast .accessibility-fixed-button {
+  background-color: var(--accent) !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+}
+
+/* Reset any transforms or filters for our buttons */
+#accessibility-buttons-container,
+#accessibility-buttons-container *,
+.accessibility-fixed-button,
+.accessibility-fixed-button * {
+  filter: none !important;
+  transform: none !important;
+}
+
+/* Restore initial transform for container only */
+#accessibility-buttons-container {
+  transform: translateY(-50%) !important;
+}
+
+/* Development mode reset button */
+.dev-reset-button {
+  z-index: 9999 !important;
+}
+
+.dev-reset-button:hover .button-text {
+  opacity: 1 !important;
+}
+
+.dev-reset-button:hover .button-tooltip {
+  opacity: 1 !important;
+}
+
+/* Ensure the reset button works in all modes */
+.high-contrast .dev-reset-button {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+}
+
+.monochrome .dev-reset-button {
+  filter: none !important;
+}
+
+.monochrome .dev-reset-button * {
+  filter: none !important;
+}
+
+/* Fix monochrome button positioning issues */
+.monochrome #accessibility-buttons-container,
+.monochrome .fixed.right-0.top-1\/2 {
+  position: fixed !important;
+  right: 0 !important;
+  top: 50% !important;
+  bottom: auto !important; /* Override any bottom positioning */
+  transform: translateY(-50%) !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+
+/* Force accessibility and feedback buttons to maintain correct position in monochrome */
+.monochrome [aria-label="Accessibility options"],
+.monochrome [aria-label="Provide feedback"] {
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  background-color: var(--accent) !important;
+  color: #000000 !important;
+  z-index: 9999 !important;
+  filter: none !important;
+}
+
+/* Also fix the dev reset button in monochrome mode */
+.monochrome [aria-label="Reset accessibility settings (Dev mode)"] {
+  position: absolute !important;
+  left: 1rem !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  background-color: #dc2626 !important;
+  border: 2px solid #dc2626 !important;
+  color: #ffffff !important;
+  z-index: 9999 !important;
+  filter: none !important;
+}
+
+/* Apply grayscale filter specifically to image elements when .grayscale is active */
+.grayscale img,
+.grayscale Image /* Targeting Next.js Image component potentially */
+{
+  filter: grayscale(100%) !important; /* Apply standard grayscale filter */
+}
+
+/* Ensure accessibility buttons container and contents are NEVER filtered */
+#accessibility-buttons-container,
+#accessibility-buttons-container * {
+   filter: none !important; /* Explicitly remove any inherited filter */
+}
+
+/* Remove the overly complex manual grayscale implementation */
+/* Grayscale mode - structured approach (not using filters) - REMOVED */
+/* .grayscale { ... */
+/* ... entire block from ~line 1436 to ~1602 removed ... */
+/* End of removed block */
+
+/* Ensure specific interactive elements maintain some visibility if needed */
+/* (Optional: add rules here if specific elements like buttons need borders in grayscale) */
+/* Example: */
+/* .grayscale button:not(#accessibility-buttons-container *), */
+/* .grayscale input { */
+/*    border: 1px solid rgba(255, 255, 255, 0.5) !important; */
+/* } */
+
+/* Hide the development reset button */
+[aria-label="Reset accessibility settings (Dev mode)"] {
+  display: none !important;
+}
+
+/* Force white text on dashboard gradient overlays */
+.dashboard-overlay h1,
+.dashboard-overlay h2,
+.dashboard-overlay h3,
+[class*="bg-gradient"] h1,
+[class*="bg-gradient"] h2,
+[class*="bg-gradient"] h3 {
+  color: var(--primary-foreground) !important;
+}
+
+/* Specifically fix dashboard items */
+.high-contrast .dashboard-card,
+.high-contrast .custom-report {
+  background-color: #005354 !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+/* Ensure all text within the card is white */
+.high-contrast .dashboard-card *,
+.high-contrast .custom-report * {
+  color: #ffffff !important;
+}
+
+.high-contrast .dashboard-image {
+  /* border-bottom: 1px solid #ffffff !important; */
+  /* opacity: 0.5 !important; */
+  display: none !important; /* Hide image completely */
+}
+
+.high-contrast .bg-gradient-to-t,
+.high-contrast [style*="linear-gradient"],
+.high-contrast .dashboard-overlay {
+  /* background: linear-gradient(to top, rgba(0, 83, 84, 0.9), rgba(0, 83, 84, 0.5)) !important; */
+  background: none !important; /* Remove overlay background */
+  border-bottom: none !important;
+  color: #ffffff !important;
+}
+
+/* Ensure buttons inside cards are styled correctly for high contrast */
+.high-contrast .dashboard-card .btn-accent,
+.high-contrast .custom-report .btn-accent {
+  background-color: var(--accent) !important;
+  color: #ffffff !important; /* Changed from black to white */
+  border: 2px solid #ffffff !important;
+}
+
+/* Force white title text within dashboard overlays in high contrast */
+.high-contrast .dashboard-card .dashboard-overlay h1,
+.high-contrast .dashboard-card .dashboard-overlay h2,
+.high-contrast .dashboard-card .dashboard-overlay h3,
+.high-contrast .dashboard-card [class*="bg-gradient"] h1,
+.high-contrast .dashboard-card [class*="bg-gradient"] h2,
+.high-contrast .dashboard-card [class*="bg-gradient"] h3 {
+  color: #ffffff !important;
 }

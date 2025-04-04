@@ -28,6 +28,7 @@ type AccessibilitySettings = {
   'hide-images'?: boolean;
   'highlight-links'?: boolean;
   'bold-text'?: boolean;
+  'grayscale'?: boolean;
 };
 
 export default function AccessibilityWidget() {
@@ -35,6 +36,15 @@ export default function AccessibilityWidget() {
   const [activeFeatures, setActiveFeatures] = useState<AccessibilitySettings>({});
   const [textSizeLevel, setTextSizeLevel] = useState(0); // 0: normal, 1: larger, 2: larger-2x, 3: larger-3x
   const [cursorSizeLevel, setCursorSizeLevel] = useState(0); // 0: normal, 1: large, 2: x-large
+  const [isDevelopment, setIsDevelopment] = useState(false);
+  
+  // Check if in development mode
+  useEffect(() => {
+    // Check if we're in development mode
+    if (process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost') {
+      setIsDevelopment(true);
+    }
+  }, []);
   
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -85,6 +95,10 @@ export default function AccessibilityWidget() {
       
       if (settings['bold-text']) {
         document.documentElement.classList.add('bold-text');
+      }
+      
+      if (settings['grayscale']) {
+        document.documentElement.classList.add('grayscale');
       }
     }
   }, []);
@@ -221,7 +235,8 @@ export default function AccessibilityWidget() {
       'cursor-x-large',
       'hide-images',
       'highlight-links',
-      'bold-text'
+      'bold-text',
+      'grayscale'
     );
     document.body.classList.remove('dyslexia-friendly');
     
@@ -255,6 +270,53 @@ export default function AccessibilityWidget() {
   const toggleMonochrome = () => {
     const isActive = document.documentElement.classList.toggle('monochrome');
     saveSettings({ 'monochrome': isActive });
+    
+    // Force the container to maintain proper positioning in monochrome mode
+    const container = document.getElementById('accessibility-buttons-container');
+    
+    if (container) {
+      // Ensure layout is recalculated by removing and adding it to the DOM
+      const parent = container.parentNode;
+      const clone = container.cloneNode(true);
+      
+      if (parent) {
+        // Force a DOM reflow to prevent positioning issues
+        parent.removeChild(container);
+        
+        setTimeout(() => {
+          // Re-add with correct positioning
+          parent.appendChild(clone);
+          
+          // Ensure proper styles
+          const newContainer = document.getElementById('accessibility-buttons-container');
+          if (newContainer) {
+            newContainer.style.position = 'fixed';
+            newContainer.style.right = '0';
+            newContainer.style.top = '50%';
+            newContainer.style.transform = 'translateY(-50%)';
+            newContainer.style.zIndex = '9999';
+            newContainer.style.display = 'flex';
+            newContainer.style.flexDirection = 'column';
+            newContainer.style.gap = '1rem';
+            
+            // Re-attach event handlers to the cloned buttons
+            const accessibilityButton = newContainer.querySelector('[aria-label="Accessibility options"]');
+            const feedbackButton = newContainer.querySelector('[aria-label="Provide feedback"]');
+            
+            if (accessibilityButton) {
+              accessibilityButton.addEventListener('click', toggleMenu);
+            }
+            
+            if (feedbackButton) {
+              feedbackButton.addEventListener('click', () => {
+                const event = new CustomEvent('openFeedbackPopup');
+                document.dispatchEvent(event);
+              });
+            }
+          }
+        }, 10);
+      }
+    }
   };
   
   const toggleHideImages = () => {
@@ -272,6 +334,11 @@ export default function AccessibilityWidget() {
     saveSettings({ 'bold-text': isActive });
   };
   
+  const toggleGrayscale = () => {
+    const isActive = document.documentElement.classList.toggle('grayscale');
+    saveSettings({ 'grayscale': isActive });
+  };
+  
   const accessibilityFeatures: AccessibilityFeature[] = [
     // Visual Features
     {
@@ -285,10 +352,10 @@ export default function AccessibilityWidget() {
     },
     {
       id: 'monochrome',
-      name: 'Monochrome',
+      name: 'Grayscale',
       icon: <MdFilter className="w-5 h-5" />,
-      action: toggleMonochrome,
-      isActive: () => document.documentElement.classList.contains('monochrome'),
+      action: toggleGrayscale,
+      isActive: () => document.documentElement.classList.contains('grayscale'),
       description: 'Displays content in black and white',
       group: 'visual'
     },
@@ -394,13 +461,109 @@ export default function AccessibilityWidget() {
 
   return (
     <>
+      {/* Development mode reset button - only visible on localhost/development */}
+      {isDevelopment && (
+        <div 
+          style={{ 
+            position: 'fixed',
+            left: '20px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 9999,
+            display: 'flex',
+            flexDirection: 'column',
+            pointerEvents: 'auto'
+          }}
+        >
+          <motion.button
+            onClick={resetAllSettings}
+            className="dev-reset-button bg-red-600 text-white p-3 rounded-r-lg shadow-lg flex items-center justify-center"
+            style={{ 
+              width: '56px',
+              height: '56px',
+              border: '2px solid #dc2626',
+              pointerEvents: 'auto',
+              position: 'relative'
+            }}
+            whileHover={{ 
+              width: 170,
+              transition: { duration: 0.3 }
+            }}
+            initial={{ width: 56 }}
+            aria-label="Reset accessibility settings (Dev mode)"
+          >
+            <div style={{ position: 'absolute', left: '1rem', display: 'flex', alignItems: 'center' }}>
+              <FiRefreshCw style={{ width: '1.5rem', height: '1.5rem', color: '#ffffff' }} />
+            </div>
+            <span style={{ 
+              opacity: 0,
+              position: 'absolute', 
+              left: '3.5rem', 
+              fontWeight: 500,
+              color: '#ffffff',
+              transition: 'opacity 0.3s ease-in-out'
+            }}
+            className="button-text">
+              Reset Widget
+            </span>
+            <span style={{
+              position: 'absolute',
+              left: '100%',
+              marginLeft: '0.5rem',
+              backgroundColor: '#333',
+              color: 'white',
+              fontSize: '0.75rem',
+              padding: '0.25rem 0.5rem',
+              borderRadius: '0.25rem',
+              opacity: 0,
+              transition: 'opacity 0.2s ease-in-out',
+              whiteSpace: 'nowrap',
+              zIndex: 50
+            }}
+            className="button-tooltip">
+              Reset all accessibility settings
+            </span>
+          </motion.button>
+        </div>
+      )}
+
       {/* Fixed floating buttons in the right side of the screen - always visible */}
-      <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-[100] flex flex-col gap-4">
+      <div 
+        id="accessibility-buttons-container" 
+        style={{ 
+          position: 'fixed',
+          right: '0',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 9999,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          pointerEvents: 'auto'
+        }}
+      >
         {/* Accessibility button with hover animation */}
-        <div className="relative flex justify-end w-14 h-14 overflow-visible">
+        <div style={{ position: 'relative', width: '56px', height: '56px', overflow: 'visible', pointerEvents: 'auto' }}>
           <motion.button
             onClick={toggleMenu}
-            className="group bg-accent text-black p-3 rounded-l-lg shadow-lg flex items-center h-14 w-14 absolute right-0 overflow-visible border-2 border-accent"
+            className="accessibility-fixed-button"
+            style={{ 
+              position: 'absolute',
+              right: '0',
+              backgroundColor: 'var(--accent)',
+              color: '#000000',
+              padding: '0.75rem',
+              borderRadius: '0.5rem 0 0 0.5rem',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+              display: 'flex',
+              alignItems: 'center',
+              height: '56px',
+              width: '56px',
+              overflow: 'visible',
+              border: '2px solid var(--accent)',
+              pointerEvents: 'auto',
+              zIndex: 9999
+            }}
             whileHover={{ 
               width: 170,
               transition: { duration: 0.3 }
@@ -408,32 +571,71 @@ export default function AccessibilityWidget() {
             initial={{ width: 56 }}
             aria-label="Accessibility options"
           >
-            <div className="flex items-center absolute left-4">
+            <div style={{ position: 'absolute', left: '1rem', display: 'flex', alignItems: 'center' }}>
               <Image 
                 src="/accessibility-icon.svg" 
                 alt="Accessibility" 
                 width={24} 
                 height={24}
-                className="w-6 h-6"
+                style={{ width: '1.5rem', height: '1.5rem', filter: 'brightness(0)' }}
               />
             </div>
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 absolute left-14 font-medium text-black">
+            <span style={{ 
+              opacity: 0,
+              position: 'absolute', 
+              left: '3.5rem', 
+              fontWeight: 500,
+              color: '#000000',
+              transition: 'opacity 0.3s ease-in-out'
+            }}
+            className="button-text">
               Aksesibilitas
             </span>
-            <span className="absolute right-full mr-2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
+            <span style={{
+              position: 'absolute',
+              right: '100%',
+              marginRight: '0.5rem',
+              backgroundColor: '#333',
+              color: 'white',
+              fontSize: '0.75rem',
+              padding: '0.25rem 0.5rem',
+              borderRadius: '0.25rem',
+              opacity: 0,
+              transition: 'opacity 0.2s ease-in-out',
+              whiteSpace: 'nowrap',
+              zIndex: 50
+            }}
+            className="button-tooltip">
               Configure accessibility settings
             </span>
           </motion.button>
         </div>
         
         {/* Feedback button with hover animation */}
-        <div className="relative flex justify-end w-14 h-14 overflow-visible">
+        <div style={{ position: 'relative', width: '56px', height: '56px', overflow: 'visible', pointerEvents: 'auto' }}>
           <motion.button
             onClick={() => {
               const event = new CustomEvent('openFeedbackPopup');
               document.dispatchEvent(event);
             }}
-            className="group bg-accent text-black p-3 rounded-l-lg shadow-lg flex items-center h-14 w-14 absolute right-0 overflow-visible border-2 border-accent"
+            className="accessibility-fixed-button"
+            style={{ 
+              position: 'absolute',
+              right: '0',
+              backgroundColor: 'var(--accent)',
+              color: '#000000',
+              padding: '0.75rem',
+              borderRadius: '0.5rem 0 0 0.5rem',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+              display: 'flex',
+              alignItems: 'center',
+              height: '56px',
+              width: '56px',
+              overflow: 'visible',
+              border: '2px solid var(--accent)',
+              pointerEvents: 'auto',
+              zIndex: 9999
+            }}
             whileHover={{ 
               width: 170,
               transition: { duration: 0.3 }
@@ -441,13 +643,35 @@ export default function AccessibilityWidget() {
             initial={{ width: 56 }}
             aria-label="Provide feedback"
           >
-            <div className="flex items-center absolute left-4">
-              <FiMessageSquare className="w-6 h-6 text-black" />
+            <div style={{ position: 'absolute', left: '1rem', display: 'flex', alignItems: 'center' }}>
+              <FiMessageSquare style={{ width: '1.5rem', height: '1.5rem', color: '#000000' }} />
             </div>
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 absolute left-14 font-medium text-black">
+            <span style={{ 
+              opacity: 0,
+              position: 'absolute', 
+              left: '3.5rem', 
+              fontWeight: 500,
+              color: '#000000',
+              transition: 'opacity 0.3s ease-in-out'
+            }}
+            className="button-text">
               Feedback
             </span>
-            <span className="absolute right-full mr-2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
+            <span style={{
+              position: 'absolute',
+              right: '100%',
+              marginRight: '0.5rem',
+              backgroundColor: '#333',
+              color: 'white',
+              fontSize: '0.75rem',
+              padding: '0.25rem 0.5rem',
+              borderRadius: '0.25rem',
+              opacity: 0,
+              transition: 'opacity 0.2s ease-in-out',
+              whiteSpace: 'nowrap',
+              zIndex: 50
+            }}
+            className="button-tooltip">
               Share your feedback with us
             </span>
           </motion.button>
