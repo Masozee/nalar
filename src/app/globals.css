@@ -28,6 +28,9 @@
   --transition-fast: 150ms;
   --transition-normal: 250ms;
   --transition-slow: 400ms;
+  
+  /* Text size multiplier for accessibility */
+  --text-size-multiplier: 1;
 }
 
 @theme inline {
@@ -276,6 +279,44 @@ button {
   border-color: #ffffff !important;
 }
 
+/* Enhanced border visibility */
+.high-contrast section,
+.high-contrast article,
+.high-contrast div.card,
+.high-contrast .shadow,
+.high-contrast nav,
+.high-contrast footer,
+.high-contrast header {
+  border: 1px solid #ffffff !important;
+  border-radius: 4px !important;
+  overflow: visible !important;
+}
+
+/* Make images, tables, and cards more visible */
+.high-contrast img,
+.high-contrast Image,
+.high-contrast table,
+.high-contrast tr,
+.high-contrast td,
+.high-contrast th {
+  border: 1px solid #ffffff !important;
+}
+
+.high-contrast table {
+  border-collapse: separate !important;
+  border-spacing: 2px !important;
+}
+
+/* Ensure buttons have distinct borders */
+.high-contrast button,
+.high-contrast .btn-accent,
+.high-contrast a.btn-accent,
+.high-contrast a.btn-primary,
+.high-contrast a.btn-teal {
+  border: 2px solid #ffffff !important;
+  border-radius: 4px !important;
+}
+
 /* Background elements */
 .high-contrast body,
 .high-contrast nav,
@@ -296,6 +337,27 @@ button {
   color: #ffffff !important;
 }
 
+/* Specifically fix dashboard items */
+.high-contrast .bg-white.hover\:bg-teal\/5,
+.high-contrast .bg-white.p-8,
+.high-contrast section.py-16.bg-white,
+.high-contrast .dashboard-card,
+.high-contrast .custom-report {
+  background-color: #005354 !important;
+  border: 2px solid #ffffff !important;
+}
+
+.high-contrast .dashboard-image {
+  border-bottom: 1px solid #ffffff !important;
+}
+
+.high-contrast .bg-gradient-to-t,
+.high-contrast [style*="linear-gradient"],
+.high-contrast .dashboard-overlay {
+  background: #005354 !important;
+  border-bottom: 1px solid #ffffff !important;
+}
+
 /* Text elements */
 .high-contrast a,
 .high-contrast h1,
@@ -310,8 +372,16 @@ button {
 .high-contrast label,
 .high-contrast input,
 .high-contrast textarea,
-.high-contrast select {
+.high-contrast select,
+.high-contrast .text-gray-700 {
   color: #ffffff !important;
+}
+
+/* Dashboard link text fix */
+.high-contrast .btn-accent {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
 }
 
 /* Links should be underlined for better accessibility */
@@ -331,6 +401,7 @@ button {
 .high-contrast .inverted-contrast {
   background-color: #ffffff !important;
   color: #005354 !important;
+  border: 2px solid #ffffff !important;
 }
 
 .high-contrast .inverted-contrast * {
@@ -376,4 +447,732 @@ html.reduced-motion *::after {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Large Text Accessibility Mode */
+.larger-text {
+  --text-size-multiplier: 1.2; /* Base multiplier */
+}
+
+.larger-text-2x {
+  --text-size-multiplier: 1.4;
+}
+
+.larger-text-3x {
+  --text-size-multiplier: 1.6;
+}
+
+.larger-text body,
+.larger-text-2x body,
+.larger-text-3x body {
+  font-size: calc(15px * var(--text-size-multiplier));
+}
+
+/* Responsive text sizing for headings */
+.larger-text h1,
+.larger-text-2x h1,
+.larger-text-3x h1 {
+  font-size: calc(2rem * var(--text-size-multiplier));
+  line-height: 1.2;
+}
+
+.larger-text h2,
+.larger-text-2x h2,
+.larger-text-3x h2 {
+  font-size: calc(1.6rem * var(--text-size-multiplier));
+  line-height: 1.2;
+}
+
+.larger-text h3,
+.larger-text-2x h3,
+.larger-text-3x h3 {
+  font-size: calc(1.4rem * var(--text-size-multiplier));
+  line-height: 1.3;
+}
+
+.larger-text h4,
+.larger-text-2x h4,
+.larger-text-3x h4 {
+  font-size: calc(1.2rem * var(--text-size-multiplier));
+  line-height: 1.3;
+}
+
+.larger-text h5,
+.larger-text h6,
+.larger-text-2x h5,
+.larger-text-2x h6,
+.larger-text-3x h5,
+.larger-text-3x h6 {
+  font-size: calc(1rem * var(--text-size-multiplier));
+  line-height: 1.4;
+}
+
+.larger-text p,
+.larger-text-2x p,
+.larger-text-3x p {
+  font-size: calc(15px * var(--text-size-multiplier));
+  line-height: 1.7;
+}
+
+.larger-text button,
+.larger-text a,
+.larger-text-2x button,
+.larger-text-2x a,
+.larger-text-3x button,
+.larger-text-3x a {
+  font-size: calc(1rem * var(--text-size-multiplier));
+}
+
+/* Layout adjustments for larger text */
+.larger-text .grid-cols-4,
+.larger-text-2x .grid-cols-4 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.larger-text-3x .grid-cols-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* Adjust card layouts for larger text */
+.larger-text .dashboard-card,
+.larger-text-2x .dashboard-card,
+.larger-text-3x .dashboard-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.larger-text .dashboard-image,
+.larger-text-2x .dashboard-image,
+.larger-text-3x .dashboard-image {
+  height: calc(12rem * var(--text-size-multiplier)) !important;
+}
+
+.larger-text .dashboard-content,
+.larger-text-2x .dashboard-content,
+.larger-text-3x .dashboard-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.larger-text .dashboard-content p,
+.larger-text-2x .dashboard-content p,
+.larger-text-3x .dashboard-content p {
+  flex-grow: 1;
+}
+
+/* Make sure buttons are properly sized */
+.larger-text .btn-accent,
+.larger-text-2x .btn-accent,
+.larger-text-3x .btn-accent {
+  padding: calc(0.5rem * var(--text-size-multiplier)) calc(1rem * var(--text-size-multiplier));
+}
+
+/* Responsive adjustments for smaller screens with larger text */
+@media (max-width: 1024px) {
+  .larger-text .grid-cols-3,
+  .larger-text-2x .grid-cols-3,
+  .larger-text-3x .grid-cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  
+  .larger-text-3x .grid-cols-3 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .larger-text .grid-cols-2,
+  .larger-text-2x .grid-cols-2,
+  .larger-text-3x .grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Fix overflow issues */
+.larger-text,
+.larger-text-2x,
+.larger-text-3x {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.larger-text .truncate,
+.larger-text-2x .truncate,
+.larger-text-3x .truncate {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* Accessibility drawer styles */
+.accessibility-drawer {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) #f1f1f1;
+}
+
+.accessibility-drawer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.accessibility-drawer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.accessibility-drawer::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.high-contrast .accessibility-drawer::-webkit-scrollbar-track {
+  background: #003a3b;
+}
+
+.high-contrast .accessibility-drawer::-webkit-scrollbar-thumb {
+  background: #ffffff;
+}
+
+/* Equal height sections */
+.accessibility-drawer .flex-1 {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  height: 100%;
+}
+
+.accessibility-drawer .space-y-4 {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Feature item containers */
+.accessibility-drawer .space-y-4 > div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fix space-y-4 to ensure proper spacing between features */
+.accessibility-drawer .space-y-4 > div:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+/* Ensure feature descriptions stay within bounds */
+.accessibility-drawer p.text-sm {
+  margin-bottom: 0;
+  word-break: break-word;
+}
+
+/* High contrast mode for boxed sections */
+.high-contrast .accessibility-drawer .border.border-gray-100 {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  background-color: rgba(0, 60, 61, 0.5) !important;
+}
+
+.high-contrast .accessibility-drawer .bg-gray-50 {
+  background-color: #003a3b !important;
+}
+
+.high-contrast .accessibility-drawer h4.border-b {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.high-contrast .accessibility-drawer .border-b.border-gray-100 {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Accessibility drawer with two columns */
+@media (max-width: 768px) {
+  .fixed.top-0.right-0.bottom-0.w-\[40rem\] {
+    width: 100% !important;
+  }
+  
+  .accessibility-drawer .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .accessibility-drawer .flex-1 {
+    min-height: auto;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Accessibility feature badges */
+.feature-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+}
+
+.feature-badge-enabled {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.feature-badge-disabled {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+/* High contrast mode adjustments for accessibility drawer */
+.high-contrast .accessibility-drawer {
+  background-color: #005354 !important;
+  border-left: 2px solid #ffffff !important;
+}
+
+.high-contrast .accessibility-drawer h3,
+.high-contrast .accessibility-drawer h4 {
+  color: #ffffff !important;
+}
+
+.high-contrast .feature-badge-disabled {
+  background-color: #003a3b !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* Large text adjustments for drawer */
+.larger-text .accessibility-drawer .feature-badge,
+.larger-text-2x .accessibility-drawer .feature-badge,
+.larger-text-3x .accessibility-drawer .feature-badge {
+  font-size: calc(0.75rem * var(--text-size-multiplier));
+  padding: calc(0.125rem * var(--text-size-multiplier)) calc(0.5rem * var(--text-size-multiplier));
+}
+
+/* Toggle switch styles for high contrast mode */
+.high-contrast .accessibility-drawer .inline-flex[class*="bg-accent"] {
+  background-color: #E8A117 !important;
+  border: 2px solid #ffffff !important;
+}
+
+.high-contrast .accessibility-drawer .inline-flex[class*="bg-gray-200"] {
+  background-color: #003a3b !important;
+  border: 2px solid #ffffff !important;
+}
+
+.high-contrast .accessibility-drawer .inline-block.bg-white {
+  background-color: #ffffff !important;
+  border: 1px solid #003a3b !important;
+}
+
+.high-contrast .accessibility-drawer .border-gray-100,
+.high-contrast .accessibility-drawer .border-gray-200 {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.high-contrast .accessibility-drawer .text-gray-800,
+.high-contrast .accessibility-drawer .text-gray-500 {
+  color: #ffffff !important;
+}
+
+/* Text size controls in high contrast mode */
+.high-contrast .accessibility-drawer button[aria-label="Decrease text size"],
+.high-contrast .accessibility-drawer button[aria-label="Increase text size"],
+.high-contrast .accessibility-drawer button[aria-label="Decrease cursor size"],
+.high-contrast .accessibility-drawer button[aria-label="Increase cursor size"] {
+  background-color: #003a3b !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
+.high-contrast .accessibility-drawer button[aria-label="Decrease text size"]:disabled,
+.high-contrast .accessibility-drawer button[aria-label="Increase text size"]:disabled,
+.high-contrast .accessibility-drawer button[aria-label="Decrease cursor size"]:disabled,
+.high-contrast .accessibility-drawer button[aria-label="Increase cursor size"]:disabled {
+  opacity: 0.5;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.high-contrast .accessibility-drawer button[aria-label="Decrease text size"]:not(:disabled):hover,
+.high-contrast .accessibility-drawer button[aria-label="Increase text size"]:not(:disabled):hover,
+.high-contrast .accessibility-drawer button[aria-label="Decrease cursor size"]:not(:disabled):hover,
+.high-contrast .accessibility-drawer button[aria-label="Increase cursor size"]:not(:disabled):hover {
+  background-color: #004344 !important;
+}
+
+/* Monochrome mode */
+.monochrome {
+  filter: grayscale(100%) !important;
+}
+
+.monochrome * {
+  filter: grayscale(100%) !important;
+}
+
+.monochrome img,
+.monochrome video,
+.monochrome svg {
+  filter: grayscale(100%) !important;
+}
+
+/* Hide images mode */
+.hide-images img,
+.hide-images Image,
+.hide-images svg:not(.accessibility-drawer svg, [aria-label="Accessibility options"] svg),
+.hide-images figure,
+.hide-images picture,
+.hide-images video,
+.hide-images canvas,
+.hide-images [role="img"],
+.hide-images [class*="image"],
+.hide-images [class*="img"],
+.hide-images [class*="photo"],
+.hide-images [class*="banner"],
+.hide-images [class*="background"] {
+  opacity: 0.1 !important;
+  filter: blur(4px) !important;
+}
+
+.hide-images img[alt],
+.hide-images Image[alt] {
+  position: relative !important;
+}
+
+.hide-images img[alt]::after,
+.hide-images Image[alt]::after {
+  content: attr(alt) !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1px dashed var(--border) !important;
+  padding: 1rem !important;
+  text-align: center !important;
+  font-size: 0.875rem !important;
+}
+
+/* Cursor size adjustments */
+.cursor-large,
+.cursor-large * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-9'%3E%3C/path%3E%3C/svg%3E"), auto !important;
+}
+
+.cursor-x-large,
+.cursor-x-large * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-9'%3E%3C/path%3E%3C/svg%3E"), auto !important;
+}
+
+.high-contrast.cursor-large,
+.high-contrast.cursor-large * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-9'%3E%3C/path%3E%3C/svg%3E"), auto !important;
+}
+
+.high-contrast.cursor-x-large,
+.high-contrast.cursor-x-large * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-9'%3E%3C/path%3E%3C/svg%3E"), auto !important;
+}
+
+/* Highlight Links mode */
+.highlight-links a {
+  background-color: #ffffd0 !important;
+  color: #0000cc !important;
+  text-decoration: underline !important;
+  border: 1px solid #e0e0a0 !important;
+  padding: 0 2px !important;
+  border-radius: 2px !important;
+  transition: all 0.1s ease-in-out !important;
+  font-weight: bold !important;
+}
+
+.highlight-links a:hover,
+.highlight-links a:focus {
+  background-color: #ffff90 !important;
+  color: #0000ee !important;
+  box-shadow: 0 0 0 2px rgba(232, 161, 23, 0.3) !important;
+  outline: 2px solid #E8A117 !important;
+}
+
+.high-contrast.highlight-links a {
+  background-color: #FFCC00 !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  outline: none !important;
+}
+
+.high-contrast.highlight-links a:hover,
+.high-contrast.highlight-links a:focus {
+  background-color: #ffffff !important;
+  color: #005354 !important;
+}
+
+/* Fix for feature cards in accessibility drawer */
+.accessibility-drawer .flex-1 {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  height: 100%;
+}
+
+.accessibility-drawer .flex-grow {
+  flex: 1;
+}
+
+/* Ensure consistent spacing in feature containers */
+.accessibility-drawer .space-y-4 > div {
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.accessibility-drawer .space-y-4 > div:not(:last-child) {
+  margin-bottom: 1rem !important;
+}
+
+/* Fix border display */
+.accessibility-drawer .space-y-4 > div.border-b {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+/* Ensure feature descriptions stay within bounds */
+.accessibility-drawer p.text-sm {
+  margin-bottom: 0;
+  word-break: break-word;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Consistent card heights for small content sections */
+.accessibility-drawer .flex-1.border {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.accessibility-drawer .flex-1.border > h4 {
+  flex-shrink: 0;
+}
+
+.accessibility-drawer .flex-1.border > .space-y-4 {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Updated feedback button styles */
+.high-contrast button[aria-label="Provide feedback"] {
+  background-color: #E8A117 !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+}
+
+.high-contrast button[aria-label="Provide feedback"]:hover {
+  background-color: #ffffff !important;
+  color: #005354 !important;
+}
+
+/* High contrast mode for the feedback popup */
+.high-contrast .fixed.right-0.bottom-24 {
+  border: 2px solid #ffffff !important;
+  background-color: #005354 !important;
+}
+
+.high-contrast .fixed.right-0.bottom-24 h4 {
+  color: #ffffff !important;
+}
+
+.high-contrast .fixed.right-0.bottom-24 p {
+  color: #ffffff !important;
+}
+
+.high-contrast .fixed.right-0.bottom-24 button.border {
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+.high-contrast .fixed.right-0.bottom-24 button.bg-accent {
+  background-color: #E8A117 !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* Bold Text mode */
+.bold-text h1,
+.bold-text h2,
+.bold-text h3,
+.bold-text h4,
+.bold-text h5,
+.bold-text h6,
+.bold-text p,
+.bold-text span,
+.bold-text a,
+.bold-text div,
+.bold-text button,
+.bold-text li,
+.bold-text label,
+.bold-text input,
+.bold-text textarea,
+.bold-text table,
+.bold-text td,
+.bold-text th {
+  font-weight: bold !important;
+}
+
+/* Fix font weight for already bold headings */
+.bold-text h1,
+.bold-text h2,
+.bold-text h3,
+.bold-text h4,
+.bold-text h5,
+.bold-text h6 {
+  font-weight: 900 !important;
+}
+
+/* Further improved accessibility drawer layout */
+.accessibility-drawer .space-y-4 {
+  display: flex;
+  flex-direction: column;
+}
+
+.accessibility-drawer .space-y-4 > div {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.accessibility-drawer .space-y-4 > div:last-child {
+  margin-bottom: 0;
+}
+
+.accessibility-drawer p.text-sm {
+  margin-bottom: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Ensure the drawer components are properly sized */
+.accessibility-drawer .flex-1.border {
+  padding: 1rem;
+  min-height: 150px;
+  height: auto !important;
+  margin-bottom: 1.5rem;
+}
+
+/* Fix spacing between sections */
+.accessibility-drawer .flex-col.space-y-6 > div:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Ensure feature lists have proper spacing */
+.accessibility-drawer .flex-1.border .space-y-4 {
+  margin-top: 0.5rem;
+}
+
+/* Make section titles more visible */
+.accessibility-drawer h4 {
+  font-size: 1.125rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Fix width issues on smaller screens */
+@media (max-width: 768px) {
+  .fixed.top-0.right-0.bottom-0.w-\[40rem\] {
+    width: 100% !important;
+    max-width: 100vw;
+  }
+  
+  .accessibility-drawer .p-6 {
+    padding: 1rem;
+  }
+  
+  .accessibility-drawer .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+}
+
+/* Add a subtle scroll indicator */
+.accessibility-drawer:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to top, rgba(255,255,255,0.8), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.high-contrast .accessibility-drawer:after {
+  background: linear-gradient(to top, rgba(0,83,84,0.8), transparent);
+}
+
+/* Sticky feedback bar styles */
+.high-contrast .fixed.bottom-0.left-0.z-40 .bg-white {
+  background-color: #005354 !important;
+  border-color: #ffffff !important;
+}
+
+.high-contrast .fixed.bottom-0.left-0.z-40 .bg-accent\/5 {
+  background-color: rgba(232, 161, 23, 0.1) !important;
+}
+
+.high-contrast .fixed.bottom-0.left-0.z-40 .text-primary {
+  color: #ffffff !important;
+}
+
+.high-contrast .fixed.bottom-0.left-0.z-40 .text-gray-600 {
+  color: #ffffff !important;
+}
+
+.high-contrast .fixed.bottom-0.left-0.z-40 .border-gray-100 {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.high-contrast .fixed.bottom-0.left-0.z-40 .bg-primary {
+  background-color: #E8A117 !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+
+.high-contrast .fixed.bottom-0.left-0.z-40 .bg-accent {
+  background-color: #E8A117 !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* Tooltip styles */
+.group:hover .group-hover\:opacity-100 {
+  z-index: 100;
+}
+
+/* Ensure tooltips are readable in high contrast mode */
+.high-contrast .bg-gray-800 {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* Accessibility button styles */
+.high-contrast .fixed.right-0.top-1\/3 button {
+  background-color: #005354 !important;
+  border: 2px solid #ffffff !important;
+}
+
+.high-contrast .fixed.right-0.top-1\/3 button:hover {
+  background-color: #E8A117 !important;
+  color: #000000 !important;
+}
+
+/* Remove redundant development notice styles */
+.high-contrast .fixed.right-0.top-1\/2 .bg-white,
+.high-contrast .fixed.right-0.top-1\/2 .text-primary,
+.high-contrast .fixed.right-0.top-1\/2 .text-gray-600,
+.high-contrast .fixed.right-0.top-1\/2 .bg-accent {
+  display: none;
 }

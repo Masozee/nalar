@@ -8,35 +8,35 @@ import { FiArrowRight, FiBarChart2, FiGlobe, FiPieChart, FiTrendingUp } from 're
 const dashboards = [
   {
     id: 1,
-    title: "Indonesia Economic Indicators",
+    title: "Indonesia's Strategic Dependency Dashboard",
     icon: <FiPieChart className="w-5 h-5" />,
     description: "Comprehensive visualization of key economic indicators for Indonesia, including GDP growth, inflation rates, and foreign investment trends.",
-    link: "/dashboards/economic-indicators",
-    image: "/bg/frank-mouland-e4mYPf_JUIk-unsplash.png",
+    link: "https://isdp.csis.or.id",
+    image: "/bg/getty-images-PWFDb-sRcsY-unsplash.jpg",
   },
   {
     id: 2,
-    title: "Regional Trade Analysis",
+    title: "Collective Violence Early Warning Dataset",
     icon: <FiBarChart2 className="w-5 h-5" />,
     description: "Interactive visualization of trade flows between ASEAN countries, highlighting key exports, imports, and emerging trade patterns.",
-    link: "/dashboards/regional-trade",
-    image: "/bg/heather-green-bQTzJzwQfJE-unsplash.png",
+    link: "https://violence.csis.or.id",
+    image: "/bg/pawel-janiak-49LBMXrY5BE-unsplash.jpg",
   },
   {
     id: 3,
-    title: "Political Survey Results",
+    title: "Hatespeech Dashboard",
     icon: <FiTrendingUp className="w-5 h-5" />,
     description: "Visualization of public opinion trends on key political issues in Indonesia, based on CSIS's quarterly nationwide surveys.",
-    link: "/dashboards/political-surveys",
-    image: "/bg/muska-create-5MvNlQENWDM-unsplash.png",
+    link: "https://hatespeech.csis.or.id",
+    image: "/bg/jason-leung-XigshA91R6M-unsplash.jpg",
   },
   {
     id: 4,
-    title: "Global Relations Index",
+    title: "Decarbonization for Development",
     icon: <FiGlobe className="w-5 h-5" />,
     description: "Interactive tracker of Indonesia's diplomatic and economic relations with key global partners, including strength of ties and recent developments.",
-    link: "/dashboards/global-relations",
-    image: "/bg/muska-create-K5OIYotY9GA-unsplash.png",
+    link: "https://dfdlab.org",
+    image: "/bg/getty-images-PWFDb-sRcsY-unsplash.jpg",
   },
 ];
 
@@ -54,23 +54,24 @@ const Dashboard = () => {
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {dashboards.map((dashboard, index) => (
             <motion.div
               key={dashboard.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white hover:bg-teal/5 transition-all border-animate-bottom relative shadow"
+              className="dashboard-card bg-white hover:bg-teal/5 transition-all border-animate-bottom relative shadow"
             >
-              <div className="h-48 relative overflow-hidden">
+              <div className="dashboard-image h-48 relative overflow-hidden">
                 <Image 
                   src={dashboard.image}
                   alt={dashboard.title}
                   fill
                   style={{ objectFit: 'cover' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex items-end">
+                <div className="dashboard-overlay absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex items-end" 
+                     style={{ background: 'linear-gradient(360deg, rgba(77,135,135,255) 0%, rgba(34,23,17,0.24693627450980393) 37%)' }}>
                   <div className="p-6">
                     <h3 className="text-2xl font-bold text-white mb-1">{dashboard.title}</h3>
                   </div>
@@ -79,7 +80,7 @@ const Dashboard = () => {
                   {dashboard.icon}
                 </div>
               </div>
-              <div className="p-6">
+              <div className="dashboard-content p-6">
                 <p className="text-gray-700 mb-6">{dashboard.description}</p>
                 <Link 
                   href={dashboard.link} 
@@ -93,7 +94,7 @@ const Dashboard = () => {
           ))}
         </div>
         
-        <div className="mt-16 bg-white p-8 border-animate-left border border-accent/20">
+        <div className="custom-report mt-16 bg-white p-8 border-animate-left border border-accent/20">
           <div className="flex flex-col md:flex-row md:items-center justify-between">
             <div className="mb-6 md:mb-0 md:max-w-2xl">
               <h3 className="text-2xl font-bold text-primary mb-3">Custom Research Reports</h3>

@@ -26,7 +26,8 @@ export default function Hero() {
           priority
           style={{ objectFit: 'cover', objectPosition: 'center' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/60" 
+             style={{ background: 'linear-gradient(360deg, rgba(77,135,135,255) 0%, rgba(34,23,17,0.24693627450980393) 37%)' }}></div>
       </div>
 
       {/* Content */}

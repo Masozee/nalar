@@ -8,6 +8,7 @@ import ScrollProgress from "@/components/animations/ScrollProgress";
 import NavBar from "@/components/NavBar";
 import BackToTop from "@/components/BackToTop";
 import AccessibilityWidget from "@/components/AccessibilityWidget";
+import FeedbackPopup from '../components/FeedbackPopup';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -75,7 +76,10 @@ export default function RootLayout({
         <SpeedInsights />
         <Analytics />
         <BackToTop />
-        <AccessibilityWidget />
+        <div id="accessibility">
+          <AccessibilityWidget />
+        </div>
+        <FeedbackPopup />
       </body>
     </html>
   );
