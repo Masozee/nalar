@@ -394,13 +394,13 @@ export default function AccessibilityWidget() {
 
   return (
     <>
-      {/* Fixed floating buttons in the right side of the screen */}
-      <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-50 flex flex-col gap-4">
+      {/* Fixed floating buttons in the right side of the screen - always visible */}
+      <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-[100] flex flex-col gap-4">
         {/* Accessibility button with hover animation */}
-        <div className="relative flex justify-end w-14 h-14">
+        <div className="relative flex justify-end w-14 h-14 overflow-visible">
           <motion.button
             onClick={toggleMenu}
-            className="group bg-accent text-white p-3 rounded-l-lg shadow-lg hover:bg-accent/90 transition-colors flex items-center justify-center h-14 w-14 absolute right-0"
+            className="group bg-accent text-black p-3 rounded-l-lg shadow-lg flex items-center h-14 w-14 absolute right-0 overflow-visible border-2 border-accent"
             whileHover={{ 
               width: 170,
               transition: { duration: 0.3 }
@@ -414,10 +414,10 @@ export default function AccessibilityWidget() {
                 alt="Accessibility" 
                 width={24} 
                 height={24}
-                className="w-6 h-6 text-white"
+                className="w-6 h-6"
               />
             </div>
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 absolute left-14 font-medium text-white">
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 absolute left-14 font-medium text-black">
               Aksesibilitas
             </span>
             <span className="absolute right-full mr-2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
@@ -427,13 +427,13 @@ export default function AccessibilityWidget() {
         </div>
         
         {/* Feedback button with hover animation */}
-        <div className="relative flex justify-end w-14 h-14">
+        <div className="relative flex justify-end w-14 h-14 overflow-visible">
           <motion.button
             onClick={() => {
               const event = new CustomEvent('openFeedbackPopup');
               document.dispatchEvent(event);
             }}
-            className="group bg-accent text-white p-3 rounded-l-lg shadow-lg hover:bg-accent/90 transition-colors flex items-center justify-center h-14 w-14 absolute right-0"
+            className="group bg-accent text-black p-3 rounded-l-lg shadow-lg flex items-center h-14 w-14 absolute right-0 overflow-visible border-2 border-accent"
             whileHover={{ 
               width: 170,
               transition: { duration: 0.3 }
@@ -442,9 +442,9 @@ export default function AccessibilityWidget() {
             aria-label="Provide feedback"
           >
             <div className="flex items-center absolute left-4">
-              <FiMessageSquare className="w-6 h-6 text-white" />
+              <FiMessageSquare className="w-6 h-6 text-black" />
             </div>
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 absolute left-14 font-medium text-white">
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 absolute left-14 font-medium text-black">
               Feedback
             </span>
             <span className="absolute right-full mr-2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">

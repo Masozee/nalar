@@ -1172,7 +1172,68 @@ html.reduced-motion *::after {
 /* Remove redundant development notice styles */
 .high-contrast .fixed.right-0.top-1\/2 .bg-white,
 .high-contrast .fixed.right-0.top-1\/2 .text-primary,
-.high-contrast .fixed.right-0.top-1\/2 .text-gray-600,
-.high-contrast .fixed.right-0.top-1\/2 .bg-accent {
+.high-contrast .fixed.right-0.top-1\/2 .text-gray-600 {
   display: none;
+}
+
+/* Ensure accessibility buttons are always consistent in all modes */
+[aria-label="Accessibility options"],
+[aria-label="Provide feedback"] {
+  background-color: var(--accent) !important;
+  color: #000000 !important;
+  border: 2px solid var(--accent) !important;
+  z-index: 100 !important;
+}
+
+[aria-label="Accessibility options"]:hover,
+[aria-label="Provide feedback"]:hover {
+  background-color: #f0b546 !important;
+}
+
+/* Ensure icons are black in all modes */
+[aria-label="Accessibility options"] img,
+[aria-label="Accessibility options"] svg,
+[aria-label="Provide feedback"] svg {
+  color: #000000 !important;
+  fill: #000000 !important;
+}
+
+/* Specific selector to override any other mode styles */
+html:where(:not(:empty)) [aria-label="Accessibility options"],
+html:where(:not(:empty)) [aria-label="Provide feedback"] {
+  background-color: var(--accent) !important;
+  color: #000000 !important;
+}
+
+/* Override high contrast mode */
+.high-contrast [aria-label="Accessibility options"],
+.high-contrast [aria-label="Provide feedback"] {
+  background-color: var(--accent) !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+}
+
+/* Convert accessibility icon to black in all modes */
+[aria-label="Accessibility options"] img {
+  filter: brightness(0) !important;
+}
+
+/* Ensure accessibility buttons are consistently visible in high contrast mode */
+.high-contrast [aria-label="Accessibility options"],
+.high-contrast [aria-label="Provide feedback"] {
+  background-color: var(--accent) !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  display: flex !important;
+  z-index: 200 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Ensure container is visible */
+.high-contrast .fixed.right-0.top-1\/2 {
+  display: flex !important;
+  z-index: 200 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
