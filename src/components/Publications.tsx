@@ -2,9 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiDownload, FiArrowRight, FiCalendar, FiUser } from 'react-icons/fi';
-import StaggerContainer from './animations/StaggerContainer';
-import HoverEffect from './animations/HoverEffect';
+import { motion } from 'framer-motion';
+import { FiDownload, FiArrowRight, FiCalendar, FiUser, FiExternalLink, FiBook } from 'react-icons/fi';
 import FadeIn from './animations/FadeIn';
 
 const publications = [
@@ -66,136 +65,167 @@ const publications = [
 ];
 
 export default function Publications() {
-  const featuredPublication = publications[0];
-  const otherPublications = publications.slice(1);
+  const featuredPublication = publications.find(pub => pub.featured);
+  const otherPublications = publications.filter(pub => !pub.featured);
 
   return (
     <section className="py-16 bg-white border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeIn>
-          <div className="flex items-baseline mb-8">
-            <h2 className="text-3xl font-bold text-primary">Research Publications</h2>
-            <div className="ml-auto flex items-center space-x-3">
-              <span className="text-gray-400">|</span>
-              <Link 
-                href="/publications/categories" 
-                className="text-teal hover:text-accent flex items-center text-sm font-medium"
-              >
-                Browse By Category
-              </Link>
-            </div>
-          </div>
-        </FadeIn>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold text-primary">Research Publications</h2>
+          <Link 
+            href="/publications" 
+            className="flex items-center text-accent text-base font-medium hover:underline"
+          >
+            View All <FiArrowRight className="ml-2" />
+          </Link>
+        </div>
         
-        {featuredPublication && (
-          <FadeIn>
-            <div className="mb-10 border-glow shadow-lg">
-              <div className="grid grid-cols-1 md:grid-cols-3">
-                <div className="md:col-span-1 bg-primary/5 flex flex-col justify-center p-6 border-animate-left relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-20">
-                    <Image 
-                      src={featuredPublication.image}
-                      alt={featuredPublication.title}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </div>
-                  <div className="relative z-10">
-                    <span className="bg-accent text-white px-3 py-1 mb-3 inline-block text-sm">Featured</span>
-                    <h3 className="text-xl md:text-2xl font-bold mb-2 text-primary">{featuredPublication.title}</h3>
-                    <div className="flex items-center mb-1 text-teal text-sm">
-                      <FiCalendar className="mr-2" />
-                      <span>{featuredPublication.date}</span>
-                    </div>
-                    <div className="flex items-center mb-3 text-teal text-sm">
-                      <FiUser className="mr-2" />
-                      <span>{featuredPublication.author}</span>
-                    </div>
-                    <span className="px-3 py-1 border border-primary text-primary mb-4 inline-block text-sm">
-                      {featuredPublication.category}
-                    </span>
-                    <Link
-                      href={featuredPublication.link}
-                      className="flex items-center justify-center btn-primary px-4 py-2 text-base font-medium"
-                    >
-                      Read Publication <FiArrowRight className="ml-2" />
-                    </Link>
-                    <button className="flex items-center justify-center mt-3 border border-teal text-teal px-4 py-2 text-sm hover:bg-teal hover:text-white transition-colors">
-                      <FiDownload className="mr-2" /> Download PDF
-                    </button>
-                  </div>
-                </div>
-                <div className="md:col-span-2 p-6">
-                  <p className="text-base text-gray-700 mb-4">{featuredPublication.excerpt}</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="border-l-4 border-l-teal p-4 bg-teal/5">
-                      <h4 className="font-bold mb-2 text-primary text-base">Key Insights</h4>
-                      <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm">
-                        <li>Analysis of current economic trends</li>
-                        <li>Forecasts for major industry sectors</li>
-                        <li>Policy recommendations for growth</li>
-                      </ul>
-                    </div>
-                    <div className="border-l-4 border-l-accent p-4 bg-accent/5">
-                      <h4 className="font-bold mb-2 text-primary text-base">Methodology</h4>
-                      <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm">
-                        <li>Quantitative economic modeling</li>
-                        <li>Expert interviews and surveys</li>
-                        <li>Comparative analysis with regional peers</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </FadeIn>
-        )}
-        
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {otherPublications.map((publication) => (
-            <HoverEffect key={publication.id} translateY={-5} className="card-hover bg-white shadow-md">
-              <div className="border-animate-top">
-                <div className="relative h-40 w-full overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Featured Publication */}
+          {featuredPublication && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="col-span-1 lg:col-span-8 relative"
+            >
+              <div className="bg-white shadow-lg border-glow border-pulse">
+                <div className="relative h-[250px] w-full overflow-hidden">
                   <Image 
-                    src={publication.image}
-                    alt={publication.title}
+                    src={featuredPublication.image}
+                    alt={featuredPublication.title}
                     fill
                     style={{ objectFit: 'cover' }}
                   />
-                  <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-2 py-1">
-                    {publication.category}
+                  <div className="absolute top-0 left-0 bg-accent text-white py-1 px-3 z-10 text-sm">
+                    Featured Research
                   </div>
                 </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-primary text-lg mb-2">{publication.title}</h3>
-                  <p className="text-gray-700 text-sm line-clamp-2 mb-3">{publication.excerpt}</p>
-                  <div className="flex items-center text-gray-500 text-xs mb-3">
-                    <FiCalendar className="mr-1" />
-                    <span>{publication.date}</span>
-                    <span className="mx-2">•</span>
-                    <FiUser className="mr-1" />
-                    <span>{publication.author}</span>
+                
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="text-base text-teal font-medium">{featuredPublication.category}</span>
+                    <div className="flex items-center space-x-4">
+                      <span className="flex items-center text-gray-500 text-xs">
+                        <FiCalendar className="mr-1" /> {featuredPublication.date}
+                      </span>
+                      <span className="flex items-center text-gray-500 text-xs">
+                        <FiUser className="mr-1" /> {featuredPublication.author}
+                      </span>
+                    </div>
                   </div>
+                  <h3 className="text-xl font-bold mb-3 text-primary">{featuredPublication.title}</h3>
+                  <p className="text-base text-gray-700 mb-4">{featuredPublication.excerpt}</p>
+                  <div className="flex justify-between items-center">
+                    <Link 
+                      href={featuredPublication.link} 
+                      className="inline-flex items-center btn-primary text-base font-medium px-4 py-2"
+                    >
+                      Read Publication <FiArrowRight className="ml-2" />
+                    </Link>
+                    <button
+                      className="flex items-center text-teal text-sm hover:underline"
+                    >
+                      <FiDownload className="mr-1" /> Download PDF
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+          
+          {/* Publications Sidebar */}
+          <div className="col-span-1 lg:col-span-4">
+            <div className="bg-white border-t-4 border-primary mb-8">
+              <h3 className="text-base font-bold p-3 bg-primary text-white">Recent Publications</h3>
+              <div className="divide-y divide-gray-200">
+                {otherPublications.slice(0, 3).map((publication, index) => (
+                  <motion.div
+                    key={publication.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="p-3 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-teal font-medium">{publication.category}</span>
+                      <span className="text-gray-500">{publication.date}</span>
+                    </div>
+                    <Link href={publication.link}>
+                      <h4 className="text-sm font-bold hover:text-accent transition-colors">
+                        {publication.title}
+                      </h4>
+                    </Link>
+                    <div className="mt-1 text-xs text-gray-500">{publication.author}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="bg-primary p-5 text-white">
+              <h3 className="text-base font-bold mb-3">Request Publications</h3>
+              <p className="mb-3 text-sm">Can't find what you're looking for? Request a research publication or report from our archives.</p>
+              <div className="space-y-2">
+                <input 
+                  type="text" 
+                  placeholder="Research topic" 
+                  className="w-full p-2 border border-white/20 bg-primary/80 text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-accent text-sm"
+                />
+                <button className="w-full py-2 btn-accent font-medium text-sm">
+                  Submit Request
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Publications Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+          {otherPublications.slice(0, 3).map((publication, index) => (
+            <motion.div
+              key={publication.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 * index }}
+              className="bg-white border-animate-left card-hover"
+            >
+              <div className="relative h-40 w-full overflow-hidden">
+                <Image 
+                  src={publication.image}
+                  alt={publication.title}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
+                <div className="absolute top-0 left-0 px-2 py-1 bg-teal text-white font-medium text-xs">
+                  {publication.category}
+                </div>
+              </div>
+              <div className="p-4">
+                <div className="flex justify-end">
+                  <span className="text-xs text-gray-500">{publication.date}</span>
+                </div>
+                <h3 className="text-base font-bold mb-2 text-primary hover:text-accent transition-colors">
+                  <Link href={publication.link}>{publication.title}</Link>
+                </h3>
+                <p className="text-sm text-gray-700 mb-3 line-clamp-2">{publication.excerpt}</p>
+                <div className="flex justify-between items-center">
                   <Link 
                     href={publication.link} 
-                    className="text-teal hover:text-accent text-sm font-medium flex items-center"
+                    className="text-accent font-medium hover:underline flex items-center text-sm"
                   >
                     Read More <FiArrowRight className="ml-1" />
                   </Link>
+                  <span 
+                    className="text-gray-500 text-xs flex items-center"
+                  >
+                    <FiUser className="mr-1" /> {publication.author}
+                  </span>
                 </div>
               </div>
-            </HoverEffect>
+            </motion.div>
           ))}
-        </StaggerContainer>
-        
-        <FadeIn className="text-center mt-12">
-          <Link 
-            href="/publications" 
-            className="inline-flex items-center justify-center bg-accent hover:bg-accent/90 text-white py-3 px-6 transition-colors font-medium"
-          >
-            View All Publications <FiArrowRight className="ml-2" />
-          </Link>
-        </FadeIn>
+        </div>
       </div>
     </section>
   );
