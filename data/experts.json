@@ -1,0 +1,222 @@
+[
+  {
+    "id": "exp-001",
+    "slug": "yose-rizal-damuri",
+    "name": "Dr. Yose Rizal Damuri",
+    "title": "Executive Director",
+    "expertise": ["International Trade", "Regional Integration", "Economic Development"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_1.png",
+    "profileUrl": "/experts/yose-rizal-damuri",
+    "bio": "Expert in economic policy, specializing in trade and regional cooperation."
+  },
+  {
+    "id": "exp-002",
+    "slug": "shafiah-f-muhibat",
+    "name": "Dr. Shafiah F. Muhibat",
+    "title": "Deputy Executive Director for Research",
+    "expertise": ["Maritime Security", "ASEAN", "Regionalism"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/Muhibat_photo_green.png",
+    "profileUrl": "/experts/shafiah-f-muhibat",
+    "bio": "Focuses on regional maritime issues and Southeast Asian foreign relations."
+  },
+  {
+    "id": "exp-003",
+    "slug": "medelina-k-hendytio",
+    "name": "Medelina K. Hendytio",
+    "title": "Deputy Executive Director",
+    "expertise": ["Education Policy", "Gender", "Public Administration"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_18.png",
+    "profileUrl": "/experts/medelina-k-hendytio",
+    "bio": "Works on gender, education systems, and governance reform in Indonesia."
+  },
+  {
+    "id": "exp-004",
+    "slug": "philips-j-vermonte",
+    "name": "Dr. Philips J. Vermonte",
+    "title": "Senior Fellow",
+    "expertise": ["Indonesian Politics", "Democratization", "Security"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_20.png",
+    "profileUrl": "/experts/philips-j-vermonte",
+    "bio": "Senior political analyst with focus on democracy and political institutions."
+  },
+  {
+    "id": "exp-005",
+    "slug": "rizal-sukma",
+    "name": "Dr. Rizal Sukma",
+    "title": "Senior Fellow",
+    "expertise": ["Foreign Policy", "Security", "Islam and Politics"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_9.png",
+    "profileUrl": "/experts/rizal-sukma",
+    "bio": "Specialist in Indonesia’s foreign relations and strategic regional issues."
+  },
+  {
+    "id": "exp-006",
+    "slug": "puspa-delima-amri",
+    "name": "Dr. Puspa Delima Amri",
+    "title": "Non-Resident Fellow",
+    "expertise": ["Monetary Economics", "Financial Development", "Small Business Finance"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/SBE_Puspa_A_72dpi-6442_square.JPG",
+    "profileUrl": "/experts/puspa-delima-amri",
+    "bio": "Focuses on macroeconomic analysis and inclusive financial growth."
+  },
+  {
+    "id": "exp-007",
+    "slug": "arya-fernandes",
+    "name": "Arya Fernandes",
+    "title": "Head of Department of Politics and Social Change",
+    "expertise": ["Political Parties", "Democratization", "Public Opinion"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_11.png",
+    "profileUrl": "/experts/arya-fernandes",
+    "bio": "Expert on political trends, democratic institutions, and public perception."
+  },
+  {
+    "id": "exp-008",
+    "slug": "lina-a-alexandra",
+    "name": "Dr. Lina A. Alexandra",
+    "title": "Head of Department of International Relations",
+    "expertise": ["Conflict Resolution", "Peacebuilding", "Human Rights"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_3.png",
+    "profileUrl": "/experts/lina-a-alexandra",
+    "bio": "Specializes in peace processes and Southeast Asian diplomacy."
+  },
+  {
+    "id": "exp-009",
+    "slug": "adinova-fauri",
+    "name": "Adinova Fauri",
+    "title": "Researcher",
+    "expertise": ["Macroeconomics", "Fiscal Policy", "Regional Integration"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/Untitled_design_1.jpg",
+    "profileUrl": "/experts/adinova-fauri",
+    "bio": "Focuses on Indonesian fiscal policy and economic development strategies."
+  },
+  {
+    "id": "exp-010",
+    "slug": "andrew-w-mantong",
+    "name": "Andrew W. Mantong",
+    "title": "Researcher",
+    "expertise": ["Cybersecurity", "Foreign Policy", "Indo-Pacific Strategy"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_10.png",
+    "profileUrl": "/experts/andrew-w-mantong",
+    "bio": "Researches strategic policy in digital and international security affairs."
+  },
+  {
+    "id": "exp-011",
+    "slug": "beltsazar-krisetya",
+    "name": "Beltsazar Krisetya",
+    "title": "Researcher",
+    "expertise": ["Digital Governance", "Social Transformation", "Knowledge Systems"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_10.png",
+    "profileUrl": "/experts/beltsazar-krisetya",
+    "bio": "Studies technology’s impact on governance and societal change."
+  },
+  {
+    "id": "exp-012",
+    "slug": "dandy-rafitrandi",
+    "name": "Dandy Rafitrandi",
+    "title": "Researcher",
+    "expertise": ["Climate Policy", "Trade", "Energy Transition"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_6.png",
+    "profileUrl": "/experts/dandy-rafitrandi",
+    "bio": "Focuses on sustainable development, green trade, and energy policy."
+  },
+  {
+    "id": "exp-013",
+    "slug": "deni-friawan",
+    "name": "Deni Friawan",
+    "title": "Researcher",
+    "expertise": ["Economic Crisis", "Institutional Reform", "Governance"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_13.png",
+    "profileUrl": "/experts/deni-friawan",
+    "bio": "Focuses on economic crisis recovery, institutional change, and governance effectiveness."
+  },
+  {
+    "id": "exp-014",
+    "slug": "dominique-nicky-fahrizal",
+    "name": "Dominique Nicky Fahrizal",
+    "title": "Researcher",
+    "expertise": ["Strategic Studies", "Political Institutions", "Law"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_53.png",
+    "profileUrl": "/experts/dominique-nicky-fahrizal",
+    "bio": "Works on legal and strategic political studies within Indonesia’s political system."
+  },
+  {
+    "id": "exp-015",
+    "slug": "edbert-gani-suryahudaya",
+    "name": "Edbert Gani Suryahudaya",
+    "title": "Researcher",
+    "expertise": ["Political Economy", "Voter Behavior", "Democratization"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/Untitled_design_20240725_090532_0000_copy.png",
+    "profileUrl": "/experts/edbert-gani-suryahudaya",
+    "bio": "Analyzes the intersection of economics and politics, especially electoral behavior."
+  },
+  {
+    "id": "exp-016",
+    "slug": "ira-s-titiheruw",
+    "name": "Ira S. Titiheruw",
+    "title": "Researcher",
+    "expertise": ["Regional Integration", "Macroeconomics", "Financial Policy"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_17.png",
+    "profileUrl": "/experts/ira-s-titiheruw",
+    "bio": "Specialist in Southeast Asia’s macroeconomic policies and regional financial cooperation."
+  },
+  {
+    "id": "exp-017",
+    "slug": "m-habib-abiyan-dzakwan",
+    "name": "M. Habib Abiyan Dzakwan",
+    "title": "Researcher",
+    "expertise": ["Critical Minerals", "ESG", "Geoeconomics", "Foreign Policy"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_63.png",
+    "profileUrl": "/experts/m-habib-abiyan-dzakwan",
+    "bio": "Researches strategic resources and sustainability in Indonesian and global context."
+  },
+  {
+    "id": "exp-018",
+    "slug": "muhammad-waffaa-kharisma",
+    "name": "Muhammad Waffaa Kharisma",
+    "title": "Researcher",
+    "expertise": ["Geopolitics", "Humanitarian Issues", "ASEAN", "Foreign Policy"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/waffa.png",
+    "profileUrl": "/experts/muhammad-waffaa-kharisma",
+    "bio": "Explores regional security, diplomacy, and human rights within the Indo-Pacific."
+  },
+  {
+    "id": "exp-019",
+    "slug": "noory-okthariza",
+    "name": "Noory Okthariza",
+    "title": "Researcher",
+    "expertise": ["Political Parties", "Elections", "Political Islam"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_19.png",
+    "profileUrl": "/experts/noory-okthariza",
+    "bio": "Focuses on electoral politics, Islamic movements, and party dynamics in Indonesia."
+  },
+  {
+    "id": "exp-020",
+    "slug": "novia-xu",
+    "name": "Novia Xu",
+    "title": "Researcher",
+    "expertise": ["Climate Change", "Trade Policy", "Sustainability"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/foto_Novia.png",
+    "profileUrl": "/experts/novia-xu",
+    "bio": "Works at the nexus of environmental policy and international trade regulations."
+  },
+  {
+    "id": "exp-021",
+    "slug": "pieter-pandie",
+    "name": "Pieter Pandie",
+    "title": "Researcher",
+    "expertise": ["International Relations", "Security Studies", "Diplomacy"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/Pieter_Pandi_CSIS.png",
+    "profileUrl": "/experts/pieter-pandie",
+    "bio": "Analyzes security and diplomatic issues within global and Southeast Asian context."
+  },
+  {
+    "id": "exp-022",
+    "slug": "vidhyandika-djati-perkasa",
+    "name": "Vidhyandika Djati Perkasa",
+    "title": "Senior Researcher",
+    "expertise": ["Governance", "Decentralization", "Social Policy"],
+    "imageUrl": "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/person/researcher_23.png",
+    "profileUrl": "/experts/vidhyandika-djati-perkasa",
+    "bio": "Focuses on public service reform, decentralization, and government accountability."
+  }
+]
