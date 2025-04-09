@@ -56,21 +56,22 @@ const NavBar = () => {
   };
 
   const togglePublicationsMenu = () => {
-    setPublicationsMenuOpen(!publicationsMenuOpen);
     if (mediaMenuOpen) setMediaMenuOpen(false);
+    setPublicationsMenuOpen(!publicationsMenuOpen);
   };
 
   const toggleMediaMenu = () => {
-    setMediaMenuOpen(!mediaMenuOpen);
     if (publicationsMenuOpen) setPublicationsMenuOpen(false);
+    setMediaMenuOpen(!mediaMenuOpen);
   };
 
   const navItems = [
     { name: 'About', href: '/about' },
-    { name: 'Events', href: '/events' },
-    { name: 'Experts', href: '/experts' },
-    { name: 'Media', href: '/media', hasDropdown: true },
+    { name: 'Scholars', href: '/scholars' },
     { name: 'Publications', href: '/publications', hasDropdown: true },
+    { name: 'Media', href: '/media', hasDropdown: true },
+    { name: 'Events', href: '/events' },
+    { name: 'News', href: '/news' },
   ];
 
   const publicationCategories = [
@@ -114,18 +115,6 @@ const NavBar = () => {
     }
   };
 
-  // Add animation to the logo
-  const logoVariants = {
-    hover: {
-      scale: 1.05,
-      rotate: -2,
-      transition: {
-        duration: 0.3,
-        ease: 'easeInOut'
-      }
-    }
-  };
-
   const topNavItems = [
     { name: 'CSIS Journals', href: '/journals' },
     { name: 'Shop', href: '/shop' },
@@ -144,18 +133,16 @@ const NavBar = () => {
       <div className="hidden lg:block border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-12 items-center">
-            {/* Logo on the left */}
+            {/* Logo on the left - bigger and without effects */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="flex items-center">
-                <motion.div whileHover="hover" variants={logoVariants}>
-                  <Image 
-                    src="/logo-max.png" 
-                    alt="CSIS Indonesia Logo" 
-                    width={100} 
-                    height={35} 
-                    priority
-                  />
-                </motion.div>
+                <Image 
+                  src="/logo-max.png" 
+                  alt="CSIS Indonesia Logo" 
+                  width={120} 
+                  height={42} 
+                  priority
+                />
               </Link>
             </div>
             
@@ -195,16 +182,31 @@ const NavBar = () => {
                     }`}
                   >
                     {item.name}
-                    <motion.svg
-                      animate={{ rotate: (item.name === 'Publications' ? publicationsMenuOpen : mediaMenuOpen) ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="ml-1 h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </motion.svg>
+                    {(item.name === 'Publications' ? publicationsMenuOpen : mediaMenuOpen) ? (
+                      <motion.svg
+                        initial={{ rotate: 0 }}
+                        animate={{ rotate: [0, 180] }}
+                        transition={{ duration: 0.3 }}
+                        className="ml-1 h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      </motion.svg>
+                    ) : (
+                      <motion.svg
+                        initial={{ rotate: 0 }}
+                        animate={{ rotate: [0, 180] }}
+                        transition={{ duration: 0.3 }}
+                        className="ml-1 h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </motion.svg>
+                    )}
                   </motion.button>
                 ) : (
                   <motion.div whileHover="hover" variants={menuItemVariants}>
@@ -242,15 +244,13 @@ const NavBar = () => {
           <div className="md:hidden flex items-center justify-between w-full">
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="flex items-center">
-                <motion.div whileHover="hover" variants={logoVariants}>
-                  <Image 
-                    src="/logo-max.png" 
-                    alt="CSIS Indonesia Logo" 
-                    width={80} 
-                    height={28} 
-                    priority
-                  />
-                </motion.div>
+                <Image 
+                  src="/logo-max.png" 
+                  alt="CSIS Indonesia Logo" 
+                  width={100} 
+                  height={35} 
+                  priority
+                />
               </Link>
             </div>
             
@@ -596,16 +596,54 @@ const NavBar = () => {
             <div className="px-4 pt-2 pb-4 space-y-1">
               {/* Main nav items in mobile */}
               {navItems.map((item) => (
-                <div key={item.name}>
-                  <Link
-                    href={item.href}
-                    onClick={() => handleNavClick(item.name)}
-                    className={`block py-3 text-base font-medium ${
-                      activeItem === item.name ? 'text-accent' : 'text-gray-900 hover:text-accent'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
+                <div key={item.name} className="px-2 pt-2 pb-3 space-y-1">
+                  {item.hasDropdown ? (
+                    <div>
+                      <button
+                        onClick={() => item.name === 'Publications' ? togglePublicationsMenu() : toggleMediaMenu()}
+                        className="flex justify-between items-center w-full text-left px-3 py-2 rounded-md text-base font-medium text-primary hover:text-accent hover:bg-gray-50"
+                      >
+                        {item.name}
+                        {(item.name === 'Publications' ? publicationsMenuOpen : mediaMenuOpen) ? (
+                          <motion.svg
+                            initial={{ rotate: 0 }}
+                            animate={{ rotate: [0, 180] }}
+                            transition={{ duration: 0.3 }}
+                            className="ml-1 h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                          </motion.svg>
+                        ) : (
+                          <motion.svg
+                            initial={{ rotate: 0 }}
+                            animate={{ rotate: [0, 180] }}
+                            transition={{ duration: 0.3 }}
+                            className="ml-1 h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </motion.svg>
+                        )}
+                      </button>
+                      
+                      {/* Rest of dropdown content */}
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={() => handleNavClick(item.name)}
+                      className={`block py-3 text-base font-medium ${
+                        activeItem === item.name ? 'text-accent' : 'text-gray-900 hover:text-accent'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>

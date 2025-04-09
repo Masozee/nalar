@@ -6,5 +6,5 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <div className="admin-layout">{children}</div>;
+  return <div className="admin-layout font-sans">{children}</div>;
 } 
