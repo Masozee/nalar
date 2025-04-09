@@ -13,6 +13,10 @@ const config: Config = {
         secondary: '#f5f5f5',
         accent: '#ffb030',
       },
+      fontFamily: {
+        sans: ['var(--font-geist-sans)', 'Inter', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
+      },
     },
   },
   plugins: [],

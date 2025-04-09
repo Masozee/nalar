@@ -6,10 +6,14 @@ import {
   Area,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts";
+  TooltipProps
+} from 'recharts';
+import { formatDate } from './utils';
 
+// Define Event interface
 interface Speaker {
   name: string;
   affiliation: string;
@@ -17,142 +21,140 @@ interface Speaker {
 
 interface Event {
   id: string;
-  slug: string;
   title: string;
   date: string;
   time: string;
   location: string;
   type: string;
   description: string;
-  imageUrl: string;
   speakers: Speaker[];
-  registrationLink: string;
 }
 
 interface EventAttendanceChartProps {
   events: Event[];
 }
 
-// Custom Tooltip for Area Chart
-const CustomAreaTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-lg border bg-background p-3 shadow-md">
-        <div className="grid gap-2">
-          <div className="flex flex-col">
-            <span className="text-[0.70rem] uppercase text-muted-foreground font-medium">
-              Event
-            </span>
-            <span className="font-medium text-foreground line-clamp-1 max-w-[200px]">
-              {label}
-            </span>
-          </div>
-          <div className="flex justify-between items-baseline gap-8 mt-1">
-             <span className="text-[0.70rem] uppercase text-muted-foreground font-medium">
-               Event Date
-             </span>
-             <span className="font-medium">
-               {payload[0]?.payload?.date}
-             </span>
-           </div>
-          <div className="flex justify-between items-baseline gap-8">
-            <span className="text-[0.70rem] uppercase text-muted-foreground font-medium">
-              Attendance
-            </span>
-            <span className="font-semibold text-primary text-lg">
-              {payload[0].value.toLocaleString()}
-            </span>
+export function EventAttendanceChart({ events }: EventAttendanceChartProps) {
+  // Generate random attendance data for sample visualization
+  const data = useMemo(() => {
+    return events.map(event => {
+      // Random attendance between 30-200
+      const attendance = Math.floor(Math.random() * 170) + 30;
+      // Random registration is always higher than attendance (by 10-40%)
+      const registrations = attendance + Math.floor(Math.random() * (attendance * 0.4)) + Math.ceil(attendance * 0.1);
+      
+      return {
+        name: event.title,
+        date: event.date,
+        time: event.time,
+        location: event.location.split(",")[0],
+        registrations,
+        attendance,
+      };
+    });
+  }, [events]);
+
+  // Custom tooltip
+  const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+      const event = payload[0].payload;
+      const attendanceRate = Math.round((event.attendance / event.registrations) * 100);
+      
+      return (
+        <div className="font-sans bg-background border rounded-md shadow-sm p-2 text-sm">
+          <p className="font-medium">{event.name}</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            {new Date(event.date).toLocaleDateString()}
+          </p>
+          <div className="mt-2 space-y-1">
+            <p className="text-xs flex justify-between">
+              <span>Registrations:</span> 
+              <span className="font-medium">{event.registrations}</span>
+            </p>
+            <p className="text-xs flex justify-between">
+              <span>Attendance:</span> 
+              <span className="font-medium">{event.attendance}</span>
+            </p>
+            <p className="text-xs flex justify-between">
+              <span>Attendance Rate:</span> 
+              <span className="font-medium">{attendanceRate}%</span>
+            </p>
           </div>
         </div>
+      );
+    }
+    return null;
+  };
+
+  // If no events data
+  if (data.length === 0) {
+    return (
+      <div className="h-[250px] flex items-center justify-center text-muted-foreground">
+        <p>No past events data available</p>
       </div>
     );
   }
-  return null;
-};
-
-// Generate simulated attendance data (in a real app, this would be from an API)
-const generateAttendanceData = (events: Event[]) => {
-  return events.map(event => {
-    // Generate a random attendance value based on date - older events tend to have higher attendance
-    // This is just for demo purposes - in a real app, this would be actual data
-    const date = new Date(event.date);
-    const now = new Date();
-    const age = now.getTime() - date.getTime();
-    const ageModifier = Math.min(1, age / (1000 * 60 * 60 * 24 * 365)); // Normalize to 0-1 based on year
-    
-    // Base attendance between 30-150 with older events having more reliable attendance
-    const baseAttendance = 30 + Math.floor(Math.random() * 120);
-    const adjustedAttendance = Math.floor(baseAttendance * (0.8 + 0.4 * ageModifier));
-    
-    return {
-      name: event.title,
-      attendance: adjustedAttendance,
-      date: new Date(event.date).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      }),
-    };
-  });
-};
-
-export function EventAttendanceChart({ events }: EventAttendanceChartProps) {
-  const chartData = useMemo(() => {
-    return generateAttendanceData(events);
-  }, [events]);
 
   return (
-    <div className="h-full p-6">
-      {chartData.length > 0 ? (
-        <ResponsiveContainer width="100%" height={320}>
-          <AreaChart
-            data={chartData}
-            margin={{ top: 10, right: 10, left: 0, bottom: 5 }}
-          >
-            <defs>
-              <linearGradient id="colorAttendance" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.6}/>
-                <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <XAxis
-              dataKey="name"
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => value.length > 12 ? `${value.substring(0, 10)}...` : value}
-              padding={{ left: 10, right: 10 }}
-            />
-            <YAxis
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              width={0}
-              domain={[0, 'dataMax + 20']}
-              tickCount={4}
-            />
-            <Tooltip
-               cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 1, fill: "transparent" }} 
-               content={<CustomAreaTooltip />}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="attendance" 
-              stroke="hsl(var(--primary))" 
-              fillOpacity={1}
-              fill="url(#colorAttendance)" 
-              strokeWidth={2}
-              activeDot={{ r: 6, strokeWidth: 0 }}
-              animationDuration={800}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      ) : (
-        <div className="flex items-center justify-center h-full">
-          <p className="text-center text-muted-foreground">No event attendance data</p>
-        </div>
-      )}
+    <div className="w-full h-[280px] p-4 pt-2">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart
+          data={data}
+          margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
+        >
+          <defs>
+            <linearGradient id="colorRegistrations" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.1}/>
+              <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+            </linearGradient>
+            <linearGradient id="colorAttendance" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4}/>
+              <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1}/>
+            </linearGradient>
+          </defs>
+          <CartesianGrid 
+            strokeDasharray="3 3" 
+            vertical={false} 
+            stroke="hsl(var(--muted)/0.3)" 
+          />
+          <XAxis 
+            dataKey="name" 
+            fontSize={11}
+            fontFamily="var(--font-geist-sans), 'Inter', sans-serif"
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) => value.length > 12 ? `${value.substring(0, 12)}...` : value}
+          />
+          <YAxis 
+            fontSize={11}
+            fontFamily="var(--font-geist-sans), 'Inter', sans-serif"
+            tickLine={false} 
+            axisLine={false}
+            width={30}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          <Area 
+            type="monotone" 
+            dataKey="registrations" 
+            stroke="hsl(var(--primary)/0.3)" 
+            fillOpacity={1} 
+            fill="url(#colorRegistrations)"
+            strokeWidth={1}
+            activeDot={{ r: 5 }}
+            animationDuration={800}
+          />
+          <Area 
+            type="monotone" 
+            dataKey="attendance" 
+            stroke="hsl(var(--primary))" 
+            fillOpacity={1} 
+            fill="url(#colorAttendance)"
+            strokeWidth={2}
+            activeDot={{ r: 5 }}
+            animationDuration={800}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
     </div>
   );
 } 

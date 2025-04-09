@@ -1,15 +1,18 @@
 "use client";
 
-import React, { useMemo } from 'react';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import React from 'react';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  Tooltip, 
+  ResponsiveContainer, 
+  TooltipProps 
+} from 'recharts';
+import { getDaysRemaining } from './utils';
 
+// Define Event interface
 interface Speaker {
   name: string;
   affiliation: string;
@@ -17,126 +20,103 @@ interface Speaker {
 
 interface Event {
   id: string;
-  slug: string;
   title: string;
   date: string;
   time: string;
   location: string;
   type: string;
   description: string;
-  imageUrl: string;
   speakers: Speaker[];
-  registrationLink: string;
 }
 
 interface UpcomingEventsChartProps {
   events: Event[];
 }
 
-// Custom Tooltip Component
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-lg border bg-background p-3 shadow-md">
-        <div className="grid gap-2">
-          <div className="flex flex-col">
-            <span className="text-[0.70rem] uppercase text-muted-foreground font-medium">
-              Event
-            </span>
-            <span className="font-medium text-foreground line-clamp-1 max-w-[200px]">
-              {label}
-            </span>
-          </div>
-          <div className="flex justify-between items-baseline gap-8 mt-1">
-            <span className="text-[0.70rem] uppercase text-muted-foreground font-medium">
-              Event Date
-            </span>
-            <span className="font-medium">
-              {payload[0]?.payload?.date}
-            </span>
-          </div>
-          <div className="flex justify-between items-baseline gap-8">
-            <span className="text-[0.70rem] uppercase text-muted-foreground font-medium">
-              Days Until
-            </span>
-            <span className="font-semibold text-primary text-lg">
-              {payload[0].value}
-            </span>
-          </div>
+export function UpcomingEventsChart({ events }: UpcomingEventsChartProps) {
+  // Prepare the data
+  const data = events.map(event => {
+    const daysRemaining = getDaysRemaining(event.date);
+    return {
+      name: event.title,
+      days: daysRemaining,
+      id: event.id,
+      date: event.date,
+      time: event.time,
+      location: event.location.split(",")[0], // Only show first part of location
+    };
+  });
+
+  // Custom tooltip formatter
+  const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+      const event = payload[0].payload;
+      return (
+        <div className="font-sans bg-background border rounded-md shadow-sm p-2 text-sm">
+          <p className="font-medium">{event.name}</p>
+          <p className="text-xs text-muted-foreground mt-1">Date: {new Date(event.date).toLocaleDateString()}</p>
+          <p className="text-xs text-muted-foreground">Time: {event.time}</p>
+          <p className="text-xs text-muted-foreground">Location: {event.location}</p>
+          <p className="text-xs font-medium mt-1">{event.days} days remaining</p>
         </div>
+      );
+    }
+    return null;
+  };
+
+  // If no upcoming events
+  if (data.length === 0) {
+    return (
+      <div className="h-[250px] flex items-center justify-center text-muted-foreground">
+        <p>No upcoming events scheduled</p>
       </div>
     );
   }
-  return null;
-};
-
-export function UpcomingEventsChart({ events }: UpcomingEventsChartProps) {
-  const chartData = useMemo(() => {
-    const now = new Date();
-    
-    return events.map(event => {
-      const eventDate = new Date(event.date);
-      const diffTime = Math.abs(eventDate.getTime() - now.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-      return {
-        name: event.title,
-        daysUntil: diffDays,
-        date: new Date(event.date).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-        }),
-      };
-    });
-  }, [events]);
 
   return (
-    <div className="h-full p-6">
-      {chartData.length > 0 ? (
-        <ResponsiveContainer width="100%" height={320}>
-          <BarChart 
-            data={chartData} 
-            layout="vertical"
-            margin={{ top: 10, right: 10, left: 0, bottom: 5 }}
-          >
-            <XAxis
-              type="number"
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              domain={[0, 'dataMax']}
-              tickCount={5}
-            />
-            <YAxis
-              type="category"
-              dataKey="name"
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              width={140}
-              tickFormatter={(value) => value.length > 20 ? `${value.substring(0, 17)}...` : value}
-            />
-            <Tooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.15 }} 
-              content={<CustomTooltip />}
-            />
-            <Bar 
-              dataKey="daysUntil" 
-              fill="hsl(var(--primary))"
-              radius={[0, 4, 4, 0]}
-              name="Days Until Event"
-              barSize={20}
-              animationDuration={800}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      ) : (
-        <div className="flex items-center justify-center h-full">
-          <p className="text-center text-muted-foreground">No upcoming events</p>
-        </div>
-      )}
+    <div className="w-full h-[280px] p-4 pt-2">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={data}
+          layout="vertical"
+          margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
+        >
+          <XAxis 
+            type="number" 
+            dataKey="days" 
+            name="Days"
+            fontSize={11} 
+            fontFamily="var(--font-geist-sans), 'Inter', sans-serif"
+            tickLine={false}
+            axisLine={false}
+            domain={[0, 'dataMax']}
+            tickFormatter={(value) => `${value} days`}
+          />
+          <YAxis 
+            type="category" 
+            dataKey="name" 
+            width={120}
+            fontSize={11}
+            fontFamily="var(--font-geist-sans), 'Inter', sans-serif"
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) => 
+              value.length > 18 ? `${value.substring(0, 18)}...` : value
+            }
+          />
+          <Tooltip 
+            content={<CustomTooltip />} 
+            cursor={{ fill: 'hsl(var(--muted)/0.3)' }}
+          />
+          <Bar 
+            dataKey="days" 
+            fill="hsl(var(--primary))" 
+            barSize={16}
+            radius={[0, 4, 4, 0]}
+            animationDuration={800}
+          />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 } 
