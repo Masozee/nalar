@@ -13,12 +13,14 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
+  variable: '--font-inter',
 });
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
+  variable: '--font-playfair',
 });
 
 export const metadata: Metadata = {
@@ -61,12 +63,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={playfair.className}>
+    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <head>
         <link rel="icon" href="/favicon.png" sizes="any" />
         <link rel="apple-touch-icon" href="/favicon.png" />
       </head>
-      <body className={`${inter.className} antialiased min-h-screen`}>
+      <body className="font-sans antialiased min-h-screen">
         <NavBar />
         <ScrollProgress />
         <AnimationProvider>

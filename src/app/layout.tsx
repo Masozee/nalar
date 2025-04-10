@@ -6,12 +6,14 @@ import "./globals.css";
 const inter = Inter({ 
   subsets: ["latin"],
   display: 'swap',
+  weight: ["400", "500", "600", "700"],
   variable: '--font-inter',
 });
 
 const playfair = Playfair_Display({ 
   subsets: ["latin"],
   display: 'swap',
+  weight: ["400", "500", "600", "700"],
   variable: '--font-playfair',
 });
 
@@ -28,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased min-h-screen">{children}</body>
     </html>
   );
 } 

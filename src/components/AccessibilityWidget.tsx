@@ -48,6 +48,8 @@ export default function AccessibilityWidget() {
   
   // Load settings from localStorage on mount
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const savedSettings = localStorage.getItem('accessibility-settings');
     if (savedSettings) {
       const settings = JSON.parse(savedSettings) as AccessibilitySettings;
@@ -103,8 +105,13 @@ export default function AccessibilityWidget() {
     }
   }, []);
   
+  // Helper to check if we're in browser context
+  const isBrowser = () => typeof window !== 'undefined';
+
   // Prevent body scroll when drawer is open
   useEffect(() => {
+    if (!isBrowser()) return;
+    
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -118,6 +125,8 @@ export default function AccessibilityWidget() {
   
   // Save settings to localStorage
   const saveSettings = (settingsUpdate: Partial<AccessibilitySettings>) => {
+    if (!isBrowser()) return;
+    
     const newSettings = { ...activeFeatures, ...settingsUpdate };
     setActiveFeatures(newSettings);
     localStorage.setItem('accessibility-settings', JSON.stringify(newSettings));
@@ -125,6 +134,7 @@ export default function AccessibilityWidget() {
   
   // Handle font size increase
   const increaseFontSize = () => {
+    if (!isBrowser()) return;
     if (textSizeLevel >= 3) return; // Max level reached
     
     // Remove existing text size classes
@@ -149,6 +159,7 @@ export default function AccessibilityWidget() {
   
   // Handle font size decrease
   const decreaseFontSize = () => {
+    if (!isBrowser()) return;
     if (textSizeLevel <= 0) return; // Min level reached
     
     // Remove existing text size classes
@@ -175,6 +186,7 @@ export default function AccessibilityWidget() {
   
   // Handle cursor size increase
   const increaseCursorSize = () => {
+    if (!isBrowser()) return;
     if (cursorSizeLevel >= 2) return; // Max level reached
     
     // Remove existing cursor size classes
@@ -198,6 +210,7 @@ export default function AccessibilityWidget() {
   
   // Handle cursor size decrease
   const decreaseCursorSize = () => {
+    if (!isBrowser()) return;
     if (cursorSizeLevel <= 0) return; // Min level reached
     
     // Remove existing cursor size classes
@@ -223,6 +236,8 @@ export default function AccessibilityWidget() {
   
   // Reset all accessibility settings
   const resetAllSettings = () => {
+    if (!isBrowser()) return;
+    
     // Remove all accessibility classes
     document.documentElement.classList.remove(
       'high-contrast', 
@@ -253,21 +268,25 @@ export default function AccessibilityWidget() {
   
   // Toggle functions
   const toggleHighContrast = () => {
+    if (!isBrowser()) return;
     const isActive = document.documentElement.classList.toggle('high-contrast');
     saveSettings({ 'high-contrast': isActive });
   };
   
   const toggleDyslexiaFont = () => {
+    if (!isBrowser()) return;
     const isActive = document.body.classList.toggle('dyslexia-friendly');
     saveSettings({ 'dyslexia-font': isActive });
   };
   
   const toggleReducedMotion = () => {
+    if (!isBrowser()) return;
     const isActive = document.documentElement.classList.toggle('reduced-motion');
     saveSettings({ 'reduced-motion': isActive });
   };
   
   const toggleMonochrome = () => {
+    if (!isBrowser()) return;
     const isActive = document.documentElement.classList.toggle('monochrome');
     saveSettings({ 'monochrome': isActive });
     
@@ -320,21 +339,25 @@ export default function AccessibilityWidget() {
   };
   
   const toggleHideImages = () => {
+    if (!isBrowser()) return;
     const isActive = document.documentElement.classList.toggle('hide-images');
     saveSettings({ 'hide-images': isActive });
   };
   
   const toggleHighlightLinks = () => {
+    if (!isBrowser()) return;
     const isActive = document.documentElement.classList.toggle('highlight-links');
     saveSettings({ 'highlight-links': isActive });
   };
   
   const toggleBoldText = () => {
+    if (!isBrowser()) return;
     const isActive = document.documentElement.classList.toggle('bold-text');
     saveSettings({ 'bold-text': isActive });
   };
   
   const toggleGrayscale = () => {
+    if (!isBrowser()) return;
     const isActive = document.documentElement.classList.toggle('grayscale');
     saveSettings({ 'grayscale': isActive });
   };
@@ -346,7 +369,7 @@ export default function AccessibilityWidget() {
       name: 'High Contrast',
       icon: <IoMdEye className="w-5 h-5" />,
       action: toggleHighContrast,
-      isActive: () => document.documentElement.classList.contains('high-contrast'),
+      isActive: () => isBrowser() && document.documentElement.classList.contains('high-contrast'),
       description: 'Enhances visibility with strong color contrasts',
       group: 'visual'
     },
@@ -355,7 +378,7 @@ export default function AccessibilityWidget() {
       name: 'Grayscale',
       icon: <MdFilter className="w-5 h-5" />,
       action: toggleGrayscale,
-      isActive: () => document.documentElement.classList.contains('grayscale'),
+      isActive: () => isBrowser() && document.documentElement.classList.contains('grayscale'),
       description: 'Displays content in black and white',
       group: 'visual'
     },
@@ -364,7 +387,7 @@ export default function AccessibilityWidget() {
       name: 'Hide Images',
       icon: <FiEyeOff className="w-5 h-5" />,
       action: toggleHideImages,
-      isActive: () => document.documentElement.classList.contains('hide-images'),
+      isActive: () => isBrowser() && document.documentElement.classList.contains('hide-images'),
       description: 'For text-only experience',
       group: 'visual'
     },
@@ -373,7 +396,7 @@ export default function AccessibilityWidget() {
       name: 'Highlight Links',
       icon: <FiLink className="w-5 h-5" />,
       action: toggleHighlightLinks,
-      isActive: () => document.documentElement.classList.contains('highlight-links'),
+      isActive: () => isBrowser() && document.documentElement.classList.contains('highlight-links'),
       description: 'Makes all hyperlinks more visible',
       group: 'reading'
     },
@@ -382,7 +405,7 @@ export default function AccessibilityWidget() {
       name: 'Bold Text',
       icon: <MdTextFields className="w-5 h-5" />,
       action: toggleBoldText,
-      isActive: () => document.documentElement.classList.contains('bold-text'),
+      isActive: () => isBrowser() && document.documentElement.classList.contains('bold-text'),
       description: 'Makes all text bold for better readability',
       group: 'reading'
     },
@@ -393,7 +416,7 @@ export default function AccessibilityWidget() {
       name: 'Dyslexia Font',
       icon: <FaBrain className="w-5 h-5" />,
       action: toggleDyslexiaFont,
-      isActive: () => document.body.classList.contains('dyslexia-friendly'),
+      isActive: () => isBrowser() && document.body.classList.contains('dyslexia-friendly'),
       description: 'Uses a more readable font for dyslexic users',
       group: 'reading'
     },
@@ -404,7 +427,7 @@ export default function AccessibilityWidget() {
       name: 'Reduce Motion',
       icon: <FaFlask className="w-5 h-5" />,
       action: toggleReducedMotion,
-      isActive: () => document.documentElement.classList.contains('reduced-motion'),
+      isActive: () => isBrowser() && document.documentElement.classList.contains('reduced-motion'),
       description: 'Minimizes animations and transitions',
       group: 'motion'
     },
@@ -680,7 +703,7 @@ export default function AccessibilityWidget() {
 
       {/* Full-screen drawer overlay */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && !(isBrowser() && document.documentElement.classList.contains('high-contrast')) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

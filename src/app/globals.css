@@ -7,9 +7,10 @@
 
 /* Font Variables */
 :root {
-  --font-inter: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  --font-geist-sans: 'Geist Sans', var(--font-inter);
-  --font-playfair: var(--font-playfair), serif;
+  /* Font variables will be set via Next.js font objects with their 'variable' property */
+  --font-inter: "Inter", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-geist-sans: 'Geist Sans', "Inter", sans-serif;
+  --font-playfair: "Playfair Display", Georgia, Cambria, "Times New Roman", Times, serif;
   --primary: #005354;
   --primary-foreground: #ffffff;
   --secondary: #f5f5f5;
@@ -127,7 +128,7 @@
 body {
   font-size: 15px;
   line-height: 1.6;
-  font-family: var(--font-playfair);
+  font-family: "Inter", var(--font-inter), sans-serif;
 }
 
 /* Admin section font override - use Geist or Inter for all admin interfaces */
@@ -138,7 +139,7 @@ app-sidebar *,
 *[href^="/admin"],
 [role="tablist"] *,
 [class*="(dashboard)"] * {
-  font-family: var(--font-geist-sans), var(--font-inter), sans-serif !important;
+  font-family: var(--font-geist-sans), "Inter", sans-serif !important;
 }
 
 /* Specific admin font overrides to ensure no serif fonts are used */
@@ -153,18 +154,18 @@ app-sidebar *,
 [class*="(admin)"] textarea,
 [class*="(admin)"] select,
 [class*="(admin)"] a {
-  font-family: var(--font-geist-sans), var(--font-inter), sans-serif !important;
+  font-family: var(--font-geist-sans), "Inter", sans-serif !important;
 }
 
 /* Specific elements to target for the "All Events" tab */
 .TabsContent[value="events"] *,
 [role="tab"][data-state="active"] *,
 table.events-table * {
-  font-family: var(--font-geist-sans), var(--font-inter), sans-serif !important;
+  font-family: var(--font-geist-sans), "Inter", sans-serif !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-inter), sans-serif;
+  font-family: "Inter", var(--font-inter), sans-serif;
   font-weight: 600;
   line-height: 1.2;
   margin-bottom: 0.75rem;
@@ -195,10 +196,12 @@ h5 {
 
 p {
   margin-bottom: 1.5rem;
-  font-family: var(--font-playfair);
+  font-family: "Playfair Display", var(--font-playfair);
 }
 
+/* Animated underline effect for all links */
 a {
+  position: relative;
   color: var(--teal);
   text-decoration: none;
   transition: color var(--transition-normal) ease-in-out;
@@ -208,8 +211,71 @@ a:hover {
   color: var(--accent);
 }
 
-button {
-  font-family: var(--font-inter), sans-serif;
+a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent);
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Exceptions - links that shouldn't have the animation */
+.btn-primary,
+.btn-accent,
+.btn-teal,
+a.bg-accent,
+a.bg-primary,
+.border-animate-left,
+.border-animate-top,
+.border-glow,
+button a,
+.card-hover a,
+.dashboard-image a,
+a.rounded-full,
+.border a,
+.border-b a,
+a[class*="bg-"],
+.rounded-lg a,
+.rounded-md a,
+.rounded a,
+.dropdown a,
+.absolute a {
+  text-decoration: none;
+}
+
+.btn-primary::after,
+.btn-accent::after,
+.btn-teal::after,
+a.bg-accent::after,
+a.bg-primary::after,
+.border-animate-left a::after,
+.border-animate-top a::after,
+.border-glow a::after,
+button a::after,
+.card-hover a::after,
+.dashboard-image a::after,
+a.rounded-full::after,
+.border a::after,
+.border-b a::after,
+a[class*="bg-"]::after,
+.rounded-lg a::after,
+.rounded-md a::after,
+.rounded a::after,
+.dropdown a::after,
+.absolute a::after {
+  display: none;
+}
+
+/* Keep the existing nav animation for consistency */
+.main-nav .nav-link.active::after {
+  width: 100%;
 }
 
 .text-primary {
@@ -1927,4 +1993,93 @@ body:not(.admin-layout) {
   background-color: #ffffff !important;
   border-color: #ffffff !important;
   opacity: 0.5;
+}
+
+/* Custom class for navigation elements to ensure they use Inter font */
+nav, 
+.navbar, 
+.nav-item,
+nav *,
+header * {
+  font-family: var(--font-inter), sans-serif !important;
+}
+
+/* Animated nav underline */
+.main-nav .nav-link {
+  position: relative;
+}
+
+.main-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.main-nav .nav-link:hover::after {
+  width: 100%;
+}
+
+/* Keep solid underline for active items */
+.main-nav .nav-link.active::after {
+  width: 100%;
+}
+
+button {
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Ensure heading links have the same animated underline effect */
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+a h1, a h2, a h3, a h4, a h5, a h6 {
+  position: relative;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-normal) ease-in-out;
+}
+
+h1 a::after, h2 a::after, h3 a::after, h4 a::after, h5 a::after, h6 a::after,
+a h1::after, a h2::after, a h3::after, a h4::after, a h5::after, a h6::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent);
+  transition: width 0.3s ease;
+}
+
+h1 a:hover::after, h2 a:hover::after, h3 a:hover::after, h4 a:hover::after, h5 a:hover::after, h6 a:hover::after,
+a:hover h1::after, a:hover h2::after, a:hover h3::after, a:hover h4::after, a:hover h5::after, a:hover h6::after {
+  width: 100%;
+}
+
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover,
+a:hover h1, a:hover h2, a:hover h3, a:hover h4, a:hover h5, a:hover h6 {
+  color: var(--accent);
+}
+
+/* Also ensure titles with .title-link class get the animation */
+.title-link {
+  position: relative;
+}
+
+.title-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.title-link:hover::after {
+  width: 100%;
 }

@@ -123,7 +123,7 @@ const NavBar = () => {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-sans ${
         scrolled 
           ? 'bg-white/90 backdrop-blur-md shadow-md' 
           : 'bg-white/70 backdrop-blur-sm'
@@ -140,19 +140,21 @@ const NavBar = () => {
                   src="/logo-max.png" 
                   alt="CSIS Indonesia Logo" 
                   width={120} 
-                  height={42} 
+                  height={42}
+                  className="py-2"
+                  style={{ objectFit: 'contain', imageRendering: 'crisp-edges' }}
                   priority
                 />
               </Link>
             </div>
             
             {/* Top right items: CSIS Journals, Shop, Careers */}
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-6 main-nav">
               {topNavItems.map((item) => (
                 <motion.div key={item.name} whileHover="hover" variants={menuItemVariants}>
                   <Link 
                     href={item.href}
-                    className="text-sm font-medium text-gray-600 hover:text-accent transition-colors"
+                    className="text-sm font-semibold text-gray-600 hover:text-accent transition-colors font-sans nav-link"
                   >
                     {item.name}
                   </Link>
@@ -167,7 +169,7 @@ const NavBar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Desktop navigation - Main menu on left */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-8 main-nav">
             {navItems.map((item) => (
               <div key={item.name} className="relative">
                 {item.hasDropdown ? (
@@ -175,9 +177,9 @@ const NavBar = () => {
                     whileHover="hover"
                     variants={menuItemVariants}
                     onClick={() => item.name === 'Publications' ? togglePublicationsMenu() : toggleMediaMenu()}
-                    className={`text-base font-medium transition-colors flex items-center ${
+                    className={`text-base font-semibold transition-colors flex items-center font-sans nav-link ${
                       activeItem === item.name 
-                        ? 'text-accent border-b-2 border-accent' 
+                        ? 'text-accent active' 
                         : 'text-primary hover:text-teal'
                     }`}
                   >
@@ -213,9 +215,9 @@ const NavBar = () => {
                     <Link 
                       href={item.href}
                       onClick={() => handleNavClick(item.name)}
-                      className={`text-base font-medium transition-colors ${
+                      className={`text-base font-semibold transition-colors font-sans nav-link ${
                         activeItem === item.name 
-                          ? 'text-accent border-b-2 border-accent' 
+                          ? 'text-accent active' 
                           : 'text-primary hover:text-teal'
                       }`}
                     >
@@ -248,7 +250,9 @@ const NavBar = () => {
                   src="/logo-max.png" 
                   alt="CSIS Indonesia Logo" 
                   width={100} 
-                  height={35} 
+                  height={35}
+                  className="py-2"
+                  style={{ objectFit: 'contain', imageRendering: 'crisp-edges' }}
                   priority
                 />
               </Link>
@@ -292,13 +296,13 @@ const NavBar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
               <div className="grid grid-cols-12 gap-6">
                 <div className="col-span-3">
-                  <h3 className="text-lg font-bold text-primary mb-4">Publication Categories</h3>
+                  <h3 className="text-lg font-bold text-primary mb-4 font-sans">Publication Categories</h3>
                   <div className="space-y-2">
                     {publicationCategories.map((category) => (
                       <Link
                         key={category.name}
                         href={category.href}
-                        className="flex justify-between items-center py-2 text-gray-700 hover:text-accent transition-colors"
+                        className="flex justify-between items-center py-2 text-gray-700 hover:text-accent transition-colors font-sans"
                         onClick={() => {
                           setPublicationsMenuOpen(false);
                           setActiveItem('Publications');
@@ -311,7 +315,7 @@ const NavBar = () => {
                   </div>
                 </div>
                 <div className="col-span-4">
-                  <h3 className="text-lg font-bold text-primary mb-4">Featured Publications</h3>
+                  <h3 className="text-lg font-bold text-primary mb-4 font-sans">Featured Publications</h3>
                   <div className="space-y-4">
                     <div className="flex gap-3">
                       <div className="h-16 w-20 relative flex-shrink-0">
@@ -323,8 +327,8 @@ const NavBar = () => {
                         />
                       </div>
                       <div>
-                        <h4 className="font-medium text-primary hover:text-accent transition-colors">Indonesia&apos;s Economic Outlook 2024</h4>
-                        <p className="text-sm text-gray-500">Economics • May 10, 2024</p>
+                        <h4 className="font-semibold text-primary hover:text-accent transition-colors font-sans">Indonesia&apos;s Economic Outlook 2024</h4>
+                        <p className="text-sm text-gray-500 font-sans">Economics • May 10, 2024</p>
                       </div>
                     </div>
                     <div className="flex gap-3">
@@ -337,14 +341,14 @@ const NavBar = () => {
                         />
                       </div>
                       <div>
-                        <h4 className="font-medium text-primary hover:text-accent transition-colors">ASEAN&apos;s Strategic Position in US-China Relations</h4>
-                        <p className="text-sm text-gray-500">International Relations • April 28, 2024</p>
+                        <h4 className="font-semibold text-primary hover:text-accent transition-colors font-sans">ASEAN&apos;s Strategic Position in US-China Relations</h4>
+                        <p className="text-sm text-gray-500 font-sans">International Relations • April 28, 2024</p>
                       </div>
                     </div>
                   </div>
                   <Link
                     href="/publications" 
-                    className="inline-block mt-4 text-accent font-medium hover:underline"
+                    className="inline-block mt-4 text-accent font-semibold hover:underline font-sans"
                   >
                     View all publications →
                   </Link>
@@ -392,13 +396,13 @@ const NavBar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
               <div className="grid grid-cols-12 gap-6">
                 <div className="col-span-3">
-                  <h3 className="text-lg font-bold text-primary mb-4">Media Categories</h3>
+                  <h3 className="text-lg font-bold text-primary mb-4 font-sans">Media Categories</h3>
                   <div className="space-y-2">
                     {mediaCategories.map((category) => (
                       <Link
                         key={category.name}
                         href={category.href}
-                        className="flex justify-between items-center py-2 text-gray-700 hover:text-accent transition-colors"
+                        className="flex justify-between items-center py-2 text-gray-700 hover:text-accent transition-colors font-sans"
                         onClick={() => {
                           setMediaMenuOpen(false);
                           setActiveItem('Media');
@@ -411,7 +415,7 @@ const NavBar = () => {
                   </div>
                 </div>
                 <div className="col-span-4">
-                  <h3 className="text-lg font-bold text-primary mb-4">Latest Podcasts</h3>
+                  <h3 className="text-lg font-bold text-primary mb-4 font-sans">Latest Podcasts</h3>
                   <div className="space-y-4">
                     <div className="flex gap-3">
                       <div className="h-16 w-16 relative flex-shrink-0">
@@ -423,8 +427,8 @@ const NavBar = () => {
                         />
                       </div>
                       <div>
-                        <h4 className="font-medium text-primary hover:text-accent transition-colors">South China Sea Disputes</h4>
-                        <p className="text-sm text-gray-500">Security • 28 min</p>
+                        <h4 className="font-semibold text-primary hover:text-accent transition-colors font-sans">South China Sea Disputes</h4>
+                        <p className="text-sm text-gray-500 font-sans">Security • 28 min</p>
                       </div>
                     </div>
                     <div className="flex gap-3">
@@ -437,14 +441,14 @@ const NavBar = () => {
                         />
                       </div>
                       <div>
-                        <h4 className="font-medium text-primary hover:text-accent transition-colors">Indonesia's Digital Economy</h4>
-                        <p className="text-sm text-gray-500">Economics • 32 min</p>
+                        <h4 className="font-semibold text-primary hover:text-accent transition-colors font-sans">Indonesia's Digital Economy</h4>
+                        <p className="text-sm text-gray-500 font-sans">Economics • 32 min</p>
                       </div>
                     </div>
                   </div>
                   <Link
                     href="/media/podcasts" 
-                    className="inline-block mt-4 text-accent font-medium hover:underline"
+                    className="inline-block mt-4 text-accent font-semibold hover:underline font-sans"
                   >
                     View all podcasts →
                   </Link>
@@ -539,40 +543,40 @@ const NavBar = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.3 }}
               >
-                <h3 className="text-sm font-medium text-gray-500 mb-3">POPULAR SEARCHES</h3>
+                <h3 className="text-sm font-semibold text-gray-500 mb-3 font-sans">POPULAR SEARCHES</h3>
                 <div className="flex flex-wrap gap-2">
                   <a 
                     href="/search?q=Southeast%20Asia"
                     onClick={toggleSearch}
-                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm font-sans"
                   >
                     Southeast Asia
                   </a>
                   <a 
                     href="/search?q=Indonesia%20Economy"
                     onClick={toggleSearch}
-                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm font-sans"
                   >
                     Indonesia Economy
                   </a>
                   <a 
                     href="/search?q=US-China%20Relations"
                     onClick={toggleSearch}
-                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm font-sans"
                   >
                     US-China Relations
                   </a>
                   <a 
                     href="/search?q=Maritime%20Security"
                     onClick={toggleSearch}
-                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm font-sans"
                   >
                     Maritime Security
                   </a>
                   <a 
                     href="/search?q=Digital%20Economy"
                     onClick={toggleSearch}
-                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full text-sm font-sans"
                   >
                     Digital Economy
                   </a>
@@ -593,7 +597,7 @@ const NavBar = () => {
             transition={{ duration: 0.3 }}
             className="md:hidden bg-white border-t border-gray-200 overflow-hidden"
           >
-            <div className="px-4 pt-2 pb-4 space-y-1">
+            <div className="px-4 pt-2 pb-4 space-y-1 main-nav">
               {/* Main nav items in mobile */}
               {navItems.map((item) => (
                 <div key={item.name} className="px-2 pt-2 pb-3 space-y-1">
@@ -601,7 +605,7 @@ const NavBar = () => {
                     <div>
                       <button
                         onClick={() => item.name === 'Publications' ? togglePublicationsMenu() : toggleMediaMenu()}
-                        className="flex justify-between items-center w-full text-left px-3 py-2 rounded-md text-base font-medium text-primary hover:text-accent hover:bg-gray-50"
+                        className="flex justify-between items-center w-full text-left px-3 py-2 rounded-md text-base font-semibold text-primary hover:text-accent hover:bg-gray-50 font-sans"
                       >
                         {item.name}
                         {(item.name === 'Publications' ? publicationsMenuOpen : mediaMenuOpen) ? (
@@ -637,7 +641,7 @@ const NavBar = () => {
                     <Link
                       href={item.href}
                       onClick={() => handleNavClick(item.name)}
-                      className={`block py-3 text-base font-medium ${
+                      className={`block py-3 text-base font-semibold nav-link ${
                         activeItem === item.name ? 'text-accent' : 'text-gray-900 hover:text-accent'
                       }`}
                     >

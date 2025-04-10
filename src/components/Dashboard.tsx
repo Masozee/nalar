@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiBarChart2, FiGlobe, FiPieChart, FiTrendingUp } from 'react-icons/fi';
+import { FiArrowRight, FiBarChart2, FiGlobe, FiPieChart, FiTrendingUp, FiDatabase, FiMap } from 'react-icons/fi';
 
 const dashboards = [
   {
@@ -38,6 +38,22 @@ const dashboards = [
     link: "https://dfdlab.org",
     image: "/bg/getty-images-PWFDb-sRcsY-unsplash.jpg",
   },
+  {
+    id: 5,
+    title: "ASEAN Economic Integration",
+    icon: <FiDatabase className="w-5 h-5" />,
+    description: "Comprehensive analysis of ASEAN economic integration metrics and cross-border investments.",
+    link: "/dashboards/asean-economic",
+    image: "/bg/muska-create-5MvNlQENWDM-unsplash.png",
+  },
+  {
+    id: 6,
+    title: "Maritime Security Tracker",
+    icon: <FiMap className="w-5 h-5" />,
+    description: "Real-time monitoring of maritime security incidents in Southeast Asian waters.",
+    link: "/dashboards/maritime-security",
+    image: "/bg/frank-mouland-e4mYPf_JUIk-unsplash.png",
+  },
 ];
 
 const Dashboard = () => {
@@ -48,20 +64,36 @@ const Dashboard = () => {
           <h2 className="text-3xl font-bold text-primary">Data at a Glance</h2>
           <Link 
             href="/dashboards" 
-            className="flex items-center text-accent text-lg font-medium hover:underline"
+            className="flex items-center text-accent text-lg font-semibold hover:underline"
           >
             Explore All Data <FiArrowRight className="ml-2" />
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {dashboards.map((dashboard, index) => (
+        {/* First Row: Text (col-6) and 2 cards (col-3 each) */}
+        <div className="grid grid-cols-12 gap-6 mb-6">
+          {/* Text Section - col-6 */}
+          <div className="col-span-12 md:col-span-6 bg-white p-6 shadow">
+            <h3 className="text-2xl font-bold text-primary mb-4">Interactive Data Dashboards</h3>
+            <p className="text-gray-700 mb-4">
+              CSIS Indonesia offers a range of interactive data visualization tools that provide insights into key regional and global trends.
+            </p>
+            <p className="text-gray-700 mb-4">
+              Our dashboards combine robust data analysis with user-friendly interfaces, allowing researchers, policymakers, and the public to explore complex datasets and draw meaningful conclusions.
+            </p>
+            <p className="text-gray-700">
+              Each dashboard represents a different aspect of our research focus areas, from economic indicators to security metrics and social issues.
+            </p>
+          </div>
+          
+          {/* First two cards - col-3 each */}
+          {dashboards.slice(0, 2).map((dashboard, index) => (
             <motion.div
               key={dashboard.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="dashboard-card bg-white hover:bg-teal/5 transition-all border-animate-bottom relative shadow"
+              className="col-span-12 md:col-span-3 bg-white shadow"
             >
               <div className="dashboard-image h-48 relative overflow-hidden">
                 <Image 
@@ -70,45 +102,49 @@ const Dashboard = () => {
                   fill
                   style={{ objectFit: 'cover' }}
                 />
-                <div className="dashboard-overlay absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex items-end" 
-                     style={{ background: 'linear-gradient(360deg, rgba(77,135,135,255) 0%, rgba(34,23,17,0.24693627450980393) 37%)' }}>
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold text-white mb-1">{dashboard.title}</h3>
-                  </div>
-                </div>
-                <div className="absolute top-4 right-4 bg-accent text-white p-3 rounded-full">
-                  {dashboard.icon}
-                </div>
               </div>
-              <div className="dashboard-content p-6">
-                <p className="text-gray-700 mb-6">{dashboard.description}</p>
+              <div className="p-4 text-center">
+                <h3 className="text-lg font-bold text-primary mb-4">{dashboard.title}</h3>
                 <Link 
                   href={dashboard.link} 
-                  className="btn-accent inline-flex items-center text-lg font-medium px-5 py-2"
+                  className="btn-accent inline-flex items-center justify-center text-sm font-semibold px-4 py-2 w-full"
                 >
                   View Dashboard <FiArrowRight className="ml-2" />
                 </Link>
               </div>
-              <div className="absolute top-0 left-0 w-full h-full border-animate-bottom pointer-events-none"></div>
             </motion.div>
           ))}
         </div>
         
-        <div className="custom-report mt-16 bg-white p-8 border-animate-left border border-accent/20">
-          <div className="flex flex-col md:flex-row md:items-center justify-between">
-            <div className="mb-6 md:mb-0 md:max-w-2xl">
-              <h3 className="text-2xl font-bold text-primary mb-3">Custom Research Reports</h3>
-              <p className="text-lg text-gray-700">
-                Need specialized data analysis? Our research team can create custom reports and visualizations tailored to your specific requirements.
-              </p>
-            </div>
-            <Link 
-              href="/research/custom" 
-              className="btn-accent inline-flex items-center text-lg font-medium px-6 py-3 whitespace-nowrap"
+        {/* Second Row: 4 cards (col-3 each) */}
+        <div className="grid grid-cols-12 gap-6">
+          {dashboards.slice(2, 6).map((dashboard, index) => (
+            <motion.div
+              key={dashboard.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: (index + 2) * 0.1 }}
+              className="col-span-12 md:col-span-3 bg-white shadow"
             >
-              Request Report <FiArrowRight className="ml-2" />
-            </Link>
-          </div>
+              <div className="dashboard-image h-48 relative overflow-hidden">
+                <Image 
+                  src={dashboard.image}
+                  alt={dashboard.title}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
+              <div className="p-4 text-center">
+                <h3 className="text-lg font-bold text-primary mb-4">{dashboard.title}</h3>
+                <Link 
+                  href={dashboard.link} 
+                  className="btn-accent inline-flex items-center justify-center text-sm font-semibold px-4 py-2 w-full"
+                >
+                  View Dashboard <FiArrowRight className="ml-2" />
+                </Link>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
