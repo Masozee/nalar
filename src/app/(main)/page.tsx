@@ -1,14 +1,41 @@
 'use client';
 
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import Hero from "@/components/Hero";
-import Publications from "@/components/Publications";
-import Events from "@/components/Events";
-import Podcasts from "@/components/Podcasts";
-import Dashboard from "@/components/Dashboard";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/animations/FadeIn";
-import FeaturedHotTopics from "@/components/FeaturedHotTopics";
-import ExpertFeatures from "@/components/ExpertFeatures";
+
+// Dynamically import components for code splitting
+const FeaturedHotTopics = dynamic(() => import("@/components/FeaturedHotTopics"), {
+  loading: () => <div className="h-40 animate-pulse bg-gray-100 rounded-lg"></div>,
+  ssr: true
+});
+
+const Publications = dynamic(() => import("@/components/Publications"), {
+  loading: () => <div className="h-48 animate-pulse bg-gray-100 rounded-lg"></div>,
+  ssr: true
+});
+
+const Events = dynamic(() => import("@/components/Events"), {
+  loading: () => <div className="h-48 animate-pulse bg-gray-100 rounded-lg"></div>,
+  ssr: true
+});
+
+const Podcasts = dynamic(() => import("@/components/Podcasts"), {
+  loading: () => <div className="h-48 animate-pulse bg-gray-100 rounded-lg"></div>,
+  ssr: true
+});
+
+const ExpertFeatures = dynamic(() => import("@/components/ExpertFeatures"), {
+  loading: () => <div className="h-48 animate-pulse bg-gray-100 rounded-lg"></div>,
+  ssr: true
+});
+
+const Dashboard = dynamic(() => import("@/components/Dashboard"), {
+  loading: () => <div className="h-72 animate-pulse bg-gray-100 rounded-lg"></div>,
+  ssr: true
+});
 
 export default function Home() {
   return (
@@ -16,29 +43,41 @@ export default function Home() {
       <main>
         <Hero />
         <div className="pt-20">
-          <FadeIn>
-            <FeaturedHotTopics />
-          </FadeIn>
+          <Suspense fallback={<div className="h-40 animate-pulse bg-gray-100 rounded-lg"></div>}>
+            <FadeIn>
+              <FeaturedHotTopics />
+            </FadeIn>
+          </Suspense>
           
-          <FadeIn delay={0.1}>
-            <Publications />
-          </FadeIn>
+          <Suspense fallback={<div className="h-48 animate-pulse bg-gray-100 rounded-lg"></div>}>
+            <FadeIn delay={0.05}>
+              <Publications />
+            </FadeIn>
+          </Suspense>
           
-          <FadeIn delay={0.2}>
-            <Events />
-          </FadeIn>
+          <Suspense fallback={<div className="h-48 animate-pulse bg-gray-100 rounded-lg"></div>}>
+            <FadeIn delay={0.1}>
+              <Events />
+            </FadeIn>
+          </Suspense>
           
-          <FadeIn delay={0.3}>
-            <Podcasts />
-          </FadeIn>
+          <Suspense fallback={<div className="h-48 animate-pulse bg-gray-100 rounded-lg"></div>}>
+            <FadeIn delay={0.15}>
+              <Podcasts />
+            </FadeIn>
+          </Suspense>
           
-          <FadeIn delay={0.4}>
-            <ExpertFeatures />
-          </FadeIn>
+          <Suspense fallback={<div className="h-48 animate-pulse bg-gray-100 rounded-lg"></div>}>
+            <FadeIn delay={0.2}>
+              <ExpertFeatures />
+            </FadeIn>
+          </Suspense>
           
-          <FadeIn delay={0.5}>
-            <Dashboard />
-          </FadeIn>
+          <Suspense fallback={<div className="h-72 animate-pulse bg-gray-100 rounded-lg"></div>}>
+            <FadeIn delay={0.25}>
+              <Dashboard />
+            </FadeIn>
+          </Suspense>
         </div>
       </main>
       <Footer />

@@ -1,7 +1,7 @@
 'use client';
 
-import { ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { ReactNode, memo, useMemo } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 
 interface FadeInProps {
   children: ReactNode;
@@ -11,59 +11,76 @@ interface FadeInProps {
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   distance?: number;
   once?: boolean;
+  amount?: number; // 0-1, how much of the element needs to be in view
 }
 
-export default function FadeIn({
+const FadeIn = ({
   children,
   delay = 0,
   duration = 0.5,
   className = '',
   direction = 'up',
   distance = 20,
-  once = true
-}: FadeInProps) {
-  // Define the initial animation state based on direction
-  const getInitialPosition = () => {
+  once = true,
+  amount = 0.1 // Only 10% of element needs to be visible by default
+}: FadeInProps) => {
+  // Respect user's reduced motion settings
+  const prefersReducedMotion = useReducedMotion();
+  
+  // Calculate animations only once
+  const { initialPosition, finalPosition } = useMemo(() => {
+    // If user prefers reduced motion, provide minimal animation
+    if (prefersReducedMotion) {
+      return {
+        initialPosition: { opacity: 0 },
+        finalPosition: { opacity: 1 }
+      };
+    }
+    
+    // Otherwise calculate based on direction
+    let initial, final;
+    
     switch (direction) {
       case 'up':
-        return { opacity: 0, y: distance };
+        initial = { opacity: 0, y: distance };
+        final = { opacity: 1, y: 0 };
+        break;
       case 'down':
-        return { opacity: 0, y: -distance };
+        initial = { opacity: 0, y: -distance };
+        final = { opacity: 1, y: 0 };
+        break;
       case 'left':
-        return { opacity: 0, x: distance };
+        initial = { opacity: 0, x: distance };
+        final = { opacity: 1, x: 0 };
+        break;
       case 'right':
-        return { opacity: 0, x: -distance };
+        initial = { opacity: 0, x: -distance };
+        final = { opacity: 1, x: 0 };
+        break;
       case 'none':
-        return { opacity: 0 };
       default:
-        return { opacity: 0, y: distance };
+        initial = { opacity: 0 };
+        final = { opacity: 1 };
     }
-  };
-
-  // Define the final animation state
-  const getFinalPosition = () => {
-    switch (direction) {
-      case 'up':
-      case 'down':
-        return { opacity: 1, y: 0 };
-      case 'left':
-      case 'right':
-        return { opacity: 1, x: 0 };
-      case 'none':
-        return { opacity: 1 };
-      default:
-        return { opacity: 1, y: 0 };
-    }
-  };
+    
+    return {
+      initialPosition: initial,
+      finalPosition: final
+    };
+  }, [direction, distance, prefersReducedMotion]);
 
   return (
     <motion.div
       className={className}
-      initial={getInitialPosition()}
-      whileInView={getFinalPosition()}
-      viewport={{ once }}
+      initial={initialPosition}
+      whileInView={finalPosition}
+      viewport={{ 
+        once, 
+        amount, // How much of element needs to be in view
+        margin: "0px 0px -100px 0px" // Trigger slightly before in view
+      }}
       transition={{
-        duration,
+        duration: prefersReducedMotion ? duration / 2 : duration,
         delay,
         ease: [0.22, 1, 0.36, 1]
       }}
@@ -71,4 +88,10 @@ export default function FadeIn({
       {children}
     </motion.div>
   );
-} 
+};
+
+// Add display name for better debugging
+FadeIn.displayName = 'FadeIn';
+
+// Memoize component to prevent unnecessary re-renders
+export default memo(FadeIn); 

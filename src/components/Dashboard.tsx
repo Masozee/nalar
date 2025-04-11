@@ -1,11 +1,27 @@
 'use client';
 
+import { memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiBarChart2, FiGlobe, FiPieChart, FiTrendingUp, FiDatabase, FiMap } from 'react-icons/fi';
 
-const dashboards = [
+interface DashboardItem {
+  id: number;
+  title: string;
+  icon: React.ReactNode;
+  description: string;
+  link: string;
+  image: string;
+}
+
+interface DashboardCardProps {
+  dashboard: DashboardItem;
+  index: number;
+  delayOffset?: number;
+}
+
+const dashboards: DashboardItem[] = [
   {
     id: 1,
     title: "Indonesia's Strategic Dependency Dashboard",
@@ -56,6 +72,40 @@ const dashboards = [
   },
 ];
 
+// Memoized Dashboard Card component to prevent unnecessary re-renders
+const DashboardCard = memo(({ dashboard, index, delayOffset = 0 }: DashboardCardProps) => (
+  <motion.div
+    key={dashboard.id}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.3, delay: (index + delayOffset) * 0.05 }}
+    className="col-span-12 md:col-span-3 bg-white shadow"
+    layout
+  >
+    <div className="dashboard-image h-48 relative overflow-hidden">
+      <Image 
+        src={dashboard.image}
+        alt={dashboard.title}
+        fill
+        sizes="(max-width: 768px) 100vw, 25vw"
+        priority={index < 2}
+        style={{ objectFit: 'cover' }}
+      />
+    </div>
+    <div className="p-4 text-center">
+      <h3 className="text-lg font-bold text-primary mb-4">{dashboard.title}</h3>
+      <Link 
+        href={dashboard.link} 
+        className="btn-accent inline-flex items-center justify-center text-sm font-semibold px-4 py-2 w-full"
+      >
+        View Dashboard <FiArrowRight className="ml-2" />
+      </Link>
+    </div>
+  </motion.div>
+));
+
+DashboardCard.displayName = 'DashboardCard';
+
 const Dashboard = () => {
   return (
     <section className="py-16 bg-gray-50 border-t border-gray-200">
@@ -88,62 +138,23 @@ const Dashboard = () => {
           
           {/* First two cards - col-3 each */}
           {dashboards.slice(0, 2).map((dashboard, index) => (
-            <motion.div
-              key={dashboard.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="col-span-12 md:col-span-3 bg-white shadow"
-            >
-              <div className="dashboard-image h-48 relative overflow-hidden">
-                <Image 
-                  src={dashboard.image}
-                  alt={dashboard.title}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-bold text-primary mb-4">{dashboard.title}</h3>
-                <Link 
-                  href={dashboard.link} 
-                  className="btn-accent inline-flex items-center justify-center text-sm font-semibold px-4 py-2 w-full"
-                >
-                  View Dashboard <FiArrowRight className="ml-2" />
-                </Link>
-              </div>
-            </motion.div>
+            <DashboardCard 
+              key={dashboard.id} 
+              dashboard={dashboard} 
+              index={index} 
+            />
           ))}
         </div>
         
         {/* Second Row: 4 cards (col-3 each) */}
         <div className="grid grid-cols-12 gap-6">
           {dashboards.slice(2, 6).map((dashboard, index) => (
-            <motion.div
-              key={dashboard.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: (index + 2) * 0.1 }}
-              className="col-span-12 md:col-span-3 bg-white shadow"
-            >
-              <div className="dashboard-image h-48 relative overflow-hidden">
-                <Image 
-                  src={dashboard.image}
-                  alt={dashboard.title}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-bold text-primary mb-4">{dashboard.title}</h3>
-                <Link 
-                  href={dashboard.link} 
-                  className="btn-accent inline-flex items-center justify-center text-sm font-semibold px-4 py-2 w-full"
-                >
-                  View Dashboard <FiArrowRight className="ml-2" />
-                </Link>
-              </div>
-            </motion.div>
+            <DashboardCard 
+              key={dashboard.id} 
+              dashboard={dashboard} 
+              index={index} 
+              delayOffset={2}
+            />
           ))}
         </div>
       </div>
@@ -151,4 +162,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default memo(Dashboard); 
