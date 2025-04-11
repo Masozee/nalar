@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-s3-mock": "node scripts/generate-s3-mock.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.1",

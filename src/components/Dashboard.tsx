@@ -1,76 +1,17 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiBarChart2, FiGlobe, FiPieChart, FiTrendingUp, FiDatabase, FiMap } from 'react-icons/fi';
-
-interface DashboardItem {
-  id: number;
-  title: string;
-  icon: React.ReactNode;
-  description: string;
-  link: string;
-  image: string;
-}
+import { FiArrowRight } from 'react-icons/fi';
+import api, { Dashboard as DashboardItem } from '@/lib/api';
 
 interface DashboardCardProps {
   dashboard: DashboardItem;
   index: number;
   delayOffset?: number;
 }
-
-const dashboards: DashboardItem[] = [
-  {
-    id: 1,
-    title: "Indonesia's Strategic Dependency Dashboard",
-    icon: <FiPieChart className="w-5 h-5" />,
-    description: "Comprehensive visualization of key economic indicators for Indonesia, including GDP growth, inflation rates, and foreign investment trends.",
-    link: "https://isdp.csis.or.id",
-    image: "/bg/getty-images-PWFDb-sRcsY-unsplash.jpg",
-  },
-  {
-    id: 2,
-    title: "Collective Violence Early Warning Dataset",
-    icon: <FiBarChart2 className="w-5 h-5" />,
-    description: "Interactive visualization of trade flows between ASEAN countries, highlighting key exports, imports, and emerging trade patterns.",
-    link: "https://violence.csis.or.id",
-    image: "/bg/pawel-janiak-49LBMXrY5BE-unsplash.jpg",
-  },
-  {
-    id: 3,
-    title: "Hatespeech Dashboard",
-    icon: <FiTrendingUp className="w-5 h-5" />,
-    description: "Visualization of public opinion trends on key political issues in Indonesia, based on CSIS's quarterly nationwide surveys.",
-    link: "https://hatespeech.csis.or.id",
-    image: "/bg/jason-leung-XigshA91R6M-unsplash.jpg",
-  },
-  {
-    id: 4,
-    title: "Decarbonization for Development",
-    icon: <FiGlobe className="w-5 h-5" />,
-    description: "Interactive tracker of Indonesia's diplomatic and economic relations with key global partners, including strength of ties and recent developments.",
-    link: "https://dfdlab.org",
-    image: "/bg/getty-images-PWFDb-sRcsY-unsplash.jpg",
-  },
-  {
-    id: 5,
-    title: "ASEAN Economic Integration",
-    icon: <FiDatabase className="w-5 h-5" />,
-    description: "Comprehensive analysis of ASEAN economic integration metrics and cross-border investments.",
-    link: "/dashboards/asean-economic",
-    image: "/bg/muska-create-5MvNlQENWDM-unsplash.png",
-  },
-  {
-    id: 6,
-    title: "Maritime Security Tracker",
-    icon: <FiMap className="w-5 h-5" />,
-    description: "Real-time monitoring of maritime security incidents in Southeast Asian waters.",
-    link: "/dashboards/maritime-security",
-    image: "/bg/frank-mouland-e4mYPf_JUIk-unsplash.png",
-  },
-];
 
 // Memoized Dashboard Card component to prevent unnecessary re-renders
 const DashboardCard = memo(({ dashboard, index, delayOffset = 0 }: DashboardCardProps) => (
@@ -84,7 +25,7 @@ const DashboardCard = memo(({ dashboard, index, delayOffset = 0 }: DashboardCard
   >
     <div className="dashboard-image h-48 relative overflow-hidden">
       <Image 
-        src={dashboard.image}
+        src={dashboard.image.startsWith('http') ? dashboard.image : dashboard.image}
         alt={dashboard.title}
         fill
         sizes="(max-width: 768px) 100vw, 25vw"
@@ -107,6 +48,79 @@ const DashboardCard = memo(({ dashboard, index, delayOffset = 0 }: DashboardCard
 DashboardCard.displayName = 'DashboardCard';
 
 const Dashboard = () => {
+  const [dashboards, setDashboards] = useState<DashboardItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadDashboards = async () => {
+      try {
+        setIsLoading(true);
+        const response = await api.fetchDashboards();
+        
+        if (response.error) {
+          setError(response.error);
+        } else {
+          setDashboards(response.data);
+        }
+      } catch (err) {
+        setError('Failed to load dashboards');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadDashboards();
+  }, []);
+
+  // Display loading state
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-12">
+            <div className="h-8 w-40 bg-gray-200 animate-pulse rounded"></div>
+            <div className="h-6 w-32 bg-gray-200 animate-pulse rounded"></div>
+          </div>
+          <div className="grid grid-cols-12 gap-6">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="col-span-12 md:col-span-3 bg-gray-100 h-64 animate-pulse rounded"></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Display error state
+  if (error) {
+    return (
+      <section className="py-16 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center p-8 bg-red-50 rounded-lg">
+            <h2 className="text-xl font-bold text-red-600 mb-2">Error Loading Dashboards</h2>
+            <p className="text-red-500">{error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // No dashboards available
+  if (dashboards.length === 0) {
+    return (
+      <section className="py-16 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center p-8 bg-gray-100 rounded-lg">
+            <h2 className="text-xl font-bold text-gray-600 mb-2">No Dashboards Available</h2>
+            <p className="text-gray-500">Please check back later for our interactive dashboards.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 bg-gray-50 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
