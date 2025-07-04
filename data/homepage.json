@@ -1,0 +1,252 @@
+{
+  "the_latest": {
+    "latest_publication": {
+      "id": 1,
+      "title": "Indonesia's Economic Outlook 2024",
+      "slug": "indonesia-economic-outlook-2024",
+      "date": "2024-05-10",
+      "image": "/bg/frank-mouland-e4mYPf_JUIk-unsplash.png",
+      "authors": [
+        {
+          "id": 1,
+          "name": "Dr. Amelia Wong",
+          "slug": "amelia-wong"
+        }
+      ]
+    },
+    "category_publications": [
+      {
+        "category": {
+          "id": 1,
+          "name": "Economics",
+          "slug": "economics"
+        },
+        "publication": {
+          "id": 2,
+          "title": "ASEAN's Strategic Position in US-China Relations",
+          "slug": "asean-strategic-position",
+          "date": "2024-04-28",
+          "image": "/bg/heather-green-bQTzJzwQfJE-unsplash.png",
+          "authors": [
+            {
+              "id": 2,
+              "name": "Dr. Ahmad Faisal",
+              "slug": "ahmad-faisal"
+            }
+          ]
+        }
+      },
+      {
+        "category": {
+          "id": 2,
+          "name": "Politics",
+          "slug": "politics"
+        },
+        "publication": {
+          "id": 3,
+          "title": "Political Transformation in Southeast Asia",
+          "slug": "political-transformation-sea",
+          "date": "2024-04-15",
+          "image": "/bg/muska-create-5MvNlQENWDM-unsplash.png",
+          "authors": [
+            {
+              "id": 3,
+              "name": "Dr. Nina Hartono",
+              "slug": "nina-hartono"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": 1,
+      "title": "Economic Policy in Post-Pandemic Southeast Asia",
+      "slug": "economic-policy-post-pandemic",
+      "date_start": "2024-06-15",
+      "date_end": "2024-06-15",
+      "time_start": "10:00",
+      "time_end": "16:00",
+      "location": "Grand Hyatt Jakarta",
+      "image": "/bg/frank-mouland-e4mYPf_JUIk-unsplash.png",
+      "is_upcoming": true
+    },
+    {
+      "id": 2,
+      "title": "Geopolitical Dynamics in the Indo-Pacific Region",
+      "slug": "geopolitical-dynamics-indo-pacific",
+      "date_start": "2024-06-22",
+      "date_end": "2024-06-22",
+      "time_start": "14:00",
+      "time_end": "16:00",
+      "location": "Online",
+      "image": "/bg/heather-green-bQTzJzwQfJE-unsplash.png",
+      "is_upcoming": true
+    },
+    {
+      "id": 3,
+      "title": "Workshop on Election Reform in Indonesia",
+      "slug": "election-reform-workshop",
+      "date_start": "2024-07-05",
+      "date_end": "2024-07-05",
+      "time_start": "09:00",
+      "time_end": "15:00",
+      "location": "CSIS Indonesia Headquarters",
+      "image": "/bg/muska-create-5MvNlQENWDM-unsplash.png",
+      "is_upcoming": true
+    },
+    {
+      "id": 4,
+      "title": "South China Sea Maritime Security Forum",
+      "slug": "maritime-security-forum",
+      "date_start": "2024-07-12",
+      "date_end": "2024-07-12",
+      "time_start": "13:00",
+      "time_end": "17:00",
+      "location": "Shangri-La Hotel Jakarta",
+      "image": "/bg/muska-create-K5OIYotY9GA-unsplash.png",
+      "is_upcoming": true
+    }
+  ],
+  "publications": {
+    "latest_publications": [
+      {
+        "id": 1,
+        "title": "Indonesia's Economic Outlook 2024",
+        "slug": "indonesia-economic-outlook-2024",
+        "date": "2024-05-10",
+        "image": "/bg/frank-mouland-e4mYPf_JUIk-unsplash.png",
+        "authors": [
+          {
+            "id": 1,
+            "name": "Dr. Amelia Wong",
+            "slug": "amelia-wong"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Maritime Security Challenges in Southeast Asia",
+        "slug": "maritime-security-challenges",
+        "date": "2024-04-08",
+        "image": "/bg/muska-create-K5OIYotY9GA-unsplash.png",
+        "authors": [
+          {
+            "id": 4,
+            "name": "Dr. Budi Santoso",
+            "slug": "budi-santoso"
+          }
+        ]
+      }
+    ],
+    "category_publications": [
+      {
+        "category": {
+          "id": 3,
+          "name": "Security",
+          "slug": "security"
+        },
+        "publication": {
+          "id": 4,
+          "title": "Maritime Security Challenges in Southeast Asia",
+          "slug": "maritime-security-challenges",
+          "date": "2024-04-08",
+          "image": "/bg/muska-create-K5OIYotY9GA-unsplash.png",
+          "authors": [
+            {
+              "id": 4,
+              "name": "Dr. Budi Santoso",
+              "slug": "budi-santoso"
+            }
+          ]
+        }
+      },
+      {
+        "category": {
+          "id": 5,
+          "name": "Digital Economy",
+          "slug": "digital-economy"
+        },
+        "publication": {
+          "id": 5,
+          "title": "Digital Economy Trends in Indonesia",
+          "slug": "digital-economy-trends",
+          "date": "2024-04-01",
+          "image": "/bg/wildan-kurniawan-m0JLVP04Heo-unsplash.png",
+          "authors": [
+            {
+              "id": 5,
+              "name": "Dr. Sarah Johnson",
+              "slug": "sarah-johnson"
+            }
+          ]
+        }
+      }
+    ],
+    "journal_links": [
+      {
+        "name": "Indonesian Quarterly",
+        "url": "https://journals.csis.or.id/iq"
+      },
+      {
+        "name": "Analisis CSIS",
+        "url": "https://journals.csis.or.id/analisis"
+      }
+    ]
+  },
+  "csis_on_news": [
+    {
+      "id": 1,
+      "title": "The Future of ASEAN Centrality in the Indo-Pacific",
+      "author": {
+        "id": 2,
+        "name": "Dr. Ahmad Faisal",
+        "slug": "ahmad-faisal"
+      },
+      "source": "Foreign Policy",
+      "date": "2024-05-18",
+      "link": "https://example.com/asean-centrality",
+      "category": "Op-ed"
+    },
+    {
+      "id": 2,
+      "title": "Climate Change Adaptation Strategies for Southeast Asia",
+      "author": {
+        "id": 3,
+        "name": "Dr. Nina Hartono",
+        "slug": "nina-hartono"
+      },
+      "source": "The Diplomat",
+      "date": "2024-05-12",
+      "link": "https://example.com/climate-adaptation",
+      "category": "Essay"
+    },
+    {
+      "id": 3,
+      "title": "Digital Economy Transformation in Indonesia",
+      "author": {
+        "id": 5,
+        "name": "Dr. Sarah Johnson",
+        "slug": "sarah-johnson"
+      },
+      "source": "East Asia Forum",
+      "date": "2024-05-05",
+      "link": "https://example.com/digital-economy",
+      "category": "Journal Article"
+    },
+    {
+      "id": 4,
+      "title": "Maritime Security in the South China Sea: New Developments",
+      "author": {
+        "id": 4,
+        "name": "Dr. Budi Santoso",
+        "slug": "budi-santoso"
+      },
+      "source": "The Jakarta Post",
+      "date": "2024-04-29",
+      "link": "https://example.com/maritime-security",
+      "category": "News"
+    }
+  ]
+} 

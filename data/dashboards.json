@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Indonesia's Strategic Dependency Dashboard",
+    "icon": "FiPieChart",
+    "description": "Comprehensive visualization of key economic indicators for Indonesia, including GDP growth, inflation rates, and foreign investment trends.",
+    "link": "https://isdp.csis.or.id",
+    "image": "/bg/getty-images-PWFDb-sRcsY-unsplash.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Collective Violence Early Warning Dataset",
+    "icon": "FiBarChart2",
+    "description": "Interactive visualization of trade flows between ASEAN countries, highlighting key exports, imports, and emerging trade patterns.",
+    "link": "https://violence.csis.or.id",
+    "image": "/bg/pawel-janiak-49LBMXrY5BE-unsplash.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Hatespeech Dashboard",
+    "icon": "FiTrendingUp",
+    "description": "Visualization of public opinion trends on key political issues in Indonesia, based on CSIS's quarterly nationwide surveys.",
+    "link": "https://hatespeech.csis.or.id",
+    "image": "/bg/jason-leung-XigshA91R6M-unsplash.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Decarbonization for Development",
+    "icon": "FiGlobe",
+    "description": "Interactive tracker of Indonesia's diplomatic and economic relations with key global partners, including strength of ties and recent developments.",
+    "link": "https://dfdlab.org",
+    "image": "/bg/getty-images-PWFDb-sRcsY-unsplash.jpg"
+  },
+  {
+    "id": 5,
+    "title": "ASEAN Economic Integration",
+    "icon": "FiDatabase",
+    "description": "Comprehensive analysis of ASEAN economic integration metrics and cross-border investments.",
+    "link": "/dashboards/asean-economic",
+    "image": "/bg/muska-create-5MvNlQENWDM-unsplash.png"
+  },
+  {
+    "id": 6,
+    "title": "Maritime Security Tracker",
+    "icon": "FiMap",
+    "description": "Real-time monitoring of maritime security incidents in Southeast Asian waters.",
+    "link": "/dashboards/maritime-security",
+    "image": "/bg/frank-mouland-e4mYPf_JUIk-unsplash.png"
+  }
+] 

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "pub-001",
+    "title": "The Future of AI in Renewable Energy",
+    "authors": ["Dr. Anya Sharma", "Prof. Kenji Tanaka"],
+    "publishDate": "2024-06-15T00:00:00Z",
+    "status": "Published",
+    "abstract": "Exploring the transformative potential of artificial intelligence in optimizing renewable energy production and grid management."
+  },
+  {
+    "id": "pub-002",
+    "title": "Quantum Computing: A Primer for Businesses",
+    "authors": ["Dr. Evelyn Reed"],
+    "publishDate": "2024-05-20T00:00:00Z",
+    "status": "Published",
+    "abstract": "An accessible introduction to quantum computing concepts and their potential impact on various business sectors."
+  },
+  {
+    "id": "pub-003",
+    "title": "Advanced Materials for Sustainable Construction",
+    "authors": ["Prof. Mateo Rossi"],
+    "publishDate": "2024-07-01T00:00:00Z",
+    "status": "Published",
+    "abstract": "Overview of novel materials reducing the environmental footprint of the construction industry."
+  },
+  {
+    "id": "pub-004",
+    "title": "Cybersecurity Trends in the IoT Era",
+    "authors": ["Dr. Lena Petrova", "Dr. Anya Sharma"],
+    "publishDate": "2024-03-10T00:00:00Z",
+    "status": "Published",
+    "abstract": "Analysis of emerging cybersecurity threats and mitigation strategies for Internet of Things devices."
+  },
+  {
+    "id": "pub-005",
+    "title": "Ethical Considerations in Machine Learning",
+    "authors": ["Prof. Kenji Tanaka"],
+    "publishDate": "2024-01-25T00:00:00Z",
+    "status": "Archived",
+    "abstract": "Discussion on the ethical challenges and frameworks necessary for responsible AI development."
+  },
+  {
+    "id": "pub-006",
+    "title": "Bio-Integrated Electronics",
+    "authors": ["Dr. Evelyn Reed"],
+    "publishDate": "2024-07-26T00:00:00Z",
+    "status": "Draft",
+    "abstract": "Exploring the interface between biological systems and electronic devices for medical applications."
+  }
+] 

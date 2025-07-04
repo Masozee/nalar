@@ -1,0 +1,13 @@
+{
+  "registrationsByDay": [
+    { "day": "Mon", "newUsers": 15 },
+    { "day": "Tue", "newUsers": 22 },
+    { "day": "Wed", "newUsers": 18 },
+    { "day": "Thu", "newUsers": 25 },
+    { "day": "Fri", "newUsers": 30 },
+    { "day": "Sat", "newUsers": 45 },
+    { "day": "Sun", "newUsers": 12 }
+  ],
+  "totalUsers": 5280,
+  "activeUsers": 3150
+} 

@@ -1,0 +1,24 @@
+:root {
+  --sidebar-green: #059669; /* Tailwind emerald-600 as example, adjust to your main green */
+}
+
+.sidebar-menu-button-custom {
+  font-weight: 400 !important;
+  color: #000 !important;
+  background: none !important;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar-menu-button-custom:hover, .sidebar-menu-button-custom:focus-visible {
+  background: var(--sidebar-green) !important;
+  color: #fff !important;
+}
+
+.sidebar-menu-item-custom {
+  /* Inherit text color for all text inside */
+  color: inherit !important;
+}
+
+.sidebar-group-label-custom {
+  font-weight: 400 !important;
+  color: #000 !important;
+}

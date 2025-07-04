@@ -1,0 +1,50 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# ✅ Admin Page UI Rules (ShadCN Only)
+
+## 1. General Rules
+
+1. **Use Only ShadCN Components**  
+   All UI must be built using components from [ShadCN UI](mdc:https:/ui.shadcn.com/docs/components) or Radix UI only
+
+2. **Stick to Latest Versions**  
+   Only use the latest documented ShadCN or RadixUI components. No custom-built or outdated components.
+
+3. **Don't Modify Fixed Components**  
+   If a component is already implemented and marked as “✅ Done”, **do not refactor, re-style, or modify it.**
+
+4. **Style Consistency**  
+   Follow ShadCN + Tailwind utility-first principles. No custom CSS unless explicitly needed.
+
+5. **No External UI Libraries**  
+   Do not import or use any other component libraries like Chakra, MUI, Bootstrap, etc.
+
+6. **Form Handling**  
+   Use `react-hook-form` + `zod` combo with ShadCN’s form components.
+
+7. **Icons**  
+   Only use `lucide-react` for icons.
+
+8. **Animation**  
+   Use `framer-motion` for any animations or transitions.
+
+9. **Sidebar**  
+   Don't change sidebar, except i'm directly asking to change it
+
+
+## 2. ✅ Component Implementation Checklist
+
+1. create new docs to documented new created pages with components location 
+2. Mark the components and pages you've already implemented. Do **not modify** components that are marked ✅ Done.
+
+
+
+## 3. Notes
+
+- Update the checklist as you go.
+- Before adding any custom behavior, check if ShadCN or Radix UI already supports it.
+- When in doubt, refer to the official ShadCN docs: https://ui.shadcn.com/docs/components
+
