@@ -355,11 +355,11 @@ export interface PaginatedResponse<T> {
 export async function fetchEvents(cursor?: string, status?: string, page_size: number = 12): Promise<ApiResponse<PaginatedResponse<Event>>> {
   try {
     // Connect to the actual API endpoint
-    let apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/events/`;
+    let apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/events/`;
     
     // Add status filter if provided (upcoming or past)
     if (status && (status === 'upcoming' || status === 'past')) {
-      apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/events/${status}/`;
+      apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/events/${status}/`;
     }
     
     // Add cursor for pagination if provided
@@ -714,7 +714,7 @@ function ensureAbsoluteImageUrl(imageUrl: string, baseUrl: string): string {
 export async function fetchNews(cursor?: string, page_size: number = 12): Promise<ApiResponse<PaginatedResponse<News>>> {
   try {
     const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    let url = `${API_URL}/api/news/?page_size=${page_size}`;
+    let url = `${API_URL}/news/?page_size=${page_size}`;
     
     if (cursor) {
       url += `&cursor=${cursor}`;

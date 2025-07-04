@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const url = `${BACKEND_API_URL}/api/media/${slug}/`;
+    const url = `${BACKEND_API_URL}/media/${slug}/`;
     
     const response = await fetch(url, {
       method: 'GET',

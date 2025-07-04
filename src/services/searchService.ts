@@ -73,7 +73,7 @@ export const searchService = {
    */
   search: async (params: SearchParams): Promise<SearchResponse> => {
     try {
-      const url = new URL(`${API_BASE_URL}/api/search/`);
+      const url = new URL(`${API_BASE_URL}/search/`);
       Object.entries(params).forEach(([key, value]) => {
         if (Array.isArray(value)) {
           value.forEach(v => url.searchParams.append(key, v));
@@ -101,7 +101,7 @@ export const searchService = {
    */
   getPopularSearches: async (days = 30, limit = 10): Promise<string[]> => {
     try {
-      const url = new URL(`${API_BASE_URL}/api/search/popular/`);
+      const url = new URL(`${API_BASE_URL}/search/popular/`);
       url.searchParams.append('days', days.toString());
       url.searchParams.append('limit', limit.toString());
       
@@ -125,7 +125,7 @@ export const searchService = {
    */
   getPopularKeywords: async (days = 30, limit = 10): Promise<string[]> => {
     try {
-      const url = new URL(`${API_BASE_URL}/api/search/keywords/`);
+      const url = new URL(`${API_BASE_URL}/search/keywords/`);
       url.searchParams.append('days', days.toString());
       url.searchParams.append('limit', limit.toString());
       

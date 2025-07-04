@@ -312,7 +312,7 @@ const EventDetail = () => {
     const fetchEventDetail = async () => {
       try {
         // Fetch the specific event directly from the API
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/events/${slug}/`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/events/${slug}/`);
         
         if (!response.ok) {
           throw new Error(`Failed to fetch event: ${response.status}`);

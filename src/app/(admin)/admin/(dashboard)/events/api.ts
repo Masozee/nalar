@@ -25,7 +25,7 @@ export interface EventsApiResponse {
 }
 
 export async function fetchEvents(params: Record<string, any> = {}): Promise<EventsApiResponse> {
-  const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/events/`);
+  const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/events/`);
   Object.entries(params).forEach(([key, value]) => {
     if (Array.isArray(value)) {
       value.forEach(v => url.searchParams.append(key, v));

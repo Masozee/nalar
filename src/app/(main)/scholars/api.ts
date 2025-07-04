@@ -71,7 +71,7 @@ export interface Scholar {
 export async function fetchScholars(): Promise<Scholar[]> {
   // Only request the minimum fields needed for the scholars page
   const minimalFields = 'name,slug,position,organization,profile_url,profile_img,expertise,department';
-  const url = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/persons/scholars/?fields=${minimalFields}`;
+  const url = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/persons/scholars/?fields=${minimalFields}`;
   
   const response = await fetch(url);
   
@@ -88,7 +88,7 @@ export async function fetchScholars(): Promise<Scholar[]> {
  * @returns Promise with scholar data
  */
 export async function fetchScholarBySlug(slug: string): Promise<Scholar> {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/persons/${slug}/`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/persons/${slug}/`);
   
   if (!response.ok) {
     throw new Error(`Failed to fetch scholar: ${response.status} ${response.statusText}`);

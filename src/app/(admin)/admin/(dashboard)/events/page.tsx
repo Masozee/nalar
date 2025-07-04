@@ -26,7 +26,7 @@ export default function EventsPage() {
 
   // Fetch topics for topic filter
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/topics/?page_size=100`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/topics/?page_size=100`)
       .then(res => res.json())
       .then(json => setTopics(json.results || []));
   }, []);

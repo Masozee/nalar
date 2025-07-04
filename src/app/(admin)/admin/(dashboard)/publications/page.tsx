@@ -151,7 +151,7 @@ export default function PublicationsPage() {
   const [data, setData] = useState<PublicationsApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [pageUrl, setPageUrl] = useState(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/publications/?page_size=10`);
+  const [pageUrl, setPageUrl] = useState(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/publications/?page_size=10`);
 
   useEffect(() => {
     setLoading(true);

@@ -191,7 +191,7 @@ function SearchContent() {
     setIsLoading(true);
     
     // Call the API to get search results with pagination
-    const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/search/?q=${encodeURIComponent(term)}&page=${page}`;
+    const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/search/?q=${encodeURIComponent(term)}&page=${page}`;
     
     console.log(`Fetching search results from: ${apiUrl}`);
     fetch(apiUrl)

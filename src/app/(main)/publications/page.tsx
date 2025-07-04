@@ -232,7 +232,7 @@ export default function Publications() {
       setIsLoading(true);
       try {
         // Fetch from the API
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/publications/`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/publications/`);
         
         if (!response.ok) {
           throw new Error(`Failed to fetch publications: ${response.status}`);

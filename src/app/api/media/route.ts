@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     
     // Forward all query parameters to the backend API
-    const url = `${BACKEND_API_URL}/api/media/?${searchParams.toString()}`;
+    const url = `${BACKEND_API_URL}/media/?${searchParams.toString()}`;
     
     const response = await fetch(url, {
       method: 'GET',
