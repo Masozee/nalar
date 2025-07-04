@@ -1,24 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nalar - CSIS Indonesia Frontend
 
-## Getting Started
+A modern Next.js application for the Center for Strategic and International Studies (CSIS) Indonesia website.
 
-First, run the development server:
+## 🚀 Features
 
+- **Next.js 15** with App Router
+- **TypeScript** for type safety
+- **Tailwind CSS** for styling
+- **Media Management** with Spotify integration
+- **Admin Dashboard** for content management
+- **Responsive Design** for all devices
+- **Environment Configuration** for flexible deployment
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Custom components with shadcn/ui
+- **Icons**: React Icons (Feather Icons)
+- **State Management**: React Hooks
+- **API Integration**: Native fetch with environment variables
+
+## 📦 Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/nalar.git
+cd nalar
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Configure your environment variables in `.env.local`:
+```env
+NEXT_PUBLIC_BACKEND_API_URL=http://your-backend-url
+NEXT_PUBLIC_API_URL=http://fallback-api-url
+```
+
+## 🚀 Development
+
+Run the development server:
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Data Fetching Architecture
 
