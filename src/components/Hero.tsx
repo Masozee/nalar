@@ -102,34 +102,6 @@ export default function Hero() {
           </div>
         </motion.div>
       </div>
-      
-      {/* Floating stats */}
-      <FadeIn 
-        className="absolute bottom-10 right-10 z-20 hidden lg:block" 
-        delay={0.8} 
-        direction="left"
-      >
-        <div className="bg-white/10 backdrop-blur-md p-6 max-w-xs">
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <p className="text-accent text-4xl font-bold">50+</p>
-              <p className="text-white text-sm">Years of Experience</p>
-            </div>
-            <div>
-              <p className="text-accent text-4xl font-bold">300+</p>
-              <p className="text-white text-sm">Publications</p>
-            </div>
-            <div>
-              <p className="text-accent text-4xl font-bold">40+</p>
-              <p className="text-white text-sm">Research Experts</p>
-            </div>
-            <div>
-              <p className="text-accent text-4xl font-bold">120+</p>
-              <p className="text-white text-sm">Global Partners</p>
-            </div>
-          </div>
-        </div>
-      </FadeIn>
     </section>
   );
 } 
