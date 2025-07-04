@@ -540,51 +540,51 @@ export async function fetchDashboards(): Promise<ApiResponse<Dashboard[]>> {
     data: [
       {
         id: 1,
-        title: "Economic Indicators",
+        title: "Indonesia's Strategic Dependency Dashboard",
         icon: "chart-line",
-        description: "Real-time economic indicators for Southeast Asia",
-        link: "/dashboards/economic-indicators",
-        image: "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/publication/chris-leboutillier-TUJud0AWAPI-unsplash.jpg"
+        description: "Interactive dashboard for analyzing Indonesia's strategic dependencies and vulnerabilities across various sectors",
+        link: "https://isdp.csis.or.id",
+        image: "/bg/logo/isdp.png"
       },
       {
         id: 2,
-        title: "Regional Security",
+        title: "Collective Violence Early Warning Dataset",
         icon: "shield-alt",
-        description: "Defense spending and security metrics",
-        link: "/dashboards/regional-security",
-        image: "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/publication/kurt-cotoaga-cV73uDwuti0-unsplash.jpg"
+        description: "Early warning system and dataset tracking collective violence incidents to prevent and mitigate social conflicts",
+        link: "https://cvew.csis.or.id",
+        image: "/bg/logo/cvew.png"
       },
       {
         id: 3,
-        title: "Climate Impact",
+        title: "Hatespeech Dashboard",
         icon: "cloud-sun",
-        description: "Climate change effects across ASEAN",
-        link: "/dashboards/climate-impact",
-        image: "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/publication/scottsdale-mint-kGpq0hj_xc0-unsplash.jpg"
+        description: "Monitoring and analysis platform for tracking hate speech trends and patterns in online spaces",
+        link: "https://hatespeech.csis.or.id",
+        image: "/bg/logo/hatespeech.png"
       },
       {
         id: 4,
-        title: "Digital Transformation",
+        title: "Decarbonization for Development Lab",
         icon: "laptop-code",
-        description: "Digital adoption rates and tech infrastructure",
-        link: "/dashboards/digital-transformation",
-        image: "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/publication/arnaud-jaegers-IBWJsMObnnU-unsplash.jpg"
+        description: "Research platform exploring decarbonization strategies and their impact on sustainable development",
+        link: "https://dfdlab.org",
+        image: "/bg/logo/dfd.png"
       },
       {
         id: 5,
-        title: "Trade Flows",
+        title: "Safer Internet Lab",
         icon: "exchange-alt",
-        description: "Import/export data and trade agreements",
-        link: "/dashboards/trade-flows",
-        image: "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/publication/planet-volumes-7dnIhDzIDnI-unsplash.jpg"
+        description: "Research initiative focused on promoting internet safety and digital well-being in Indonesia",
+        link: "https://saferinternetlab.org",
+        image: "/bg/logo/saferinternetlab.png"
       },
       {
         id: 6,
-        title: "Political Stability",
+        title: "Parlemen Kita",
         icon: "balance-scale",
-        description: "Governance indicators and political risk analysis",
-        link: "/dashboards/political-stability",
-        image: "https://s3-csis-web.s3.ap-southeast-1.amazonaws.com/event/img/Dialog_Penguatan....jpg"
+        description: "Platform for monitoring and analyzing Indonesian parliamentary activities and legislative processes",
+        link: "https://parlemenkita.org",
+        image: "/bg/logo/parlemenkita.png"
       }
     ]
   };
