@@ -149,6 +149,19 @@ const FALLBACK_PUBLICATIONS: Publication[] = [
   }
 ];
 
+// Utility function to format authors
+const formatAuthors = (authors: PublicationAuthor[]): string => {
+  if (!authors || authors.length === 0) return 'Unknown';
+  
+  if (authors.length === 1) {
+    return authors[0].name;
+  }
+  
+  const firstAuthor = authors[0].name;
+  const remainingCount = authors.length - 1;
+  return `${firstAuthor}, +${remainingCount} more`;
+};
+
 export default function PublicationDetail() {
   const params = useParams();
   const slug = params.slug as string;
@@ -210,7 +223,7 @@ export default function PublicationDetail() {
       setIsLoading(true);
       try {
         // Fetch from the API using environment variable
-        const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+        const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
         const response = await fetch(`${API_BASE_URL}/publications/${slug}/`);
         
         if (!response.ok) {
@@ -227,7 +240,7 @@ export default function PublicationDetail() {
           title: data.title,
           category: data.category_info?.name || data.category?.name || 'Uncategorized',
           type: data.category_info?.name || data.category?.name || 'Publication',
-          author: data.authors?.length > 0 ? data.authors[0].name : 'Unknown',
+          author: formatAuthors(data.authors || []),
           authorTitle: data.authors?.length > 0 ? data.authors[0].position : undefined,
           authorImage: data.authors?.length > 0 ? (data.authors[0].profile_img || data.authors[0].image) : undefined,
           date: new Date(data.date_publish).toLocaleDateString('en-US', {
@@ -255,7 +268,7 @@ export default function PublicationDetail() {
             title: pub.title,
             category: 'Publication',
             type: 'Publication',
-            author: pub.authors?.length > 0 ? pub.authors[0].name : 'Unknown',
+            author: formatAuthors(pub.authors || []),
             date: new Date(pub.date_publish).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',

@@ -10,45 +10,63 @@ import { FiClock, FiMapPin, FiUsers, FiGlobe, FiFileText, FiAward } from 'react-
 export default function About() {
   return (
     <>
+      <NavBar />
       <main className="pt-0">
         {/* Hero Section */}
-        <section className="py-16 md:py-24 bg-primary relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('/pattern.svg')] bg-repeat"></div>
-          </div>
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-3xl mx-auto">
-              <div className="inline-block bg-accent px-4 py-2 mb-4">
-                <span className="text-lg font-medium text-white/90">About Us</span>
-              </div>
-              <h1 className="text-4xl font-bold !text-white sm:text-5xl md:text-6xl mb-6">
-                Centre for Strategic and International Studies
-              </h1>
-              <p className="text-xl text-white/80 mb-8">
-                Indonesia&apos;s premier think tank for policy research and analysis since 1971
-              </p>
-            </div>
+        <section className="relative w-full h-[40vh] min-h-[300px] bg-[#005357]">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#005357] to-[#005357]/80 z-10" />
+          <Image
+            src="/bg/frank-mouland-e4mYPf_JUIk-unsplash.png"
+            alt="About CSIS"
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center', mixBlendMode: 'overlay' }}
+            priority
+          />
+          <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-12">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-block bg-accent px-4 py-2 mb-4 w-fit"
+            >
+              <span className="text-lg font-medium text-white">About Us</span>
+            </motion.div>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-4xl md:text-5xl font-bold !text-white mb-4"
+            >
+              Centre for Strategic and International Studies
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-lg text-green-100 max-w-2xl"
+            >
+              Indonesia&apos;s premier think tank for policy research and analysis since 1971
+            </motion.p>
           </div>
         </section>
 
         {/* About Navigation */}
-        <section className="border-b border-gray-200">
+        <section className="sticky top-16 z-40 bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav className="flex overflow-x-auto py-4 gap-8">
-              <Link href="/about" className="text-accent font-medium whitespace-nowrap border-b-2 border-accent px-1 py-2">
+              <Link href="/about" className="text-accent font-bold whitespace-nowrap border-b-2 border-accent px-1 py-2">
                 Overview
               </Link>
-              <Link href="/about/history" className="text-gray-600 hover:text-accent whitespace-nowrap px-1 py-2">
+              <Link href="/about/history" className="text-gray-600 hover:text-accent font-bold whitespace-nowrap px-1 py-2">
                 History
               </Link>
-              <Link href="/about/board-of-directors" className="text-gray-600 hover:text-accent whitespace-nowrap px-1 py-2">
+              <Link href="/about/board-of-directors" className="text-gray-600 hover:text-accent font-bold whitespace-nowrap px-1 py-2">
                 Board of Directors
               </Link>
-              <Link href="/about/foundation" className="text-gray-600 hover:text-accent whitespace-nowrap px-1 py-2">
+              <Link href="/about/foundation" className="text-gray-600 hover:text-accent font-bold whitespace-nowrap px-1 py-2">
                 CSIS Foundation
               </Link>
-              <Link href="/about/logo" className="text-gray-600 hover:text-accent whitespace-nowrap px-1 py-2">
+              <Link href="/about/logo" className="text-gray-600 hover:text-accent font-bold whitespace-nowrap px-1 py-2">
                 Behind The Logo
               </Link>
             </nav>
@@ -137,78 +155,7 @@ export default function About() {
         </section>
 
         {/* Mission & Research Focus */}
-        <section className="py-16 bg-gray-50 border-t border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="text-3xl font-bold text-primary mb-4">Our Mission & Research Focus</h2>
-              <p className="text-lg text-gray-700">
-                CSIS is committed to providing policy analysis and recommendations to improve public policy making through rigorous research and analysis
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-                <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
-                  <FiGlobe className="text-primary text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-primary mb-3">International Relations</h3>
-                <p className="text-gray-700">
-                  Analyzing geopolitical dynamics, regional cooperation, and Indonesia&apos;s foreign policy to strengthen the nation&apos;s position in the global community.
-                </p>
-              </div>
-              
-              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-                <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
-                  <FiFileText className="text-primary text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-primary mb-3">Economics</h3>
-                <p className="text-gray-700">
-                  Researching economic policies, trade relations, and development strategies to promote sustainable and inclusive growth in Indonesia.
-                </p>
-              </div>
-              
-              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-                <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
-                  <FiUsers className="text-primary text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-primary mb-3">Politics & Governance</h3>
-                <p className="text-gray-700">
-                  Examining political institutions, democratic processes, and governance issues to enhance political stability and accountability.
-                </p>
-              </div>
-              
-              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-                <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
-                  <FiAward className="text-primary text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-primary mb-3">Security Studies</h3>
-                <p className="text-gray-700">
-                  Studying traditional and non-traditional security challenges, defense policy, and regional security architecture.
-                </p>
-              </div>
-              
-              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-                <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
-                  <FiFileText className="text-primary text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-primary mb-3">Social Development</h3>
-                <p className="text-gray-700">
-                  Investigating social policies, education, healthcare, and demographic trends to address societal challenges and improve welfare.
-                </p>
-              </div>
-              
-              <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-                <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
-                  <FiGlobe className="text-primary text-2xl" />
-                </div>
-                <h3 className="text-xl font-bold text-primary mb-3">Climate & Environment</h3>
-                <p className="text-gray-700">
-                  Assessing environmental policies, climate change impacts, and sustainable development strategies for Indonesia&apos;s future.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        
       </main>
       <Footer />
     </>

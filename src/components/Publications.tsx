@@ -8,6 +8,19 @@ import { FiDownload, FiArrowRight, FiCalendar, FiExternalLink } from 'react-icon
 import FadeIn from './animations/FadeIn';
 import { useHomepage } from '@/contexts/HomepageContext';
 
+// Utility function to format authors
+const formatAuthors = (authors: Array<{ name: string }> | undefined): string => {
+  if (!authors || authors.length === 0) return 'Unknown';
+  
+  if (authors.length === 1) {
+    return authors[0].name;
+  }
+  
+  const firstAuthor = authors[0].name;
+  const remainingCount = authors.length - 1;
+  return `${firstAuthor}, +${remainingCount} more`;
+};
+
 export default function Publications() {
   const { homepageData, isLoading, error } = useHomepage();
   
@@ -99,7 +112,7 @@ export default function Publications() {
                   </div>
                   <h3 className="text-xl font-bold mb-3 text-primary">{publication.title}</h3>
                   <div className="mb-3 text-gray-600 text-sm">
-                    {publication.authors.map(a => a.name).join(', ')}
+                    {formatAuthors(publication.authors)}
                   </div>
                   <div className="flex justify-between items-center mt-4">
                     <Link 
@@ -108,11 +121,6 @@ export default function Publications() {
                     >
                       Read Publication <FiArrowRight className="ml-2" />
                     </Link>
-                    <button
-                      className="flex items-center text-teal text-xs hover:underline"
-                    >
-                      <FiDownload className="mr-1" /> Download PDF
-                    </button>
                   </div>
                 </div>
               </div>
@@ -153,7 +161,7 @@ export default function Publications() {
                   </Link>
                 </h4>
                 <div className="text-xs text-gray-600 mb-3">
-                  {item.publication.authors.map(a => a.name).join(', ')}
+                  {formatAuthors(item.publication.authors)}
                 </div>
                 <div className="mt-auto pt-2">
                   <Link 

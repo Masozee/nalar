@@ -159,23 +159,13 @@ function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/research/politics" className="text-white hover:text-white">
-                    Politics
-                  </Link>
-                </li>
-                <li>
                   <Link href="/research/international-relations" className="text-white hover:text-white">
                     International Relations
                   </Link>
                 </li>
                 <li>
-                  <Link href="/research/security" className="text-white hover:text-white">
-                    Security
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/research/social-policy" className="text-white hover:text-white">
-                    Social Policy
+                  <Link href="/research/politics" className="text-white hover:text-white">
+                    Politics and Social Changes
                   </Link>
                 </li>
               </ul>

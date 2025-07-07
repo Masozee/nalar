@@ -3,93 +3,57 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiPlayCircle, FiFilter, FiX } from 'react-icons/fi';
-
-// Sample podcast data
-const podcasts = [
-  {
-    id: 'podcast-1',
-    title: 'Indonesia\'s Economic Prospects in 2024',
-    type: 'podcast',
-    date: '2024-05-10',
-    duration: '34 min',
-    image: '/bg/frank-mouland-e4mYPf_JUIk-unsplash.png',
-    category: 'Economics',
-    speakers: ['Dr. Ahmad Sulaiman', 'Lisa Wijaya'],
-    description: 'Analysis of Indonesia\'s economic outlook for 2024 amid global uncertainties.'
-  },
-  {
-    id: 'podcast-2',
-    title: 'Navigating the South China Sea Disputes',
-    type: 'podcast',
-    date: '2024-04-28',
-    duration: '28 min',
-    image: '/bg/heather-green-bQTzJzwQfJE-unsplash.png',
-    category: 'Security',
-    speakers: ['Prof. Michael Chen', 'Dr. Sarah Johnson'],
-    description: 'Discussing the latest developments in South China Sea territorial disputes.'
-  },
-  {
-    id: 'podcast-3',
-    title: 'Digital Economy Revolution in Southeast Asia',
-    type: 'podcast',
-    date: '2024-04-15',
-    duration: '32 min',
-    image: '/bg/muska-create-5MvNlQENWDM-unsplash.png',
-    category: 'Technology',
-    speakers: ['Maria Rodriguez', 'David Kim'],
-    description: 'How digital transformation is reshaping economies across Southeast Asia.'
-  },
-  {
-    id: 'podcast-4',
-    title: 'Climate Change Adaptation in Indonesia',
-    type: 'podcast',
-    date: '2024-04-05',
-    duration: '45 min',
-    image: '/bg/frank-mouland-e4mYPf_JUIk-unsplash.png',
-    category: 'Environment',
-    speakers: ['Dr. Siti Nuraini', 'James Wilson'],
-    description: 'Exploring Indonesia\'s strategies for adapting to climate change challenges.'
-  },
-  {
-    id: 'podcast-5',
-    title: 'ASEAN\'s Role in Regional Security',
-    type: 'podcast',
-    date: '2024-03-22',
-    duration: '36 min',
-    image: '/bg/heather-green-bQTzJzwQfJE-unsplash.png',
-    category: 'Security',
-    speakers: ['Ambassador Lee Chen', 'Dr. Maria Santos'],
-    description: 'Examining ASEAN\'s evolving role in maintaining regional security and stability.'
-  },
-  {
-    id: 'podcast-6',
-    title: 'Indonesia\'s Foreign Policy Priorities',
-    type: 'podcast',
-    date: '2024-03-10',
-    duration: '40 min',
-    image: '/bg/muska-create-5MvNlQENWDM-unsplash.png',
-    category: 'Foreign Policy',
-    speakers: ['Prof. Bambang Wijaya', 'Dr. Sarah Peterson'],
-    description: 'Analysis of Indonesia\'s key foreign policy objectives and diplomatic initiatives.'
-  },
-];
-
-// Categories for filters
-const categories = [
-  'All Categories',
-  'Economics',
-  'Security',
-  'International Relations',
-  'Technology',
-  'Environment',
-  'Foreign Policy',
-];
+import { FiPlayCircle, FiFilter, FiX, FiCalendar, FiEye, FiClock } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { 
+  fetchMediaItems, 
+  getTopics, 
+  getDepartments,
+  MediaItem,
+  Topic,
+  Department 
+} from "@/services/mediaService";
 
 export default function PodcastsPage() {
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState('All Categories');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [activeType, setActiveType] = useState('All Types');
+  
+  // Load initial data
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Fetch only podcast media items
+        const mediaResponse = await fetchMediaItems({ 
+          media_type: 'podcast',
+          page_size: 50 
+        });
+        
+        const topicsData = await getTopics(mediaResponse.results);
+        const departmentsData = await getDepartments(mediaResponse.results);
+        
+        setMediaItems(mediaResponse.results);
+        setTopics(topicsData);
+        setDepartments(departmentsData);
+      } catch (err) {
+        setError('Failed to load podcasts. Please try again later.');
+        console.error('Error loading podcast data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadData();
+  }, []);
   
   // Check if we're on mobile
   useEffect(() => {
@@ -110,34 +74,102 @@ export default function PodcastsPage() {
     setActiveCategory(category);
   };
   
+  const filterByType = (type: string) => {
+    setActiveType(type);
+  };
+  
   // Filter podcasts
-  const filteredPodcasts = podcasts.filter(podcast => {
-    const categoryMatch = activeCategory === 'All Categories' || podcast.category === activeCategory;
+  const filteredPodcasts = mediaItems.filter(item => {
+    const categoryMatch = activeCategory === 'All Categories' || 
+      item.topic.some(topic => topic.name === activeCategory) ||
+      item.department.some(dept => dept.name === activeCategory);
     return categoryMatch;
   });
+
+  // Format date
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading podcasts...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-teal transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Get available filter options
+  const categoryOptions = [
+    "All Categories",
+    ...topics.map(topic => topic.name),
+    ...departments.map(dept => dept.name)
+  ];
+
+  const mediaTypeOptions = ['All Types', 'Podcast'];
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative h-64 md:h-80 bg-primary overflow-hidden">
+      <section className="relative w-full h-[40vh] min-h-[300px] bg-[#005357]">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#005357] to-[#005357]/80 z-10" />
         <Image 
           src="/bg/heather-green-bQTzJzwQfJE-unsplash.png" 
           alt="Podcasts Hero Background"
           fill
           priority
-          style={{ objectFit: 'cover' }}
-          className="opacity-70"
+          style={{ objectFit: 'cover', objectPosition: 'center', mixBlendMode: 'overlay' }}
         />
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Podcasts</h1>
-            <p className="text-xl text-white opacity-90 max-w-2xl">
-              Listen to our latest podcast episodes featuring CSIS experts discussing important regional and global issues.
-            </p>
-          </div>
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-block bg-accent px-4 py-2 mb-4 w-fit"
+          >
+            <span className="text-lg font-medium text-white">Audio Content</span>
+          </motion.div>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold !text-white mb-4"
+          >
+            Podcasts
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg text-green-100 max-w-2xl"
+          >
+            Listen to our latest podcast episodes featuring CSIS experts discussing important regional and global issues.
+          </motion.p>
         </div>
-      </div>
+      </section>
       
       <div className="container mx-auto px-4 py-8">
         {/* Mobile Filter Toggle */}
@@ -159,7 +191,7 @@ export default function PodcastsPage() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar Filters */}
           <aside className={`
-            md:w-64 flex-shrink-0 bg-white rounded-lg p-4
+            md:w-64 flex-shrink-0 bg-white rounded-lg p-4 shadow-sm
             ${isMobile ? 'fixed inset-0 z-50 bg-white overflow-auto transform transition-transform duration-300 ease-in-out' : ''}
             ${showMobileFilters ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
           `}>
@@ -177,94 +209,168 @@ export default function PodcastsPage() {
             )}
             
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-3">CATEGORY</h3>
+              <h3 className="text-sm font-medium text-gray-500 mb-3">MEDIA TYPE</h3>
               <div className="space-y-2">
-                {categories.map((category) => (
+                {mediaTypeOptions.map((type) => (
                   <button
-                    key={category}
+                    key={type}
                     onClick={() => {
-                      filterByCategory(category);
+                      filterByType(type);
                       if (isMobile) setShowMobileFilters(false);
                     }}
                     className={`w-full text-left px-3 py-2 rounded-md text-sm ${
-                      activeCategory === category
+                      activeType === type
                         ? 'bg-primary text-white'
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
-                    {category}
+                    {type}
                   </button>
                 ))}
               </div>
             </div>
           </aside>
           
-          {/* Podcasts Grid */}
-          <div className="flex-1">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-primary">
-                CSIS Podcasts
-                {activeCategory !== "All Categories" && ` • ${activeCategory}`}
-              </h2>
-              <p className="text-sm text-gray-500">Showing {filteredPodcasts.length} results</p>
+          {/* Main Content */}
+          <main className="flex-1">
+            {/* Results Count */}
+            <div className="mb-6">
+              <p className="text-gray-600">
+                {filteredPodcasts.length} {filteredPodcasts.length === 1 ? 'podcast' : 'podcasts'} found
+              </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPodcasts.map((podcast) => (
-                <Link
-                  href={`/media/podcast/${podcast.id}`}
-                  key={podcast.id}
-                  className="bg-white overflow-hidden shadow-sm rounded-lg hover:shadow-md transition-shadow"
-                >
-                  <div className="relative h-48 w-full">
-                    <Image
-                      src={podcast.image}
-                      alt={podcast.title}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                    />
-                    <div className="absolute bottom-3 left-3 bg-accent text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
-                      <FiPlayCircle className="mr-1" /> 
-                      {podcast.duration}
+            {/* Podcasts Grid */}
+            {filteredPodcasts.length === 0 ? (
+              <div className="text-center py-16">
+                <FiPlayCircle className="text-gray-400 text-6xl mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No podcasts found</h3>
+                <p className="text-gray-600">
+                  {activeCategory !== 'All Categories' 
+                    ? `No podcasts found in the "${activeCategory}" category.`
+                    : 'No podcasts available at the moment.'
+                  }
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredPodcasts.map((podcast) => (
+                  <div key={podcast.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    {/* Podcast Thumbnail */}
+                    <div className="relative aspect-video">
+                      <Image
+                        src={podcast.thumbnail || '/bg/default-podcast.jpg'}
+                        alt={podcast.title}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        className="hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                        <FiPlayCircle className="text-white text-5xl" />
+                      </div>
+                      <div className="absolute top-2 right-2">
+                        <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded flex items-center">
+                          <FiPlayCircle className="mr-1" />
+                          Podcast
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Podcast Info */}
+                    <div className="p-4">
+                      <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                        <Link 
+                          href={`/media/podcast/${podcast.slug}`}
+                          className="text-gray-900 hover:text-primary transition-colors"
+                        >
+                          {podcast.title}
+                        </Link>
+                      </h3>
+                      
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                        {podcast.description}
+                      </p>
+                      
+                      {/* Podcast Meta */}
+                      <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                        <div className="flex items-center">
+                          <FiCalendar className="mr-1" />
+                          <span>{formatDate(podcast.publish_date)}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          {podcast.duration && (
+                            <div className="flex items-center">
+                              <FiClock className="mr-1" />
+                              <span>{podcast.duration}</span>
+                            </div>
+                          )}
+                          {podcast.viewed > 0 && (
+                            <div className="flex items-center">
+                              <FiEye className="mr-1" />
+                              <span>{podcast.viewed}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Topics */}
+                      {podcast.topic && podcast.topic.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {podcast.topic.slice(0, 2).map((topic) => (
+                            <span
+                              key={topic.id}
+                              className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
+                            >
+                              {topic.name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {/* Speakers */}
+                      {podcast.persons && podcast.persons.length > 0 && (
+                        <div className="text-sm text-gray-600 mb-3">
+                          <span className="font-medium">Speakers: </span>
+                          {podcast.persons.slice(0, 2).map((person, index) => (
+                            <span key={person.id}>
+                              {person.person.name}
+                              {index < Math.min(podcast.persons.length, 2) - 1 && ', '}
+                            </span>
+                          ))}
+                          {podcast.persons.length > 2 && (
+                            <span> and {podcast.persons.length - 2} more</span>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Action Buttons */}
+                      <div className="mt-4 flex justify-between items-center">
+                        <Link
+                          href={`/media/podcast/${podcast.slug}`}
+                          className="text-primary hover:text-primary-dark font-medium text-sm"
+                        >
+                          Listen Now →
+                        </Link>
+                        {podcast.podcast_url && (
+                          <a
+                            href={podcast.podcast_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-purple-600 hover:text-purple-700 text-sm flex items-center"
+                          >
+                            <FiPlayCircle className="mr-1" />
+                            {podcast.podcast_platform || 'Listen'}
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <div className="p-4">
-                    <div className="text-xs font-medium text-gray-500 mb-2 flex justify-between">
-                      <span>{podcast.category}</span>
-                      <span>{new Date(podcast.date).toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric', 
-                        year: 'numeric' 
-                      })}</span>
-                    </div>
-                    <h3 className="text-lg font-bold text-primary mb-2 line-clamp-2">{podcast.title}</h3>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{podcast.description}</p>
-                    <div className="text-xs text-gray-500">
-                      <span>Featuring: </span>
-                      {podcast.speakers.join(', ')}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-            
-            {filteredPodcasts.length === 0 && (
-              <div className="bg-gray-50 p-8 text-center rounded-lg">
-                <h3 className="text-lg font-medium text-gray-500 mb-2">No podcasts found</h3>
-                <p className="text-gray-600">Try adjusting your filters to find what you're looking for.</p>
+                ))}
               </div>
             )}
-          </div>
+          </main>
         </div>
       </div>
-      
-      {/* Mobile filter overlay */}
-      {showMobileFilters && isMobile && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={() => setShowMobileFilters(false)}
-        ></div>
-      )}
     </div>
   );
 } 

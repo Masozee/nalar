@@ -20,7 +20,7 @@ export default function Hero() {
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/bg/muska-create-5MvNlQENWDM-unsplash.png"
+          src="/bg/IMG_9014.jpg"
           alt="CSIS Indonesia - Think Tank"
           fill
           priority
@@ -49,7 +49,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <p className="text-xl text-white/90 mb-8 max-w-2xl">
-              Providing strategic analysis and policy recommendations on economics, politics, and international relations in Indonesia and Southeast Asia since 1971.
+            Founded in 1971, the Centre for Strategic and International Studies (CSIS) has won recognition as an important research and policy institution both within Indonesia and internationally. Its development over more than three decades is entwined with the history of Indonesia itself.
             </p>
           </motion.div>
           

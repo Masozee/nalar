@@ -70,6 +70,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased min-h-screen">
         <NavBar />
+        <div className="h-28 md:h-28 lg:h-28"></div>
         <ScrollProgress />
         <AnimationProvider>
           {children}

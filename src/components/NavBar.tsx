@@ -735,8 +735,6 @@ const NavBar = () => {
           )}
         </AnimatePresence>
       </nav>
-      {/* Add a spacer to create room for content below the navbar */}
-      <div className="h-28 md:h-28 lg:h-28"></div>
     </>
   );
 };

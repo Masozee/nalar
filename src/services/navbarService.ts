@@ -98,9 +98,9 @@ export const fetchNavbarConfig = async (): Promise<NavbarConfig> => {
     return {
       publications: {
         categories: [
-          { id: 1, name: 'Economics', slug: 'economics', count: 24, href: '/publications/economics' },
-          { id: 2, name: 'Politics', slug: 'politics', count: 18, href: '/publications/politics' },
-          { id: 3, name: 'International Relations', slug: 'international-relations', count: 32, href: '/publications/international-relations' },
+          { id: 1, name: 'Economics', slug: 'economics', count: 24, href: '/publications/categories/economics' },
+          { id: 2, name: 'Politics', slug: 'politics', count: 18, href: '/publications/categories/politics' },
+          { id: 3, name: 'International Relations', slug: 'international-relations', count: 32, href: '/publications/categories/international-relations' },
         ],
         featured_publications: [],
         latest_research: null

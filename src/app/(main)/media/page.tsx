@@ -15,6 +15,7 @@ import {
   Department 
 } from "@/services/mediaService";
 import { getBestMediaUrl, getPlatformFromUrl } from "@/lib/mediaUtils";
+import { motion } from "framer-motion";
 
 export default function MediaPage() {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
@@ -141,25 +142,42 @@ export default function MediaPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative h-64 md:h-80 bg-primary overflow-hidden">
+      <section className="relative w-full h-[40vh] min-h-[300px] bg-[#005357]">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#005357] to-[#005357]/80 z-10" />
         <Image 
           src="/bg/getty-images-C3gjLSgTKNw-unsplash.jpg" 
           alt="Media Hero Background"
           fill
           priority
-          style={{ objectFit: 'cover' }}
-          className="opacity-70"
+          style={{ objectFit: 'cover', objectPosition: 'center', mixBlendMode: 'overlay' }}
         />
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Media</h1>
-            <p className="text-xl text-white opacity-90 max-w-2xl">
-              Explore our library of podcasts, videos, and news appearances featuring CSIS experts discussing the most pressing global issues.
-            </p>
-          </div>
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-block bg-accent px-4 py-2 mb-4 w-fit"
+          >
+            <span className="text-lg font-medium text-white">Media Center</span>
+          </motion.div>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold !text-white mb-4"
+          >
+            Media
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg text-green-100 max-w-2xl"
+          >
+            Explore our library of podcasts, videos, and news appearances featuring CSIS experts discussing the most pressing global issues.
+          </motion.p>
         </div>
-      </div>
+      </section>
       
       <div className="container mx-auto px-4 py-8">
         {/* Mobile Filter Toggle */}
@@ -183,7 +201,7 @@ export default function MediaPage() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar Filters */}
           <aside className={`
-            md:w-64 flex-shrink-0 bg-white rounded-lg p-4
+            md:w-64 flex-shrink-0 bg-white rounded-lg p-4 shadow-sm
             ${isMobile ? 'fixed inset-0 z-50 bg-white overflow-auto transform transition-transform duration-300 ease-in-out' : ''}
             ${showMobileFilters ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
           `}>
@@ -200,7 +218,7 @@ export default function MediaPage() {
               </div>
             )}
             
-            <div className="mb-6">
+            <div>
               <h3 className="text-sm font-medium text-gray-500 mb-3">MEDIA TYPE</h3>
               <div className="space-y-2">
                 {mediaTypeOptions.map((type) => (
@@ -217,28 +235,6 @@ export default function MediaPage() {
                     }`}
                   >
                     {type}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-3">CATEGORY</h3>
-              <div className="space-y-2">
-                {categoryOptions.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => {
-                      filterByCategory(category);
-                      if (isMobile) setShowMobileFilters(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 rounded-md text-sm ${
-                      activeCategory === category
-                        ? 'bg-primary text-white'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    {category}
                   </button>
                 ))}
               </div>

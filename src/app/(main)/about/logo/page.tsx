@@ -10,45 +10,62 @@ export default function Logo() {
   return (
     <>
       <NavBar />
-      <main className="pt-20">
+      <main className="pt-0">
         {/* Hero Section */}
-        <section className="py-16 md:py-24 bg-primary relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('/pattern.svg')] bg-repeat"></div>
-          </div>
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-3xl mx-auto">
-              <div className="inline-block bg-accent px-4 py-2 mb-4">
-                <span className="text-lg font-medium text-white">Our Identity</span>
-              </div>
-              <h1 className="text-4xl font-bold text-white sm:text-5xl md:text-6xl mb-6">
-                Behind The Logo
-              </h1>
-              <p className="text-xl text-white/80 mb-8">
-                The story and symbolism behind CSIS Indonesia&apos;s visual identity
-              </p>
-            </div>
+        <section className="relative w-full h-[40vh] min-h-[300px] bg-[#005357]">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#005357] to-[#005357]/80 z-10" />
+          <Image
+            src="/bg/frank-mouland-e4mYPf_JUIk-unsplash.png"
+            alt="Behind The Logo"
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center', mixBlendMode: 'overlay' }}
+            priority
+          />
+          <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-12">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-block bg-accent px-4 py-2 mb-4 w-fit"
+            >
+              <span className="text-lg font-medium text-white">Our Identity</span>
+            </motion.div>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-4xl md:text-5xl font-bold !text-white mb-4"
+            >
+              Behind The Logo
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-lg text-green-100 max-w-2xl"
+            >
+              The story and symbolism behind CSIS Indonesia&apos;s visual identity
+            </motion.p>
           </div>
         </section>
 
         {/* About Navigation */}
-        <section className="border-b border-gray-200">
+        <section className="sticky top-16 z-40 bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav className="flex overflow-x-auto py-4 gap-8">
-              <Link href="/about" className="text-gray-600 hover:text-accent whitespace-nowrap px-1 py-2">
+              <Link href="/about" className="text-gray-600 hover:text-accent font-bold whitespace-nowrap px-1 py-2">
                 Overview
               </Link>
-              <Link href="/about/history" className="text-gray-600 hover:text-accent whitespace-nowrap px-1 py-2">
+              <Link href="/about/history" className="text-gray-600 hover:text-accent font-bold whitespace-nowrap px-1 py-2">
                 History
               </Link>
-              <Link href="/about/board-of-directors" className="text-gray-600 hover:text-accent whitespace-nowrap px-1 py-2">
+              <Link href="/about/board-of-directors" className="text-gray-600 hover:text-accent font-bold whitespace-nowrap px-1 py-2">
                 Board of Directors
               </Link>
-              <Link href="/about/foundation" className="text-gray-600 hover:text-accent whitespace-nowrap px-1 py-2">
+              <Link href="/about/foundation" className="text-gray-600 hover:text-accent font-bold whitespace-nowrap px-1 py-2">
                 CSIS Foundation
               </Link>
-              <Link href="/about/logo" className="text-accent font-medium whitespace-nowrap border-b-2 border-accent px-1 py-2">
+              <Link href="/about/logo" className="text-accent font-bold whitespace-nowrap border-b-2 border-accent px-1 py-2">
                 Behind The Logo
               </Link>
             </nav>
