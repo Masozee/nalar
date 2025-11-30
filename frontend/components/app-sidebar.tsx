@@ -1,0 +1,590 @@
+"use client"
+
+import * as React from "react"
+import { usePathname } from "next/navigation"
+
+import { Icon } from "@/components/ui/icon"
+
+import { NavUser } from "@/components/nav-user"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  useSidebar,
+} from "@/components/ui/sidebar"
+
+// Menu data based on MENU_STRUCTURE.md
+const menuData = {
+  user: {
+    name: "Admin User",
+    email: "admin@nalar.app",
+    avatar: "/avatars/admin.jpg",
+  },
+  mainNav: [
+    {
+      title: "Dashboard",
+      icon: "LayoutDashboard",
+      url: "/dashboard",
+      items: [
+        { title: "Overview", url: "/dashboard", icon: "Home" },
+        { title: "Departments", url: "/organization/departments", icon: "Building" },
+        { title: "Positions", url: "/organization/positions", icon: "BadgeCheck" },
+        { title: "Organizational Structure", url: "/organization/structure", icon: "Network" },
+      ],
+    },
+    {
+      title: "HR",
+      icon: "Users",
+      url: "/hr",
+      items: [
+        {
+          title: "Attendance",
+          icon: "Clock",
+          items: [
+            { title: "Daily Attendance", url: "/hr/attendance/daily", icon: "CalendarCheck" },
+            { title: "Attendance Report", url: "/hr/attendance/report", icon: "FileSpreadsheet" },
+          ],
+        },
+        {
+          title: "Leave",
+          icon: "CalendarDays",
+          items: [
+            { title: "Leave Requests", url: "/hr/leave/requests", icon: "Mail" },
+            { title: "Leave Balance", url: "/hr/leave/balance", icon: "Wallet" },
+            { title: "Leave Calendar", url: "/hr/leave/calendar", icon: "CalendarRange" },
+          ],
+        },
+        {
+          title: "Payroll",
+          icon: "CreditCard",
+          items: [
+            { title: "Payroll Periods", url: "/hr/payroll/periods", icon: "CalendarDays" },
+            { title: "Salary Slips", url: "/hr/payroll/salary-slips", icon: "Receipt" },
+            { title: "Payroll Reports", url: "/hr/payroll/reports", icon: "FileSpreadsheet" },
+          ],
+        },
+        { title: "Policies", url: "/hr/policies", icon: "ScrollText" },
+      ],
+    },
+    {
+      title: "Admin Ops",
+      icon: "Calendar",
+      url: "/admin-ops",
+      items: [
+        {
+          title: "CRM",
+          icon: "Users",
+          items: [
+            { title: "Contacts", url: "/admin-ops/crm/contacts", icon: "User" },
+            { title: "Organizations", url: "/admin-ops/crm/organizations", icon: "Building" },
+          ],
+        },
+        {
+          title: "Room Booking",
+          icon: "Building",
+          items: [
+            { title: "Bookings", url: "/admin-ops/room-booking", icon: "Bookmark" },
+            { title: "Rooms", url: "/admin-ops/room-booking/rooms", icon: "LayoutGrid" },
+          ],
+        },
+        {
+          title: "Vehicle Management",
+          icon: "Car",
+          items: [
+            { title: "Vehicle Bookings", url: "/admin-ops/vehicle", icon: "ClipboardList" },
+            { title: "Vehicles", url: "/admin-ops/vehicle/fleet", icon: "Truck" },
+            { title: "Drivers", url: "/admin-ops/vehicle/drivers", icon: "UserCheck" },
+            { title: "Maintenance", url: "/admin-ops/vehicle/maintenance", icon: "Wrench" },
+          ],
+        },
+        {
+          title: "Visitor Log",
+          icon: "Users",
+          items: [
+            { title: "Visit Logs", url: "/admin-ops/visitor", icon: "History" },
+            { title: "Visitors", url: "/admin-ops/visitor/list", icon: "User" },
+            { title: "Badges", url: "/admin-ops/visitor/badges", icon: "BadgeCheck" },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Asset & Inventory",
+      icon: "Boxes",
+      url: "/assets",
+      items: [
+        {
+          title: "Asset Management",
+          icon: "HardDrive",
+          items: [
+            { title: "All Assets", url: "/assets", icon: "Package" },
+            { title: "Asset Assignments", url: "/assets/assignment", icon: "UserCheck" },
+            { title: "Maintenance Records", url: "/assets/maintenance", icon: "Wrench" },
+          ],
+        },
+        {
+          title: "Inventory",
+          icon: "PackageSearch",
+          items: [
+            { title: "SKU List", url: "/inventory/sku-list", icon: "ListOrdered" },
+            { title: "Warehouses", url: "/inventory/warehouses", icon: "Warehouse" },
+            { title: "Stock Levels", url: "/inventory/stock-levels", icon: "Layers" },
+            { title: "Physical Count", url: "/inventory/physical-count", icon: "ListChecks" },
+            { title: "Adjustment History", url: "/inventory/adjustment-history", icon: "History" },
+            { title: "Transfer Requests", url: "/inventory/transfer-requests", icon: "Upload" },
+            { title: "Transfer History", url: "/inventory/transfer-history", icon: "History" },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Procurement",
+      icon: "ShoppingCart",
+      url: "/procurement",
+      items: [
+        {
+          title: "Vendors",
+          icon: "Users",
+          items: [
+            { title: "Vendor List", url: "/procurement/vendors", icon: "ListOrdered" },
+            { title: "Vendor Evaluation", url: "/procurement/vendor-evaluation", icon: "Star" },
+          ],
+        },
+        {
+          title: "Purchase Orders",
+          icon: "ClipboardList",
+          items: [
+            { title: "PO List", url: "/procurement/po-list", icon: "ListOrdered" },
+            { title: "PO Approval", url: "/procurement/po-approval", icon: "CheckCircle" },
+            { title: "Goods Receipt", url: "/procurement/goods-receipt", icon: "PackageCheck" },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Finance",
+      icon: "DollarSign",
+      url: "/finance",
+      items: [
+        {
+          title: "Expense Requests",
+          icon: "Receipt",
+          items: [
+            { title: "My Requests", url: "/finance/my-requests", icon: "Inbox" },
+            { title: "Pending Approval", url: "/finance/pending-approval", icon: "Clock" },
+            { title: "All Requests", url: "/finance/all-requests", icon: "ListOrdered" },
+          ],
+        },
+        {
+          title: "Cash Advance",
+          icon: "CircleDollarSign",
+          items: [
+            { title: "Advance Requests", url: "/finance/advance-requests", icon: "Mail" },
+            { title: "Settlement", url: "/finance/settlement", icon: "CheckSquare" },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Research",
+      icon: "FlaskConical",
+      url: "/research",
+      items: [
+        {
+          title: "Grants",
+          icon: "GraduationCap",
+          items: [
+            { title: "Grant List", url: "/research/grants", icon: "ListOrdered" },
+            { title: "Grant Applications", url: "/research/grant-applications", icon: "FileText" },
+            { title: "Disbursements", url: "/research/disbursements", icon: "Download" },
+            { title: "Milestones", url: "/research/milestones", icon: "Flag" },
+          ],
+        },
+        {
+          title: "Publications",
+          icon: "BookOpen",
+          items: [
+            { title: "Publication List", url: "/research/publications", icon: "ListOrdered" },
+            { title: "My Publications", url: "/research/my-publications", icon: "User" },
+            { title: "Under Review", url: "/research/under-review", icon: "Eye" },
+          ],
+        },
+        {
+          title: "Projects",
+          icon: "Target",
+          items: [
+            { title: "Project List", url: "/research/projects", icon: "ListOrdered" },
+            { title: "Project Tasks", url: "/research/project-tasks", icon: "ListChecks" },
+            { title: "Project Updates", url: "/research/project-updates", icon: "Megaphone" },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Documents",
+      icon: "FileText",
+      url: "/documents",
+      items: [
+        {
+          title: "Document Management",
+          icon: "FolderOpen",
+          items: [
+            { title: "My Documents", url: "/documents/my-documents", icon: "FileText" },
+            { title: "Shared with Me", url: "/documents/shared", icon: "Share2" },
+            { title: "Folders", url: "/documents/folders", icon: "Folder" },
+          ],
+        },
+        {
+          title: "Access Control",
+          icon: "Lock",
+          items: [
+            { title: "Permissions", url: "/documents/permissions", icon: "KeyRound" },
+            { title: "Access Logs", url: "/documents/access-logs", icon: "ScrollText" },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Ticketing",
+      icon: "Ticket",
+      url: "/ticketing",
+      items: [
+        {
+          title: "Tickets",
+          icon: "Inbox",
+          items: [
+            { title: "My Tickets", url: "/ticketing/my-tickets", icon: "User" },
+            { title: "Assigned to Me", url: "/ticketing/assigned", icon: "UserCheck" },
+            { title: "All Tickets", url: "/ticketing/all", icon: "ListOrdered" },
+          ],
+        },
+        {
+          title: "SLA Management",
+          icon: "Timer",
+          items: [
+            { title: "SLA Policies", url: "/ticketing/sla-policies", icon: "ShieldCheck" },
+            { title: "SLA Reports", url: "/ticketing/sla-reports", icon: "FileSpreadsheet" },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Tools",
+      icon: "Wrench",
+      url: "/tools",
+      items: [
+        { title: "URL Shortener", url: "/tools/url-shortener", icon: "Link" },
+        { title: "QR Code Generator", url: "/tools/qr-generator", icon: "Globe" },
+        {
+          title: "Image Tools",
+          icon: "Image",
+          items: [
+            { title: "Crop Image", url: "/tools/image/crop", icon: "Crop" },
+            { title: "Resize Image", url: "/tools/image/resize", icon: "Maximize" },
+            { title: "Black & White", url: "/tools/image/black-white", icon: "Contrast" },
+            { title: "Format Converter", url: "/tools/image/convert", icon: "ImageDown" },
+            { title: "Compress Image", url: "/tools/image/compress", icon: "Minimize2" },
+            { title: "Pixelate Image", url: "/tools/image/pixelate", icon: "Square" },
+          ],
+        },
+        {
+          title: "PDF Tools",
+          icon: "FileCheck",
+          items: [
+            { title: "Audit PDF", url: "/tools/pdf/audit", icon: "AreaChart" },
+            { title: "Split PDF", url: "/tools/pdf/split", icon: "Scissors" },
+            { title: "Merge PDF", url: "/tools/pdf/merge", icon: "Merge" },
+            { title: "Sign PDF", url: "/tools/pdf/sign", icon: "PenLine" },
+            { title: "Watermark PDF", url: "/tools/pdf/watermark", icon: "Stamp" },
+            { title: "Compress PDF", url: "/tools/pdf/compress", icon: "Shrink" },
+            { title: "DOCX to PDF", url: "/tools/pdf/docx-to-pdf", icon: "FileType" },
+          ],
+        },
+        {
+          title: "Downloader",
+          icon: "Download",
+          items: [
+            { title: "YouTube", url: "/tools/downloader/youtube", icon: "Youtube" },
+            { title: "Instagram", url: "/tools/downloader/instagram", icon: "Instagram" },
+            { title: "Twitter/X", url: "/tools/downloader/twitter", icon: "Twitter" },
+          ],
+        },
+      ],
+    },
+  ],
+  secondaryNav: [
+    {
+      title: "Workflow",
+      icon: "GitBranch",
+      url: "/workflow",
+      items: [
+        { title: "Approval Requests", url: "/workflow/approvals", icon: "CheckCircle" },
+        { title: "My Approvals", url: "/workflow/my-approvals", icon: "Clipboard" },
+        { title: "Delegation Settings", url: "/workflow/delegation", icon: "UserCog" },
+      ],
+    },
+    {
+      title: "Reports",
+      icon: "BarChart3",
+      url: "/reports",
+      items: [
+        { title: "HR Reports", url: "/reports/hr", icon: "Users" },
+        { title: "Finance Reports", url: "/reports/finance", icon: "DollarSign" },
+        { title: "Inventory Reports", url: "/reports/inventory", icon: "Package" },
+        { title: "Research Metrics", url: "/reports/research", icon: "FlaskConical" },
+        { title: "Custom Reports", url: "/reports/custom", icon: "PenTool" },
+      ],
+    },
+    {
+      title: "Settings",
+      icon: "Cog",
+      url: "/settings",
+      items: [
+        { title: "Users & Roles", url: "/settings/users", icon: "Users" },
+        { title: "System Configuration", url: "/settings/system", icon: "Settings" },
+        { title: "Audit Logs", url: "/settings/audit-logs", icon: "ScrollText" },
+      ],
+    },
+  ],
+}
+
+type NestedItem = {
+  title: string
+  url: string
+  icon: string
+}
+
+type SubMenuItem = {
+  title: string
+  url?: string
+  icon?: string
+  items?: NestedItem[]
+}
+
+type MenuItem = {
+  title: string
+  icon: string
+  url: string
+  items: SubMenuItem[]
+}
+
+function NestedMenu({ item }: { item: MenuItem }) {
+  return (
+    <div className="flex flex-col gap-1">
+      {item.items.map((subItem) => {
+        // Check if this is a nested submenu (has items array)
+        if (subItem.items && subItem.items.length > 0) {
+          return (
+            <Collapsible
+              key={subItem.title}
+              defaultOpen={true}
+            >
+              <CollapsibleTrigger asChild>
+                <button className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group">
+                  <span className="flex items-center gap-2">
+                    {subItem.icon && <Icon name={subItem.icon} size={16} />}
+                    {subItem.title}
+                  </span>
+                  <Icon name="ChevronRight" size={16} className="transition-transform group-data-[state=open]:rotate-90" />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  {subItem.items.map((nestedItem) => {
+                    return (
+                      <SidebarMenuSubItem key={nestedItem.title}>
+                        <SidebarMenuSubButton asChild>
+                          <a href={nestedItem.url} className="flex items-center gap-2">
+                            {nestedItem.icon && <Icon name={nestedItem.icon} size={16} />}
+                            <span>{nestedItem.title}</span>
+                          </a>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    )
+                  })}
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </Collapsible>
+          )
+        }
+
+        // Simple menu item with direct URL
+        return (
+          <a
+            key={subItem.title}
+            href={subItem.url}
+            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          >
+            {subItem.icon && <Icon name={subItem.icon} size={16} />}
+            <span>{subItem.title}</span>
+          </a>
+        )
+      })}
+    </div>
+  )
+}
+
+// Helper to find the menu item that matches the current path
+function findActiveMenuItem(pathname: string): MenuItem | null {
+  const allMenuItems = [...menuData.mainNav, ...menuData.secondaryNav]
+
+  for (const item of allMenuItems) {
+    // Check if pathname starts with the item's base URL
+    if (pathname.startsWith(item.url) && item.url !== '/') {
+      return item
+    }
+
+    // Check nested items
+    for (const subItem of item.items) {
+      if ('url' in subItem && subItem.url && pathname.startsWith(subItem.url)) {
+        return item
+      }
+      if ('items' in subItem && subItem.items) {
+        for (const nestedItem of subItem.items) {
+          if (nestedItem.url && pathname.startsWith(nestedItem.url)) {
+            return item
+          }
+        }
+      }
+    }
+  }
+
+  // Default to Dashboard
+  return menuData.mainNav[0]
+}
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname()
+  const { setOpen } = useSidebar()
+
+  // Determine active item based on current path
+  const defaultActiveItem = React.useMemo(() => findActiveMenuItem(pathname), [pathname])
+  const [activeItem, setActiveItem] = React.useState<MenuItem | null>(defaultActiveItem)
+
+  // Update active item when pathname changes
+  React.useEffect(() => {
+    const newActiveItem = findActiveMenuItem(pathname)
+    setActiveItem(newActiveItem)
+  }, [pathname])
+
+  return (
+    <Sidebar
+      collapsible="icon"
+      className="overflow-hidden *:data-[sidebar=sidebar]:flex-row"
+      {...props}
+    >
+      {/* First sidebar - Icon only navigation */}
+      <Sidebar
+        collapsible="none"
+        className="w-[calc(var(--sidebar-width-icon)+1px)]! border-r text-white"
+        style={{ backgroundColor: "#005357" }}
+      >
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
+                <a href="/">
+                  <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                    <Icon name="Command" size={16} />
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-medium">Nalar</span>
+                    <span className="truncate text-xs">ERP System</span>
+                  </div>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupContent className="px-1.5 md:px-0">
+              <SidebarMenu>
+                {menuData.mainNav.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      tooltip={{
+                        children: item.title,
+                        hidden: false,
+                      }}
+                      onClick={() => {
+                        setActiveItem(item)
+                        setOpen(true)
+                      }}
+                      isActive={activeItem?.title === item.title}
+                      className="px-2.5 md:px-2"
+                    >
+                      <Icon name={item.icon} size={16} />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+          {/* Secondary navigation */}
+          <SidebarGroup className="mt-auto">
+            <SidebarGroupContent className="px-1.5 md:px-0">
+              <SidebarMenu>
+                {menuData.secondaryNav.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      tooltip={{
+                        children: item.title,
+                        hidden: false,
+                      }}
+                      onClick={() => {
+                        setActiveItem(item)
+                        setOpen(true)
+                      }}
+                      isActive={activeItem?.title === item.title}
+                      className="px-2.5 md:px-2"
+                    >
+                      <Icon name={item.icon} size={16} />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <NavUser />
+        </SidebarFooter>
+      </Sidebar>
+
+      {/* Second sidebar - Nested menu panel */}
+      <Sidebar collapsible="none" className="hidden flex-1 md:flex">
+        <SidebarHeader className="gap-3.5 border-b p-4">
+          <div className="flex w-full items-center justify-between">
+            <div className="text-foreground text-base font-medium">
+              {activeItem?.title}
+            </div>
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup className="px-2">
+            <SidebarGroupContent>
+              {activeItem && <NestedMenu item={activeItem} />}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    </Sidebar>
+  )
+}

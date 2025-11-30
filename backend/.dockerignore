@@ -1,0 +1,50 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.venv
+venv
+env
+.eggs
+*.egg-info
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Test
+.pytest_cache
+.coverage
+htmlcov
+.tox
+
+# Build
+dist
+build
+
+# Local files
+*.sqlite3
+db.sqlite3
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+
+# Static/Media (will be collected in container)
+staticfiles
+media
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.docker
