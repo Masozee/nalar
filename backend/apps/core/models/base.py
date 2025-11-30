@@ -13,3 +13,28 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
         ordering = ['-created_at']
+
+
+class TenantMixin(models.Model):
+    """
+    Mixin to add tenant isolation to models.
+
+    All models that need tenant isolation should inherit from this mixin.
+    This ensures data is automatically scoped to a specific tenant.
+    """
+
+    tenant = models.ForeignKey(
+        'tenants.Tenant',
+        on_delete=models.CASCADE,
+        related_name='%(app_label)s_%(class)s_set',
+        db_index=True,
+        help_text="Tenant that owns this record"
+    )
+
+    class Meta:
+        abstract = True
+        # Add composite index for tenant + common queries
+        indexes = [
+            models.Index(fields=['tenant', 'is_active']),
+            models.Index(fields=['tenant', 'created_at']),
+        ]

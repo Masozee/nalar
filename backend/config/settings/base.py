@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'apps.core',
+    'apps.tenants',  # Multi-tenancy support
     'apps.users',
     'apps.organization',
     'apps.hr',
