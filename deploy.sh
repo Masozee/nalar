@@ -70,22 +70,22 @@ fi
 
 # Step 4: Stop running containers
 echo "🛑 Stopping running containers..."
-podman-compose --env-file .env.production down 2>/dev/null || true
+docker-compose --env-file .env.production down 2>/dev/null || true
 echo -e "${GREEN}✓${NC} Containers stopped"
 
 # Step 5: Pull latest images
 echo "📥 Pulling Docker images..."
-podman-compose --env-file .env.production pull
+docker-compose --env-file .env.production pull
 echo -e "${GREEN}✓${NC} Images pulled"
 
 # Step 6: Build custom images (backend & frontend)
 echo "🔨 Building backend and frontend..."
-podman-compose --env-file .env.production build backend frontend
+docker-compose --env-file .env.production build backend frontend
 echo -e "${GREEN}✓${NC} Images built"
 
 # Step 7: Start services
 echo "🚀 Starting services..."
-podman-compose --env-file .env.production up -d
+docker-compose --env-file .env.production up -d
 echo -e "${GREEN}✓${NC} Services started"
 
 # Step 8: Wait for services to be healthy
@@ -94,12 +94,12 @@ sleep 10
 
 # Step 9: Run database migrations
 echo "📊 Running database migrations..."
-podman exec nalar_backend python manage.py migrate --noinput
+docker exec nalar_backend python manage.py migrate --noinput
 echo -e "${GREEN}✓${NC} Migrations completed"
 
 # Step 10: Collect static files
 echo "📦 Collecting static files..."
-podman exec nalar_backend python manage.py collectstatic --noinput
+docker exec nalar_backend python manage.py collectstatic --noinput
 echo -e "${GREEN}✓${NC} Static files collected"
 
 # Step 11: Show running containers
@@ -109,7 +109,7 @@ echo "🎉 Deployment Complete!"
 echo "========================================="
 echo ""
 echo "Running containers:"
-podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 echo ""
 
 # Step 12: Display access URLs
@@ -133,9 +133,9 @@ echo ""
 
 # Step 13: Show logs command
 echo "📝 View logs:"
-echo "   All services: podman-compose --env-file .env.production logs -f"
-echo "   Backend only: podman logs -f nalar_backend"
-echo "   Frontend only: podman logs -f nalar_frontend"
+echo "   All services: docker-compose --env-file .env.production logs -f"
+echo "   Backend only: docker logs -f nalar_backend"
+echo "   Frontend only: docker logs -f nalar_frontend"
 echo ""
 
 echo "✅ Deployment successful!"

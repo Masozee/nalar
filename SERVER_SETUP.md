@@ -8,12 +8,12 @@
 # Update system
 sudo apt update && sudo apt upgrade -y
 
-# Install Podman and dependencies
-sudo apt install -y podman podman-compose git
+# Install Docker and dependencies
+sudo apt install -y docker docker compose git
 
 # Verify installation
-podman --version
-podman-compose --version
+docker --version
+docker compose --version
 ```
 
 ### 2. Clone Repository
@@ -91,11 +91,11 @@ The script will:
 
 ```bash
 # Check running containers
-podman ps
+docker ps
 
 # Check logs
-podman logs -f nalar_backend
-podman logs -f nalar_caddy
+docker logs -f nalar_backend
+docker logs -f nalar_caddy
 
 # Test endpoints
 curl http://localhost:8000/admin/
@@ -124,35 +124,35 @@ The script automatically:
 ```bash
 # Stop all services
 cd /home/deploy/nalar
-sudo podman-compose --env-file .env.production down
+sudo docker compose --env-file .env.production down
 
 # Start all services
-sudo podman-compose --env-file .env.production up -d
+sudo docker compose --env-file .env.production up -d
 
 # Restart a specific service
-sudo podman restart nalar_backend
+sudo docker restart nalar_backend
 ```
 
 ### View Logs
 
 ```bash
 # All services
-sudo podman-compose --env-file .env.production logs -f
+sudo docker compose --env-file .env.production logs -f
 
 # Specific service
-sudo podman logs -f nalar_backend
-sudo podman logs -f nalar_frontend
-sudo podman logs -f nalar_caddy
+sudo docker logs -f nalar_backend
+sudo docker logs -f nalar_frontend
+sudo docker logs -f nalar_caddy
 ```
 
 ### Database Access
 
 ```bash
 # PostgreSQL shell
-sudo podman exec -it nalar_db psql -U nalar_prod -d nalar
+sudo docker exec -it nalar_db psql -U nalar_prod -d nalar
 
 # Redis CLI
-sudo podman exec -it nalar_redis redis-cli
+sudo docker exec -it nalar_redis redis-cli
 # AUTH <your-redis-password>
 ```
 
@@ -160,13 +160,13 @@ sudo podman exec -it nalar_redis redis-cli
 
 ```bash
 # Create superuser
-sudo podman exec -it nalar_backend python manage.py createsuperuser
+sudo docker exec -it nalar_backend python manage.py createsuperuser
 
 # Run migrations
-sudo podman exec nalar_backend python manage.py migrate
+sudo docker exec nalar_backend python manage.py migrate
 
 # Django shell
-sudo podman exec -it nalar_backend python manage.py shell
+sudo docker exec -it nalar_backend python manage.py shell
 ```
 
 ## Monitoring
@@ -190,10 +190,10 @@ Pre-configured dashboards for:
 sudo mkdir -p /backups/nalar
 
 # Backup database
-sudo podman exec nalar_db pg_dump -U nalar_prod nalar | gzip > /backups/nalar/db_$(date +%Y%m%d).sql.gz
+sudo docker exec nalar_db pg_dump -U nalar_prod nalar | gzip > /backups/nalar/db_$(date +%Y%m%d).sql.gz
 
 # Backup RustFS data
-sudo podman exec nalar_rustfs tar czf - /data > /backups/nalar/rustfs_$(date +%Y%m%d).tar.gz
+sudo docker exec nalar_rustfs tar czf - /data > /backups/nalar/rustfs_$(date +%Y%m%d).tar.gz
 ```
 
 ### Automated Backup (Cron)
@@ -211,10 +211,10 @@ BACKUP_DIR="/backups/nalar"
 mkdir -p $BACKUP_DIR
 
 # Backup PostgreSQL
-podman exec nalar_db pg_dump -U nalar_prod nalar | gzip > $BACKUP_DIR/db_$DATE.sql.gz
+docker exec nalar_db pg_dump -U nalar_prod nalar | gzip > $BACKUP_DIR/db_$DATE.sql.gz
 
 # Backup RustFS
-podman exec nalar_rustfs tar czf - /data > $BACKUP_DIR/rustfs_$DATE.tar.gz
+docker exec nalar_rustfs tar czf - /data > $BACKUP_DIR/rustfs_$DATE.tar.gz
 
 # Delete backups older than 30 days
 find $BACKUP_DIR -type f -mtime +30 -delete
@@ -239,7 +239,7 @@ Add line:
 
 ```bash
 # Check Caddy logs
-sudo podman logs nalar_caddy
+sudo docker logs nalar_caddy
 
 # Verify DNS
 dig yourdomain.com
@@ -252,7 +252,7 @@ curl -I http://yourdomain.com
 
 ```bash
 # Check if PostgreSQL is running
-sudo podman exec nalar_db pg_isready
+sudo docker exec nalar_db pg_isready
 
 # Verify credentials in .env.production
 # Make sure POSTGRES_USER and POSTGRES_PASSWORD match
@@ -262,14 +262,14 @@ sudo podman exec nalar_db pg_isready
 
 ```bash
 # Check container logs
-sudo podman logs nalar_backend
+sudo docker logs nalar_backend
 
 # Check all containers
-sudo podman ps -a
+sudo docker ps -a
 
 # Remove and recreate
-sudo podman-compose --env-file .env.production down
-sudo podman-compose --env-file .env.production up -d
+sudo docker compose --env-file .env.production down
+sudo docker compose --env-file .env.production up -d
 ```
 
 ## Security Checklist
@@ -293,7 +293,7 @@ sudo podman-compose --env-file .env.production up -d
 ## Next Steps
 
 After deployment:
-1. Create admin user: `sudo podman exec -it nalar_backend python manage.py createsuperuser`
+1. Create admin user: `sudo docker exec -it nalar_backend python manage.py createsuperuser`
 2. Access admin: `https://api.yourdomain.com/admin/`
 3. Configure AWS Rekognition (if using face recognition)
 4. Set up automated backups

@@ -1,0 +1,254 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: nalar_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nalar}
+      POSTGRES_USER: ${POSTGRES_USER:-nalar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nalar_secret}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nalar}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Redis Cache & Session Store
+  redis:
+    image: redis:7-alpine
+    container_name: nalar_redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-nalar_redis_secret}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Django Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nalar_backend
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.prod
+      - DEBUG=${DEBUG:-False}
+      - DJANGO_SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
+      - DJANGO_ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,backend}
+      - DB_HOST=postgres
+      - DB_NAME=${POSTGRES_DB:-nalar}
+      - DB_USER=${POSTGRES_USER:-nalar}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-nalar_secret_change_in_production}
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nalar}:${POSTGRES_PASSWORD:-nalar_secret_change_in_production}@postgres:5432/${POSTGRES_DB:-nalar}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-nalar_redis_secret}@redis:6379/0
+      - CORS_ALLOW_ALL=${CORS_ALLOW_ALL:-True}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+      - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY:-rustfsadmin}
+      - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY:-rustfsadmin}
+      - RUSTFS_ENDPOINT_INTERNAL=${RUSTFS_ENDPOINT_INTERNAL:-http://rustfs:9000}
+      - RUSTFS_MEDIA_BUCKET=${RUSTFS_MEDIA_BUCKET:-nalar-media}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REKOGNITION_REGION=${AWS_REKOGNITION_REGION:-us-east-1}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/media:/app/media
+      - ./backend/staticfiles:/app/staticfiles
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nalar_frontend
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:${BACKEND_PORT:-8000}/api/v1
+      - NEXT_PUBLIC_FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+    expose:
+      - "3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Caddy Web Server (Reverse Proxy & SSL)
+  caddy:
+    image: caddy:2-alpine
+    container_name: nalar_caddy
+    ports:
+      - "${HTTP_PORT:-80}:80"        # HTTP (use 80 for production, 8080 for dev)
+      - "${HTTPS_PORT:-443}:443"     # HTTPS (use 443 for production, 8443 for dev)
+      - "${HTTPS_PORT:-443}:443/udp" # HTTP/3 QUIC
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+      - EMAIL=${LETSENCRYPT_EMAIL:-}
+      - TLS_CONFIG=${TLS_CONFIG:-}   # Set to "tls {$EMAIL}" for production with domain
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Prometheus (Metrics Collection)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: nalar_prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Grafana (Visualization & Dashboards)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: nalar_grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_SERVER_ROOT_URL=${GRAFANA_URL:-http://localhost:3001}
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Node Exporter (System Metrics)
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: nalar_node_exporter
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    expose:
+      - "9100"
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Postgres Exporter (Database Metrics)
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: nalar_postgres_exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER:-nalar}:${POSTGRES_PASSWORD:-nalar_secret}@postgres:5432/${POSTGRES_DB:-nalar}?sslmode=disable"
+    expose:
+      - "9187"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Redis Exporter (Cache Metrics)
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: nalar_redis_exporter
+    environment:
+      REDIS_ADDR: "redis:6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-nalar_redis_secret}
+    expose:
+      - "9121"
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # RustFS Object Storage (S3-compatible)
+  rustfs:
+    image: rustfs/rustfs:latest
+    container_name: nalar_rustfs
+    environment:
+      - RUSTFS_ROOT_USER=${RUSTFS_ROOT_USER:-rustfsadmin}
+      - RUSTFS_ROOT_PASSWORD=${RUSTFS_ROOT_PASSWORD:-rustfsadmin}
+    ports:
+      - "9000:9000"  # S3 API
+      - "9001:9001"  # Console
+    volumes:
+      - rustfs_data:/data
+      - rustfs_logs:/logs
+    restart: unless-stopped
+    networks:
+      - nalar_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  rustfs_data:
+    driver: local
+  rustfs_logs:
+    driver: local
+
+networks:
+  nalar_network:
+    driver: bridge
