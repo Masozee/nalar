@@ -1,0 +1,40 @@
+# Development mode: Only DB and Redis in containers
+# Run backend and frontend from your terminal
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nalar_db_dev
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nalar_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-nalar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nalar_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - nalar_postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nalar}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: nalar_redis_dev
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - nalar_redis_dev_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  nalar_postgres_dev_data:
+    driver: local
+  nalar_redis_dev_data:
+    driver: local

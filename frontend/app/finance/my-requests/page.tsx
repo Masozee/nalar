@@ -70,10 +70,10 @@ export default function MyRequestsPage() {
 
   const stats = {
     total: data?.count || 0,
-    draft: (data?.results || []).filter((e: ExpenseRequest) => e.status === 'draft').length,
-    pending: (data?.results || []).filter((e: ExpenseRequest) => e.status === 'submitted' || e.status === 'pending_approval').length,
-    approved: (data?.results || []).filter((e: ExpenseRequest) => e.status === 'approved' || e.status === 'processing').length,
-    paid: (data?.results || []).filter((e: ExpenseRequest) => e.status === 'paid').length,
+    draft: (data?.results || []).filter((e) => e.status === 'draft').length,
+    pending: (data?.results || []).filter((e) => e.status === 'submitted' || e.status === 'pending_approval').length,
+    approved: (data?.results || []).filter((e) => e.status === 'approved' || e.status === 'processing').length,
+    paid: (data?.results || []).filter((e) => e.status === 'paid').length,
   }
 
   return (

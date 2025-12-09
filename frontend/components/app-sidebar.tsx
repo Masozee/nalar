@@ -51,9 +51,10 @@ const menuData = {
       icon: "Users",
       url: "/hr",
       items: [
+        { title: "Staff", url: "/hr/employees", icon: "Users" },
         {
           title: "Attendance",
-          icon: "Clock",
+          isGroupLabel: true,
           items: [
             { title: "Daily Attendance", url: "/hr/attendance/daily", icon: "CalendarCheck" },
             { title: "Attendance Report", url: "/hr/attendance/report", icon: "FileSpreadsheet" },
@@ -61,7 +62,7 @@ const menuData = {
         },
         {
           title: "Leave",
-          icon: "CalendarDays",
+          isGroupLabel: true,
           items: [
             { title: "Leave Requests", url: "/hr/leave/requests", icon: "Mail" },
             { title: "Leave Balance", url: "/hr/leave/balance", icon: "Wallet" },
@@ -70,7 +71,7 @@ const menuData = {
         },
         {
           title: "Payroll",
-          icon: "CreditCard",
+          isGroupLabel: true,
           items: [
             { title: "Payroll Periods", url: "/hr/payroll/periods", icon: "CalendarDays" },
             { title: "Salary Slips", url: "/hr/payroll/salary-slips", icon: "Receipt" },
@@ -87,7 +88,7 @@ const menuData = {
       items: [
         {
           title: "CRM",
-          icon: "Users",
+          isGroupLabel: true,
           items: [
             { title: "Contacts", url: "/admin-ops/crm/contacts", icon: "User" },
             { title: "Organizations", url: "/admin-ops/crm/organizations", icon: "Building" },
@@ -95,7 +96,7 @@ const menuData = {
         },
         {
           title: "Room Booking",
-          icon: "Building",
+          isGroupLabel: true,
           items: [
             { title: "Bookings", url: "/admin-ops/room-booking", icon: "Bookmark" },
             { title: "Rooms", url: "/admin-ops/room-booking/rooms", icon: "LayoutGrid" },
@@ -103,7 +104,7 @@ const menuData = {
         },
         {
           title: "Vehicle Management",
-          icon: "Car",
+          isGroupLabel: true,
           items: [
             { title: "Vehicle Bookings", url: "/admin-ops/vehicle", icon: "ClipboardList" },
             { title: "Vehicles", url: "/admin-ops/vehicle/fleet", icon: "Truck" },
@@ -113,7 +114,7 @@ const menuData = {
         },
         {
           title: "Visitor Log",
-          icon: "Users",
+          isGroupLabel: true,
           items: [
             { title: "Visit Logs", url: "/admin-ops/visitor", icon: "History" },
             { title: "Visitors", url: "/admin-ops/visitor/list", icon: "User" },
@@ -129,7 +130,7 @@ const menuData = {
       items: [
         {
           title: "Asset Management",
-          icon: "HardDrive",
+          isGroupLabel: true,
           items: [
             { title: "All Assets", url: "/assets", icon: "Package" },
             { title: "Asset Assignments", url: "/assets/assignment", icon: "UserCheck" },
@@ -138,7 +139,7 @@ const menuData = {
         },
         {
           title: "Inventory",
-          icon: "PackageSearch",
+          isGroupLabel: true,
           items: [
             { title: "SKU List", url: "/inventory/sku-list", icon: "ListOrdered" },
             { title: "Warehouses", url: "/inventory/warehouses", icon: "Warehouse" },
@@ -158,7 +159,7 @@ const menuData = {
       items: [
         {
           title: "Vendors",
-          icon: "Users",
+          isGroupLabel: true,
           items: [
             { title: "Vendor List", url: "/procurement/vendors", icon: "ListOrdered" },
             { title: "Vendor Evaluation", url: "/procurement/vendor-evaluation", icon: "Star" },
@@ -166,7 +167,7 @@ const menuData = {
         },
         {
           title: "Purchase Orders",
-          icon: "ClipboardList",
+          isGroupLabel: true,
           items: [
             { title: "PO List", url: "/procurement/po-list", icon: "ListOrdered" },
             { title: "PO Approval", url: "/procurement/po-approval", icon: "CheckCircle" },
@@ -182,7 +183,7 @@ const menuData = {
       items: [
         {
           title: "Expense Requests",
-          icon: "Receipt",
+          isGroupLabel: true,
           items: [
             { title: "My Requests", url: "/finance/my-requests", icon: "Inbox" },
             { title: "Pending Approval", url: "/finance/pending-approval", icon: "Clock" },
@@ -191,7 +192,7 @@ const menuData = {
         },
         {
           title: "Cash Advance",
-          icon: "CircleDollarSign",
+          isGroupLabel: true,
           items: [
             { title: "Advance Requests", url: "/finance/advance-requests", icon: "Mail" },
             { title: "Settlement", url: "/finance/settlement", icon: "CheckSquare" },
@@ -206,7 +207,7 @@ const menuData = {
       items: [
         {
           title: "Grants",
-          icon: "GraduationCap",
+          isGroupLabel: true,
           items: [
             { title: "Grant List", url: "/research/grants", icon: "ListOrdered" },
             { title: "Grant Applications", url: "/research/grant-applications", icon: "FileText" },
@@ -216,7 +217,7 @@ const menuData = {
         },
         {
           title: "Publications",
-          icon: "BookOpen",
+          isGroupLabel: true,
           items: [
             { title: "Publication List", url: "/research/publications", icon: "ListOrdered" },
             { title: "My Publications", url: "/research/my-publications", icon: "User" },
@@ -225,7 +226,7 @@ const menuData = {
         },
         {
           title: "Projects",
-          icon: "Target",
+          isGroupLabel: true,
           items: [
             { title: "Project List", url: "/research/projects", icon: "ListOrdered" },
             { title: "Project Tasks", url: "/research/project-tasks", icon: "ListChecks" },
@@ -241,7 +242,7 @@ const menuData = {
       items: [
         {
           title: "Document Management",
-          icon: "FolderOpen",
+          isGroupLabel: true,
           items: [
             { title: "My Documents", url: "/documents/my-documents", icon: "FileText" },
             { title: "Shared with Me", url: "/documents/shared", icon: "Share2" },
@@ -250,7 +251,7 @@ const menuData = {
         },
         {
           title: "Access Control",
-          icon: "Lock",
+          isGroupLabel: true,
           items: [
             { title: "Permissions", url: "/documents/permissions", icon: "KeyRound" },
             { title: "Access Logs", url: "/documents/access-logs", icon: "ScrollText" },
@@ -265,7 +266,7 @@ const menuData = {
       items: [
         {
           title: "Tickets",
-          icon: "Inbox",
+          isGroupLabel: true,
           items: [
             { title: "My Tickets", url: "/ticketing/my-tickets", icon: "User" },
             { title: "Assigned to Me", url: "/ticketing/assigned", icon: "UserCheck" },
@@ -274,7 +275,7 @@ const menuData = {
         },
         {
           title: "SLA Management",
-          icon: "Timer",
+          isGroupLabel: true,
           items: [
             { title: "SLA Policies", url: "/ticketing/sla-policies", icon: "ShieldCheck" },
             { title: "SLA Reports", url: "/ticketing/sla-reports", icon: "FileSpreadsheet" },
@@ -291,7 +292,7 @@ const menuData = {
         { title: "QR Code Generator", url: "/tools/qr-generator", icon: "Globe" },
         {
           title: "Image Tools",
-          icon: "Image",
+          isGroupLabel: true,
           items: [
             { title: "Crop Image", url: "/tools/image/crop", icon: "Crop" },
             { title: "Resize Image", url: "/tools/image/resize", icon: "Maximize" },
@@ -303,7 +304,7 @@ const menuData = {
         },
         {
           title: "PDF Tools",
-          icon: "FileCheck",
+          isGroupLabel: true,
           items: [
             { title: "Audit PDF", url: "/tools/pdf/audit", icon: "AreaChart" },
             { title: "Split PDF", url: "/tools/pdf/split", icon: "Scissors" },
@@ -316,7 +317,7 @@ const menuData = {
         },
         {
           title: "Downloader",
-          icon: "Download",
+          isGroupLabel: true,
           items: [
             { title: "YouTube", url: "/tools/downloader/youtube", icon: "Youtube" },
             { title: "Instagram", url: "/tools/downloader/instagram", icon: "Instagram" },
@@ -327,16 +328,6 @@ const menuData = {
     },
   ],
   secondaryNav: [
-    {
-      title: "Workflow",
-      icon: "GitBranch",
-      url: "/workflow",
-      items: [
-        { title: "Approval Requests", url: "/workflow/approvals", icon: "CheckCircle" },
-        { title: "My Approvals", url: "/workflow/my-approvals", icon: "Clipboard" },
-        { title: "Delegation Settings", url: "/workflow/delegation", icon: "UserCog" },
-      ],
-    },
     {
       title: "Reports",
       icon: "BarChart3",
@@ -354,9 +345,40 @@ const menuData = {
       icon: "Cog",
       url: "/settings",
       items: [
-        { title: "Users & Roles", url: "/settings/users", icon: "Users" },
+        {
+          title: "Organization",
+          isGroupLabel: true,
+          items: [
+            { title: "Organization Settings", url: "/settings/organization", icon: "Building2" },
+            { title: "Team Management", url: "/settings/team", icon: "Users" },
+            { title: "Users & Roles", url: "/settings/users", icon: "UserCog" },
+          ],
+        },
+        {
+          title: "Billing & Subscription",
+          isGroupLabel: true,
+          items: [
+            { title: "Billing & Invoices", url: "/settings/billing", icon: "CreditCard" },
+          ],
+        },
+        {
+          title: "Personal",
+          isGroupLabel: true,
+          items: [
+            { title: "Account Settings", url: "/account", icon: "User" },
+          ],
+        },
         { title: "System Configuration", url: "/settings/system", icon: "Settings" },
         { title: "Audit Logs", url: "/settings/audit-logs", icon: "ScrollText" },
+        {
+          title: "Workflow",
+          isGroupLabel: true,
+          items: [
+            { title: "Approval Requests", url: "/workflow/approvals", icon: "CheckCircle" },
+            { title: "My Approvals", url: "/workflow/my-approvals", icon: "Clipboard" },
+            { title: "Delegation Settings", url: "/workflow/delegation", icon: "UserCog" },
+          ],
+        },
       ],
     },
   ],
@@ -373,6 +395,7 @@ type SubMenuItem = {
   url?: string
   icon?: string
   items?: NestedItem[]
+  isGroupLabel?: boolean // New: marks this as a group header, not a clickable item
 }
 
 type MenuItem = {
@@ -382,10 +405,40 @@ type MenuItem = {
   items: SubMenuItem[]
 }
 
-function NestedMenu({ item }: { item: MenuItem }) {
+function NestedMenu({ item, pathname }: { item: MenuItem; pathname: string }) {
   return (
     <div className="flex flex-col gap-1">
       {item.items.map((subItem) => {
+        // Check if this is a group label/header
+        if (subItem.isGroupLabel) {
+          return (
+            <div key={subItem.title} className="mt-3 first:mt-0">
+              <div className="px-3 py-1 text-[11px] font-medium text-muted-foreground">
+                {subItem.title}
+              </div>
+              {subItem.items && subItem.items.length > 0 && (
+                <div className="flex flex-col gap-0.5 mt-0.5">
+                  {subItem.items.map((nestedItem) => {
+                    const isActive = pathname === nestedItem.url
+                    return (
+                      <a
+                        key={nestedItem.title}
+                        href={nestedItem.url}
+                        className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                          isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : ''
+                        }`}
+                      >
+                        {nestedItem.icon && <Icon name={nestedItem.icon} size={16} />}
+                        <span>{nestedItem.title}</span>
+                      </a>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          )
+        }
+
         // Check if this is a nested submenu (has items array)
         if (subItem.items && subItem.items.length > 0) {
           return (
@@ -405,9 +458,10 @@ function NestedMenu({ item }: { item: MenuItem }) {
               <CollapsibleContent>
                 <SidebarMenuSub>
                   {subItem.items.map((nestedItem) => {
+                    const isActive = pathname === nestedItem.url
                     return (
                       <SidebarMenuSubItem key={nestedItem.title}>
-                        <SidebarMenuSubButton asChild>
+                        <SidebarMenuSubButton asChild isActive={isActive}>
                           <a href={nestedItem.url} className="flex items-center gap-2">
                             {nestedItem.icon && <Icon name={nestedItem.icon} size={16} />}
                             <span>{nestedItem.title}</span>
@@ -423,11 +477,14 @@ function NestedMenu({ item }: { item: MenuItem }) {
         }
 
         // Simple menu item with direct URL
+        const isActive = pathname === subItem.url
         return (
           <a
             key={subItem.title}
             href={subItem.url}
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+              isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : ''
+            }`}
           >
             {subItem.icon && <Icon name={subItem.icon} size={16} />}
             <span>{subItem.title}</span>
@@ -580,7 +637,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarContent>
           <SidebarGroup className="px-2">
             <SidebarGroupContent>
-              {activeItem && <NestedMenu item={activeItem} />}
+              {activeItem && <NestedMenu item={activeItem} pathname={pathname} />}
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>

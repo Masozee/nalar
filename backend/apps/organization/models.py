@@ -1,8 +1,8 @@
 from django.db import models
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
-class Department(BaseModel, AuditMixin):
+class Department(TenantBaseModel, AuditMixin):
     """Department model for organizational structure."""
 
     name = models.CharField(max_length=100)
@@ -36,7 +36,7 @@ class Department(BaseModel, AuditMixin):
         return self.name
 
 
-class Position(BaseModel, AuditMixin):
+class Position(TenantBaseModel, AuditMixin):
     """Position/Job Title model for organizational structure."""
 
     name = models.CharField(max_length=100)
@@ -67,7 +67,7 @@ class Position(BaseModel, AuditMixin):
         return self.name
 
 
-class Team(BaseModel, AuditMixin):
+class Team(TenantBaseModel, AuditMixin):
     """Team model within departments."""
 
     name = models.CharField(max_length=100, db_index=True)

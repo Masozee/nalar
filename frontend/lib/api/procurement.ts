@@ -1,4 +1,5 @@
 import { apiClient } from './client'
+import type { PaginatedResponse } from './types'
 
 // Enums and Types
 
@@ -224,17 +225,9 @@ export interface POApprovalData {
   reason?: string
 }
 
-// API Response Interface
-interface ApiListResponse<T> {
-  count: number
-  next: string | null
-  previous: string | null
-  results: T[]
-}
-
 // Vendor API
 export const vendorApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<VendorListItem>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<VendorListItem>> =>
     apiClient.get('/procurement/vendor/vendors/', { params }),
 
   get: (id: string): Promise<Vendor> =>
@@ -267,7 +260,7 @@ export const vendorApi = {
 
 // Vendor Contact API
 export const vendorContactApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<VendorContact>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<VendorContact>> =>
     apiClient.get('/procurement/vendor/contacts/', { params }),
 
   get: (id: string): Promise<VendorContact> =>
@@ -285,7 +278,7 @@ export const vendorContactApi = {
 
 // Vendor Evaluation API
 export const vendorEvaluationApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<VendorEvaluation>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<VendorEvaluation>> =>
     apiClient.get('/procurement/vendor/evaluations/', { params }),
 
   get: (id: string): Promise<VendorEvaluation> =>
@@ -303,7 +296,7 @@ export const vendorEvaluationApi = {
 
 // Purchase Order API
 export const purchaseOrderApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<POListItem>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<POListItem>> =>
     apiClient.get('/procurement/po/orders/', { params }),
 
   get: (id: string): Promise<PurchaseOrder> =>
@@ -354,7 +347,7 @@ export const purchaseOrderApi = {
 
 // PO Item API
 export const poItemApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<POItem>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<POItem>> =>
     apiClient.get('/procurement/po/items/', { params }),
 
   get: (id: string): Promise<POItem> =>
@@ -372,7 +365,7 @@ export const poItemApi = {
 
 // PO Receipt API
 export const poReceiptApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<POReceipt>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<POReceipt>> =>
     apiClient.get('/procurement/po/receipts/', { params }),
 
   get: (id: string): Promise<POReceipt> =>

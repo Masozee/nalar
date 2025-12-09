@@ -1,5 +1,13 @@
 import orjson
+from decimal import Decimal
 from rest_framework.renderers import BaseRenderer
+
+
+def default(obj):
+    """Handle types that orjson doesn't serialize by default."""
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
 
 
 class ORJSONRenderer(BaseRenderer):
@@ -15,5 +23,6 @@ class ORJSONRenderer(BaseRenderer):
 
         return orjson.dumps(
             data,
+            default=default,
             option=orjson.OPT_SERIALIZE_NUMPY | orjson.OPT_UTC_Z,
         )

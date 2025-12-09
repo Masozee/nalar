@@ -4,7 +4,7 @@ Document management models with encryption and role-based access control.
 from django.db import models
 from django.conf import settings
 from django.core.files.base import ContentFile
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class DocumentCategory(models.TextChoices):
@@ -52,7 +52,7 @@ class DocumentRole(models.TextChoices):
     STAFF = 'staff', 'Staff'
 
 
-class Folder(BaseModel):
+class Folder(TenantBaseModel):
     """Hierarchical folder structure for organizing documents."""
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
@@ -97,7 +97,7 @@ class Folder(BaseModel):
         return self.name
 
 
-class Document(BaseModel, AuditMixin):
+class Document(TenantBaseModel, AuditMixin):
     """
     Document model with encryption support.
     Files are encrypted using AES-256-GCM before storage.
@@ -300,7 +300,7 @@ class Document(BaseModel, AuditMixin):
         return roles
 
 
-class DocumentAccessPermission(BaseModel):
+class DocumentAccessPermission(TenantBaseModel):
     """
     Role-based access permissions for documents.
     Defines which roles can access specific documents.
@@ -331,7 +331,7 @@ class DocumentAccessPermission(BaseModel):
         return f"{self.document.title} - {self.get_role_display()}"
 
 
-class DocumentUserAccess(BaseModel):
+class DocumentUserAccess(TenantBaseModel):
     """
     Explicit user-level access to documents.
     Overrides role-based access for specific users.
@@ -376,7 +376,7 @@ class DocumentUserAccess(BaseModel):
         return f"{self.document.title} - {self.user.email}"
 
 
-class DocumentAccessLog(BaseModel):
+class DocumentAccessLog(TenantBaseModel):
     """
     Audit log for document access attempts.
     Tracks who accessed/downloaded documents and when.

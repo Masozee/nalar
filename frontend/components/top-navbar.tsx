@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { Icon } from "@/components/ui/icon"
+import { TenantSwitcher } from "@/components/tenant-switcher"
 
 export function TopNavbar() {
   const [open, setOpen] = React.useState(false)
@@ -41,6 +42,8 @@ export function TopNavbar() {
 
   return (
     <div className="flex items-center gap-2">
+      {/* Tenant Switcher */}
+      <TenantSwitcher />
       {/* Command Search */}
       <Button
         variant="outline"

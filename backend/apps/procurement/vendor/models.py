@@ -3,7 +3,7 @@ Vendor management models.
 """
 from django.db import models
 from django.conf import settings
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class VendorCategory(models.TextChoices):
@@ -32,7 +32,7 @@ class VendorType(models.TextChoices):
     OTHER = 'other', 'Lainnya'
 
 
-class Vendor(BaseModel, AuditMixin):
+class Vendor(TenantBaseModel, AuditMixin):
     """
     Vendor/Supplier master data.
     """
@@ -141,7 +141,7 @@ class Vendor(BaseModel, AuditMixin):
         return f'VND-{num:04d}'
 
 
-class VendorContact(BaseModel):
+class VendorContact(TenantBaseModel):
     """Additional contacts for a vendor."""
     vendor = models.ForeignKey(
         Vendor,
@@ -164,7 +164,7 @@ class VendorContact(BaseModel):
         return f"{self.vendor.name} - {self.name}"
 
 
-class VendorEvaluation(BaseModel, AuditMixin):
+class VendorEvaluation(TenantBaseModel, AuditMixin):
     """Periodic vendor evaluation/assessment."""
     vendor = models.ForeignKey(
         Vendor,

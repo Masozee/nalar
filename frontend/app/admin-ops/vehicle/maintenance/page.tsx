@@ -88,7 +88,7 @@ export default function VehicleMaintenancePage() {
     total: data?.count || 0,
     thisMonth: thisMonth.length,
     totalCost: totalCost,
-    avgCost: data?.results?.length > 0 ? totalCost / data.results.length : 0,
+    avgCost: (data?.results?.length ?? 0) > 0 ? totalCost / (data?.results?.length ?? 1) : 0,
   }
 
   return (

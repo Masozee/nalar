@@ -5,6 +5,9 @@ app_name = 'api_v1'
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('', include('apps.tenants.urls')),  # Tenant management API
+    path('', include('apps.core.urls')),  # Core API (audit logs, etc.)
+    path('analytics/', include('apps.analytics.urls')),  # Dashboard analytics API
     path('auth/', include('apps.users.urls')),
     path('hr/', include('apps.hr.urls')),
     path('organization/', include('apps.organization.urls')),

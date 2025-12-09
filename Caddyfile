@@ -1,0 +1,188 @@
+# Caddyfile - Reverse Proxy Configuration for Production
+# Set DOMAIN and EMAIL environment variables in .env.production
+
+# Frontend - Main Application
+{$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (production only)
+    {$TLS_CONFIG}
+
+    # Reverse proxy to Next.js frontend
+    reverse_proxy frontend:3000
+
+    # Enable compression
+    encode gzip
+
+    # Security headers
+    header {
+        # Enable HSTS
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        # Prevent clickjacking
+        X-Frame-Options "SAMEORIGIN"
+        # Prevent MIME type sniffing
+        X-Content-Type-Options "nosniff"
+        # Enable XSS protection
+        X-XSS-Protection "1; mode=block"
+        # Remove server header
+        -Server
+    }
+
+    # Logging
+    log {
+        output stdout
+        format json
+        level INFO
+    }
+}
+
+# Backend API
+api.{$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (production only)
+    {$TLS_CONFIG}
+
+    # Reverse proxy to Django backend
+    reverse_proxy backend:8000 {
+        # Health check
+        health_uri /health/
+        health_interval 30s
+        health_timeout 5s
+    }
+
+    # Enable compression
+    encode gzip
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        -Server
+    }
+
+    # CORS headers (if needed for direct API access)
+    @options {
+        method OPTIONS
+    }
+    header @options {
+        Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "Authorization, Content-Type"
+        Access-Control-Max-Age "86400"
+    }
+    respond @options 204
+
+    # Logging
+    log {
+        output file /var/log/caddy/api-access.log {
+            roll_size 100mb
+            roll_keep 5
+            roll_keep_for 720h
+        }
+        format json
+        level INFO
+    }
+}
+
+# Grafana Monitoring Dashboard
+grafana.{$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (production only)
+    {$TLS_CONFIG}
+
+    # Reverse proxy to Grafana
+    reverse_proxy grafana:3000
+
+    # Enable compression
+    encode gzip
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        -Server
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/grafana-access.log {
+            roll_size 100mb
+            roll_keep 5
+        }
+        format json
+        level INFO
+    }
+}
+
+# RustFS Object Storage - S3 API
+s3.{$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (production only)
+    {$TLS_CONFIG}
+
+    # Reverse proxy to RustFS S3 API
+    reverse_proxy rustfs:9000 {
+        # Increase timeouts for large file uploads
+        transport http {
+            read_timeout 300s
+            write_timeout 300s
+        }
+    }
+
+    # Enable compression (but not for binary data)
+    encode gzip
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        -Server
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/s3-access.log {
+            roll_size 100mb
+            roll_keep 5
+        }
+        format json
+        level INFO
+    }
+}
+
+# RustFS Console (Web UI)
+storage.{$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (production only)
+    {$TLS_CONFIG}
+
+    # Reverse proxy to RustFS Console
+    reverse_proxy rustfs:9001
+
+    # Enable compression
+    encode gzip
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        -Server
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/storage-access.log {
+            roll_size 100mb
+            roll_keep 5
+        }
+        format json
+        level INFO
+    }
+}
+
+# Prometheus Metrics (Optional - usually keep internal)
+# prometheus.{$DOMAIN:localhost} {
+#     # Enable automatic HTTPS and basic auth for security
+#     # tls {$EMAIL}
+#     # basicauth {
+#     #     admin {$PROMETHEUS_PASSWORD_HASH}
+#     # }
+#
+#     reverse_proxy prometheus:9090
+# }

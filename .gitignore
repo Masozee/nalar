@@ -40,3 +40,5 @@ logs/
 
 # Podman/Docker volumes
 volumes/
+.env.production
+.env.development

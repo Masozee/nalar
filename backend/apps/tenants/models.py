@@ -269,3 +269,94 @@ class Subscription(BaseModel, AuditMixin):
     def is_active(self):
         """Check if subscription is active."""
         return self.status in ['active', 'trialing']
+
+
+class InvoiceStatus(models.TextChoices):
+    """Invoice payment status."""
+    DRAFT = 'draft', 'Draft'
+    PENDING = 'pending', 'Pending'
+    PAID = 'paid', 'Paid'
+    FAILED = 'failed', 'Failed'
+    REFUNDED = 'refunded', 'Refunded'
+    CANCELED = 'canceled', 'Canceled'
+
+
+class Invoice(BaseModel, AuditMixin):
+    """
+    Invoice model for tracking billing and payments.
+    """
+
+    tenant = models.ForeignKey(
+        Tenant,
+        on_delete=models.CASCADE,
+        related_name='invoices'
+    )
+    subscription = models.ForeignKey(
+        Subscription,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='invoices'
+    )
+
+    # Invoice Details
+    invoice_number = models.CharField(max_length=50, unique=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, default='USD')
+    tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    # Description
+    description = models.TextField(blank=True)
+    line_items = models.JSONField(default=list, blank=True)
+
+    # Status
+    status = models.CharField(
+        max_length=20,
+        choices=InvoiceStatus.choices,
+        default=InvoiceStatus.PENDING
+    )
+
+    # Dates
+    issue_date = models.DateField()
+    due_date = models.DateField()
+    paid_date = models.DateTimeField(null=True, blank=True)
+
+    # Payment Gateway
+    stripe_invoice_id = models.CharField(max_length=100, blank=True)
+    payment_method = models.CharField(max_length=50, blank=True)
+
+    # Files
+    pdf_url = models.URLField(blank=True)
+
+    class Meta:
+        verbose_name = 'Invoice'
+        verbose_name_plural = 'Invoices'
+        ordering = ['-issue_date', '-created_at']
+        indexes = [
+            models.Index(fields=['tenant', '-issue_date']),
+            models.Index(fields=['status', '-issue_date']),
+            models.Index(fields=['invoice_number']),
+        ]
+
+    def __str__(self):
+        return f"{self.invoice_number} - {self.tenant.name}"
+
+    def save(self, *args, **kwargs):
+        """Auto-generate invoice number if not provided."""
+        if not self.invoice_number:
+            import datetime
+            date_str = datetime.date.today().strftime('%Y%m')
+            last_invoice = Invoice.objects.filter(
+                invoice_number__startswith=f'INV-{date_str}'
+            ).order_by('-invoice_number').first()
+
+            if last_invoice:
+                last_num = int(last_invoice.invoice_number.split('-')[-1])
+                new_num = last_num + 1
+            else:
+                new_num = 1
+
+            self.invoice_number = f'INV-{date_str}-{new_num:04d}'
+
+        super().save(*args, **kwargs)

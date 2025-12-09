@@ -3,7 +3,7 @@ Asset Maintenance models for tracking asset repairs and maintenance schedules.
 """
 from django.db import models
 from django.conf import settings
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class AssetCategory(models.TextChoices):
@@ -40,7 +40,7 @@ class MaintenanceStatus(models.TextChoices):
     PENDING_PARTS = 'pending_parts', 'Menunggu Sparepart'
 
 
-class Asset(BaseModel):
+class Asset(TenantBaseModel):
     """Master data for company assets."""
     asset_code = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=200)
@@ -129,7 +129,7 @@ class Asset(BaseModel):
         return max(self.purchase_price - depreciation, self.salvage_value or Decimal('0'))
 
 
-class MaintenanceSchedule(BaseModel):
+class MaintenanceSchedule(TenantBaseModel):
     """Scheduled maintenance for assets."""
     asset = models.ForeignKey(
         Asset,
@@ -164,7 +164,7 @@ class MaintenanceSchedule(BaseModel):
         return f"{self.asset.asset_code} - {self.title}"
 
 
-class MaintenanceRecord(BaseModel, AuditMixin):
+class MaintenanceRecord(TenantBaseModel, AuditMixin):
     """Actual maintenance work performed on assets."""
     asset = models.ForeignKey(
         Asset,

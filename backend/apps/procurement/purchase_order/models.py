@@ -5,7 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 from apps.procurement.vendor.models import Vendor
 
 
@@ -37,7 +37,7 @@ class PaymentStatus(models.TextChoices):
     PAID = 'paid', 'Lunas'
 
 
-class PurchaseOrder(BaseModel, AuditMixin):
+class PurchaseOrder(TenantBaseModel, AuditMixin):
     """
     Purchase Order header.
     """
@@ -214,7 +214,7 @@ class PurchaseOrder(BaseModel, AuditMixin):
         self.save(update_fields=['payment_status'])
 
 
-class POItem(BaseModel):
+class POItem(TenantBaseModel):
     """
     Purchase Order line items.
     """
@@ -304,7 +304,7 @@ class POItem(BaseModel):
         return max(self.quantity - self.received_quantity, Decimal('0'))
 
 
-class POReceipt(BaseModel, AuditMixin):
+class POReceipt(TenantBaseModel, AuditMixin):
     """
     Goods receipt for Purchase Order.
     """
@@ -362,7 +362,7 @@ class POReceipt(BaseModel, AuditMixin):
         return f'{prefix}{num:04d}'
 
 
-class POReceiptItem(BaseModel):
+class POReceiptItem(TenantBaseModel):
     """
     Line items for goods receipt.
     """

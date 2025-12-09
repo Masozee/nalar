@@ -1,4 +1,5 @@
 import { apiClient } from './client'
+import type { PaginatedResponse } from './types'
 
 // ==================== ASSET MAINTENANCE ====================
 
@@ -280,7 +281,7 @@ export interface AssetCheckout {
 export const assetsApi = {
   // Asset CRUD
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: AssetListItem[], count: number }>('/assets/maintenance/assets/', params),
+    apiClient.get<PaginatedResponse<AssetListItem>>('/assets/maintenance/assets/', params),
 
   get: (id: string) =>
     apiClient.get<Asset>(`/assets/maintenance/assets/${id}/`),
@@ -315,7 +316,7 @@ export const assetsApi = {
 
 export const maintenanceSchedulesApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: MaintenanceSchedule[], count: number }>('/assets/maintenance/schedules/', params),
+    apiClient.get<PaginatedResponse<MaintenanceSchedule>>('/assets/maintenance/schedules/', params),
 
   get: (id: string) =>
     apiClient.get<MaintenanceSchedule>(`/assets/maintenance/schedules/${id}/`),
@@ -338,7 +339,7 @@ export const maintenanceSchedulesApi = {
 
 export const maintenanceRecordsApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: MaintenanceRecordListItem[], count: number }>('/assets/maintenance/records/', params),
+    apiClient.get<PaginatedResponse<MaintenanceRecordListItem>>('/assets/maintenance/records/', params),
 
   get: (id: string) =>
     apiClient.get<MaintenanceRecord>(`/assets/maintenance/records/${id}/`),
@@ -370,7 +371,7 @@ export const maintenanceRecordsApi = {
 
 export const assetAssignmentsApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: AssetAssignmentListItem[], count: number }>('/assets/assignment/assignments/', params),
+    apiClient.get<PaginatedResponse<AssetAssignmentListItem>>('/assets/assignment/assignments/', params),
 
   get: (id: string) =>
     apiClient.get<AssetAssignment>(`/assets/assignment/assignments/${id}/`),
@@ -396,7 +397,7 @@ export const assetAssignmentsApi = {
 
 export const assetTransfersApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: AssetTransfer[], count: number }>('/assets/assignment/transfers/', params),
+    apiClient.get<PaginatedResponse<AssetTransfer>>('/assets/assignment/transfers/', params),
 
   get: (id: string) =>
     apiClient.get<AssetTransfer>(`/assets/assignment/transfers/${id}/`),
@@ -416,7 +417,7 @@ export const assetTransfersApi = {
 
 export const assetCheckoutsApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: AssetCheckout[], count: number }>('/assets/assignment/checkouts/', params),
+    apiClient.get<PaginatedResponse<AssetCheckout>>('/assets/assignment/checkouts/', params),
 
   get: (id: string) =>
     apiClient.get<AssetCheckout>(`/assets/assignment/checkouts/${id}/`),

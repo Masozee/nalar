@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class TicketPriority(models.TextChoices):
@@ -28,7 +28,7 @@ class TicketType(models.TextChoices):
     CHANGE = 'change', 'Perubahan'
 
 
-class Category(BaseModel):
+class Category(TenantBaseModel):
     """Ticket category for classification."""
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=20, unique=True)
@@ -56,7 +56,7 @@ class Category(BaseModel):
         return self.name
 
 
-class SLAPolicy(BaseModel):
+class SLAPolicy(TenantBaseModel):
     """Service Level Agreement policy."""
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
@@ -90,7 +90,7 @@ class SLAPolicy(BaseModel):
         return f"{self.name} ({self.get_priority_display()})"
 
 
-class Ticket(BaseModel, AuditMixin):
+class Ticket(TenantBaseModel, AuditMixin):
     """Main ticket model for helpdesk."""
     ticket_number = models.CharField(max_length=20, unique=True, editable=False)
 
@@ -240,7 +240,7 @@ class Ticket(BaseModel, AuditMixin):
             self.resolution_breached = True
 
 
-class TicketComment(BaseModel):
+class TicketComment(TenantBaseModel):
     """Comments/updates on a ticket."""
     ticket = models.ForeignKey(
         Ticket,
@@ -294,7 +294,7 @@ class TicketComment(BaseModel):
         super().save(*args, **kwargs)
 
 
-class TicketAttachment(BaseModel):
+class TicketAttachment(TenantBaseModel):
     """File attachments for tickets."""
     ticket = models.ForeignKey(
         Ticket,

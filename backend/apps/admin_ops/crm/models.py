@@ -10,7 +10,7 @@ Supports:
 import uuid
 from django.db import models
 from django.conf import settings
-from apps.core.models.base import BaseModel
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class AccessLevel(models.TextChoices):
@@ -41,7 +41,7 @@ class OrganizationType(models.TextChoices):
     OTHER = 'other', 'Other'
 
 
-class Organization(BaseModel):
+class Organization(TenantBaseModel):
     """Organization/Company entity"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
@@ -93,7 +93,7 @@ class Organization(BaseModel):
         return self.name
 
 
-class Contact(BaseModel):
+class Contact(TenantBaseModel):
     """Individual contact with support for multiple positions"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -182,7 +182,7 @@ class Contact(BaseModel):
         return ' '.join(parts)
 
 
-class JobPosition(BaseModel):
+class JobPosition(TenantBaseModel):
     """
     Job positions for contacts - supports multiple positions per contact
     Links contacts to organizations with specific roles
@@ -239,7 +239,7 @@ class JobPosition(BaseModel):
         return f"{self.contact.get_full_name()} - {self.title} at {self.organization.name}"
 
 
-class ContactNote(BaseModel):
+class ContactNote(TenantBaseModel):
     """Notes and comments about contacts"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contact = models.ForeignKey(
@@ -292,7 +292,7 @@ class ActivityType(models.TextChoices):
     OTHER = 'other', 'Other'
 
 
-class ContactActivity(BaseModel):
+class ContactActivity(TenantBaseModel):
     """Track interactions and activities with contacts"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contact = models.ForeignKey(

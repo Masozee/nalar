@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class AttendanceStatus(models.TextChoices):
@@ -14,7 +14,7 @@ class AttendanceStatus(models.TextChoices):
     LEAVE = 'leave', 'Cuti'
 
 
-class Attendance(BaseModel, AuditMixin):
+class Attendance(TenantBaseModel, AuditMixin):
     """Daily attendance record for employees."""
 
     employee = models.ForeignKey(
@@ -84,7 +84,7 @@ class Attendance(BaseModel, AuditMixin):
         return self.work_hours
 
 
-class AttendanceSummary(BaseModel):
+class AttendanceSummary(TenantBaseModel):
     """Monthly attendance summary for employees."""
 
     employee = models.ForeignKey(

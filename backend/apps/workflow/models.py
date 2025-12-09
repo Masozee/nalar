@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class ApprovalStatus(models.TextChoices):
@@ -13,7 +13,7 @@ class ApprovalStatus(models.TextChoices):
     REVISION = 'revision', 'Perlu Revisi'
 
 
-class WorkflowTemplate(BaseModel):
+class WorkflowTemplate(TenantBaseModel):
     """
     Defines a reusable approval workflow template.
     Can be applied to different models (LeaveRequest, PurchaseOrder, ExpenseRequest, etc.)
@@ -51,7 +51,7 @@ class WorkflowTemplate(BaseModel):
         return self.name
 
 
-class WorkflowStep(BaseModel):
+class WorkflowStep(TenantBaseModel):
     """
     Individual step in a workflow.
     Steps are executed in order (by step_order).
@@ -121,7 +121,7 @@ class WorkflowStep(BaseModel):
         return f"{self.workflow.name} - Step {self.step_order}: {self.name}"
 
 
-class ApprovalRequest(BaseModel, AuditMixin):
+class ApprovalRequest(TenantBaseModel, AuditMixin):
     """
     An instance of a workflow for a specific object.
     Created when someone submits something for approval.
@@ -206,7 +206,7 @@ class ApprovalRequest(BaseModel, AuditMixin):
             return None
 
 
-class ApprovalAction(BaseModel):
+class ApprovalAction(TenantBaseModel):
     """
     Records each approval action taken on a request.
     Provides full audit trail of who did what and when.
@@ -261,7 +261,7 @@ class ApprovalAction(BaseModel):
         return f"{self.approval_request.title} - {self.get_action_display()} by {self.actor}"
 
 
-class ApprovalDelegate(BaseModel):
+class ApprovalDelegate(TenantBaseModel):
     """
     Allows users to delegate their approval authority to others.
     Useful for vacations, temporary assignments, etc.

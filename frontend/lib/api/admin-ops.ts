@@ -1,4 +1,5 @@
 import { apiClient } from './client'
+import type { PaginatedResponse } from './types'
 
 // Room Booking Types
 export interface Room {
@@ -197,7 +198,7 @@ export interface VisitorBadge {
 export const roomApi = {
   rooms: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: Room[], count: number }>('/admin-ops/room-booking/rooms/', params),
+      apiClient.get<PaginatedResponse<Room>>('/admin-ops/room-booking/rooms/', params),
 
     get: (id: string) =>
       apiClient.get<Room>(`/admin-ops/room-booking/rooms/${id}/`),
@@ -214,7 +215,7 @@ export const roomApi = {
 
   bookings: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: RoomBooking[], count: number }>('/admin-ops/room-booking/bookings/', params),
+      apiClient.get<PaginatedResponse<RoomBooking>>('/admin-ops/room-booking/bookings/', params),
 
     get: (id: string) =>
       apiClient.get<RoomBooking>(`/admin-ops/room-booking/bookings/${id}/`),
@@ -243,7 +244,7 @@ export const roomApi = {
 export const vehicleApi = {
   vehicles: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: Vehicle[], count: number }>('/admin-ops/vehicle/vehicles/', params),
+      apiClient.get<PaginatedResponse<Vehicle>>('/admin-ops/vehicle/vehicles/', params),
 
     get: (id: string) =>
       apiClient.get<Vehicle>(`/admin-ops/vehicle/vehicles/${id}/`),
@@ -260,7 +261,7 @@ export const vehicleApi = {
 
   drivers: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: Driver[], count: number }>('/admin-ops/vehicle/drivers/', params),
+      apiClient.get<PaginatedResponse<Driver>>('/admin-ops/vehicle/drivers/', params),
 
     get: (id: string) =>
       apiClient.get<Driver>(`/admin-ops/vehicle/drivers/${id}/`),
@@ -277,7 +278,7 @@ export const vehicleApi = {
 
   bookings: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: VehicleBooking[], count: number }>('/admin-ops/vehicle/bookings/', params),
+      apiClient.get<PaginatedResponse<VehicleBooking>>('/admin-ops/vehicle/bookings/', params),
 
     get: (id: string) =>
       apiClient.get<VehicleBooking>(`/admin-ops/vehicle/bookings/${id}/`),
@@ -306,7 +307,7 @@ export const vehicleApi = {
 
   maintenance: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: VehicleMaintenance[], count: number }>('/admin-ops/vehicle/maintenance/', params),
+      apiClient.get<PaginatedResponse<VehicleMaintenance>>('/admin-ops/vehicle/maintenance/', params),
 
     get: (id: string) =>
       apiClient.get<VehicleMaintenance>(`/admin-ops/vehicle/maintenance/${id}/`),
@@ -326,7 +327,7 @@ export const vehicleApi = {
 export const visitorApi = {
   visitors: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: Visitor[], count: number }>('/admin-ops/visitor/visitors/', params),
+      apiClient.get<PaginatedResponse<Visitor>>('/admin-ops/visitor/visitors/', params),
 
     get: (id: string) =>
       apiClient.get<Visitor>(`/admin-ops/visitor/visitors/${id}/`),
@@ -346,7 +347,7 @@ export const visitorApi = {
 
   logs: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: VisitLog[], count: number }>('/admin-ops/visitor/logs/', params),
+      apiClient.get<PaginatedResponse<VisitLog>>('/admin-ops/visitor/logs/', params),
 
     get: (id: string) =>
       apiClient.get<VisitLog>(`/admin-ops/visitor/logs/${id}/`),
@@ -369,7 +370,7 @@ export const visitorApi = {
 
   badges: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: VisitorBadge[], count: number }>('/admin-ops/visitor/badges/', params),
+      apiClient.get<PaginatedResponse<VisitorBadge>>('/admin-ops/visitor/badges/', params),
 
     get: (id: string) =>
       apiClient.get<VisitorBadge>(`/admin-ops/visitor/badges/${id}/`),

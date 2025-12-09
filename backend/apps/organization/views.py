@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from .models import Department, Position, Team
 from .serializers import (
     DepartmentSerializer,
@@ -12,7 +13,45 @@ from .serializers import (
 )
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="List Departments",
+        description="""
+        Get all departments in the organization with filtering and search capabilities.
+
+        **Features:**
+        - Hierarchical department structure
+        - Department head information
+        - Active/inactive filtering
+        - Code and name search
+        """,
+        tags=["Organization - Departments"],
+    ),
+    retrieve=extend_schema(
+        summary="Get Department Details",
+        description="Retrieve complete department information including head and parent department.",
+        tags=["Organization - Departments"],
+    ),
+    create=extend_schema(
+        summary="Create Department",
+        description="Add a new department to the organizational structure.",
+        tags=["Organization - Departments"],
+    ),
+)
 class DepartmentViewSet(viewsets.ModelViewSet):
+    """
+    **Department Management**
+
+    Manage organizational departments in a hierarchical structure. Departments can have
+    parent-child relationships, assigned heads, and contain multiple teams and employees.
+
+    **Key Features:**
+    - Hierarchical organization structure
+    - Department heads and managers
+    - Team and employee assignment
+    - Budget and resource allocation
+    """
+
     queryset = Department.objects.select_related('parent', 'head').all()
     serializer_class = DepartmentSerializer
     filterset_fields = ['parent', 'is_active']

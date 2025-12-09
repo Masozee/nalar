@@ -113,20 +113,21 @@ class Command(BaseCommand):
             )
             raise
 
-    def _create_default_tenant(self, name, email, dry_run):
+    def _create_default_tenant(self, tenant_name, email, dry_run):
         """Create or get the default tenant."""
         if dry_run:
             # Return a mock tenant for dry run
             class MockTenant:
-                id = 'mock-id'
-                name = name
-                slug = 'default'
+                def __init__(self):
+                    self.id = 'mock-id'
+                    self.name = tenant_name
+                    self.slug = 'default'
             return MockTenant()
 
         tenant, created = Tenant.objects.get_or_create(
             slug='default',
             defaults={
-                'name': name,
+                'name': tenant_name,
                 'email': email,
                 'plan': PlanType.ENTERPRISE,
                 'status': TenantStatus.ACTIVE,

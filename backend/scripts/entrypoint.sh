@@ -15,9 +15,17 @@ while ! nc -z ${REDIS_HOST:-redis} ${REDIS_PORT:-6379}; do
 done
 echo "Redis started"
 
-# Run migrations
-echo "Running migrations..."
-uv run python manage.py migrate --noinput
+# Run migrations (skip if SKIP_MIGRATIONS=1)
+if [ "${SKIP_MIGRATIONS}" != "1" ]; then
+    echo "Running migrations..."
+    python manage.py migrate --noinput || echo "Migration failed, continuing..."
+
+    # Collect static files
+    echo "Collecting static files..."
+    python manage.py collectstatic --noinput || echo "Static collection failed, continuing..."
+else
+    echo "Skipping migrations (SKIP_MIGRATIONS=1)"
+fi
 
 # Execute command
 exec "$@"

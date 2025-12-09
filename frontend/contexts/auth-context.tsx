@@ -6,9 +6,15 @@ import { useRouter } from "next/navigation"
 type User = {
   id: number
   email: string
+  username: string
   first_name: string
   last_name: string
   avatar?: string
+  last_login?: string
+  date_joined?: string
+  is_active?: boolean
+  is_staff?: boolean
+  is_superuser?: boolean
 }
 
 type AuthContextType = {

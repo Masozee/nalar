@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Tenant, TenantUser, Subscription
+from .models import Tenant, TenantUser, Subscription, Invoice
 
 
 @admin.register(Tenant)
@@ -150,3 +150,68 @@ class SubscriptionAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+
+@admin.register(Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
+    """Admin interface for Invoice model."""
+
+    list_display = [
+        'invoice_number',
+        'tenant',
+        'status_badge',
+        'total_amount_display',
+        'issue_date',
+        'due_date',
+        'paid_date',
+    ]
+    list_filter = ['status', 'issue_date', 'paid_date']
+    search_fields = ['invoice_number', 'tenant__name', 'stripe_invoice_id']
+    readonly_fields = ['invoice_number', 'created_at', 'updated_at', 'created_by', 'updated_by']
+    date_hierarchy = 'issue_date'
+
+    fieldsets = (
+        ('Invoice Details', {
+            'fields': ('tenant', 'subscription', 'invoice_number', 'status')
+        }),
+        ('Amounts', {
+            'fields': ('amount', 'tax_amount', 'total_amount', 'currency')
+        }),
+        ('Description', {
+            'fields': ('description', 'line_items')
+        }),
+        ('Dates', {
+            'fields': ('issue_date', 'due_date', 'paid_date')
+        }),
+        ('Payment Details', {
+            'fields': ('payment_method', 'stripe_invoice_id', 'pdf_url'),
+            'classes': ('collapse',)
+        }),
+        ('Audit', {
+            'fields': ('created_at', 'updated_at', 'created_by', 'updated_by'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def status_badge(self, obj):
+        """Display status as colored badge."""
+        colors = {
+            'paid': 'green',
+            'pending': 'orange',
+            'draft': 'gray',
+            'failed': 'red',
+            'refunded': 'blue',
+            'canceled': 'gray',
+        }
+        color = colors.get(obj.status, 'gray')
+        return format_html(
+            '<span style="color: {}; font-weight: bold;">{}</span>',
+            color,
+            obj.get_status_display()
+        )
+    status_badge.short_description = 'Status'
+
+    def total_amount_display(self, obj):
+        """Display total amount with currency."""
+        return f'{obj.currency} {obj.total_amount}'
+    total_amount_display.short_description = 'Total Amount'

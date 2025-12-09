@@ -4,7 +4,7 @@ Publication models for Research module.
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from apps.core.models import BaseModel
+from apps.core.models import TenantBaseModel
 from apps.core.models.audit import AuditMixin
 
 
@@ -41,7 +41,7 @@ class IndexationType(models.TextChoices):
     OTHER = 'other', 'Lainnya'
 
 
-class Publication(BaseModel, AuditMixin):
+class Publication(TenantBaseModel, AuditMixin):
     """Research publication model."""
     title = models.CharField(max_length=500, verbose_name='Judul')
     abstract = models.TextField(blank=True, verbose_name='Abstrak')
@@ -150,7 +150,7 @@ class Publication(BaseModel, AuditMixin):
         super().save(*args, **kwargs)
 
 
-class PublicationAuthor(BaseModel):
+class PublicationAuthor(TenantBaseModel):
     """Publication author model."""
     class AuthorType(models.TextChoices):
         INTERNAL = 'internal', 'Internal'
@@ -206,7 +206,7 @@ class PublicationAuthor(BaseModel):
         return self.user.get_full_name() if self.user else 'Unknown'
 
 
-class PublicationReview(BaseModel, AuditMixin):
+class PublicationReview(TenantBaseModel, AuditMixin):
     """Internal review for publications."""
     class ReviewStatus(models.TextChoices):
         PENDING = 'pending', 'Pending'

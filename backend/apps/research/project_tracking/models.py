@@ -5,7 +5,7 @@ from decimal import Decimal
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from apps.core.models import BaseModel
+from apps.core.models import TenantBaseModel
 from apps.core.models.audit import AuditMixin
 
 
@@ -27,7 +27,7 @@ class ProjectType(models.TextChoices):
     INTERNAL = 'internal', 'Penelitian Internal'
 
 
-class ResearchProject(BaseModel, AuditMixin):
+class ResearchProject(TenantBaseModel, AuditMixin):
     """Research project tracking model."""
     project_code = models.CharField(
         max_length=30, unique=True, verbose_name='Kode Proyek'
@@ -148,7 +148,7 @@ class ResearchProject(BaseModel, AuditMixin):
         return False
 
 
-class ProjectTeamMember(BaseModel):
+class ProjectTeamMember(TenantBaseModel):
     """Project team member."""
     class Role(models.TextChoices):
         CO_LEAD = 'co_lead', 'Co-Lead'
@@ -184,7 +184,7 @@ class ProjectTeamMember(BaseModel):
         return f"{self.user} - {self.project.project_code}"
 
 
-class ProjectTask(BaseModel, AuditMixin):
+class ProjectTask(TenantBaseModel, AuditMixin):
     """Project task/activity."""
     class TaskStatus(models.TextChoices):
         TODO = 'todo', 'To Do'
@@ -248,7 +248,7 @@ class ProjectTask(BaseModel, AuditMixin):
         self.save(update_fields=['status', 'completed_at'])
 
 
-class ProjectUpdate(BaseModel, AuditMixin):
+class ProjectUpdate(TenantBaseModel, AuditMixin):
     """Project progress update/log."""
     project = models.ForeignKey(
         ResearchProject, on_delete=models.CASCADE,

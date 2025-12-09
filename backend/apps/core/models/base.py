@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from .managers import TenantManager
 
 
 class BaseModel(models.Model):
@@ -21,6 +22,9 @@ class TenantMixin(models.Model):
 
     All models that need tenant isolation should inherit from this mixin.
     This ensures data is automatically scoped to a specific tenant.
+
+    Note: tenant field is nullable during migration phase.
+    After data migration, this will be made required.
     """
 
     tenant = models.ForeignKey(
@@ -28,6 +32,8 @@ class TenantMixin(models.Model):
         on_delete=models.CASCADE,
         related_name='%(app_label)s_%(class)s_set',
         db_index=True,
+        null=True,  # Temporarily nullable for migration
+        blank=True,
         help_text="Tenant that owns this record"
     )
 
@@ -38,3 +44,26 @@ class TenantMixin(models.Model):
             models.Index(fields=['tenant', 'is_active']),
             models.Index(fields=['tenant', 'created_at']),
         ]
+
+
+class TenantBaseModel(BaseModel, TenantMixin):
+    """
+    Base model for all tenant-aware models.
+    Combines BaseModel fields with TenantMixin and automatic filtering.
+
+    Usage:
+        class MyModel(TenantBaseModel):
+            name = models.CharField(max_length=100)
+
+        # Queries automatically filtered by current tenant
+        MyModel.objects.all()  # Only current tenant's records
+
+        # Bypass tenant filtering (admin/superuser)
+        MyModel.all_objects.all()  # All records across all tenants
+    """
+
+    objects = TenantManager()  # Tenant-aware manager (default)
+    all_objects = models.Manager()  # Unfiltered manager for admin
+
+    class Meta:
+        abstract = True

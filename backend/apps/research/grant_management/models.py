@@ -5,7 +5,7 @@ from decimal import Decimal
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from apps.core.models import BaseModel
+from apps.core.models import TenantBaseModel
 from apps.core.models.audit import AuditMixin
 
 
@@ -41,7 +41,7 @@ class FundingSource(models.TextChoices):
     OTHER = 'other', 'Lainnya'
 
 
-class Grant(BaseModel, AuditMixin):
+class Grant(TenantBaseModel, AuditMixin):
     """Research grant/funding model."""
     grant_number = models.CharField(
         max_length=30, unique=True, verbose_name='Nomor Grant'
@@ -174,7 +174,7 @@ class Grant(BaseModel, AuditMixin):
         return 0
 
 
-class GrantTeamMember(BaseModel):
+class GrantTeamMember(TenantBaseModel):
     """Grant team member (co-investigators, researchers, etc.)."""
     class Role(models.TextChoices):
         CO_PI = 'co_pi', 'Co-Principal Investigator'
@@ -213,7 +213,7 @@ class GrantTeamMember(BaseModel):
         return f"{self.user} - {self.grant.grant_number} ({self.get_role_display()})"
 
 
-class GrantMilestone(BaseModel, AuditMixin):
+class GrantMilestone(TenantBaseModel, AuditMixin):
     """Grant milestone/deliverable."""
     class MilestoneStatus(models.TextChoices):
         PENDING = 'pending', 'Pending'
@@ -249,7 +249,7 @@ class GrantMilestone(BaseModel, AuditMixin):
         return f"{self.grant.grant_number} - {self.title}"
 
 
-class GrantDisbursement(BaseModel, AuditMixin):
+class GrantDisbursement(TenantBaseModel, AuditMixin):
     """Grant fund disbursement record."""
     class DisbursementStatus(models.TextChoices):
         REQUESTED = 'requested', 'Diajukan'

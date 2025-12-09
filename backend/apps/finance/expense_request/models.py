@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 from decimal import Decimal
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class ExpenseCategory(models.TextChoices):
@@ -43,7 +43,7 @@ class PaymentMethod(models.TextChoices):
     PETTY_CASH = 'petty_cash', 'Kas Kecil'
 
 
-class ExpenseRequest(BaseModel, AuditMixin):
+class ExpenseRequest(TenantBaseModel, AuditMixin):
     """
     Expense request/reimbursement header.
     """
@@ -220,7 +220,7 @@ class ExpenseRequest(BaseModel, AuditMixin):
         self.save(update_fields=['status', 'payment_date'])
 
 
-class ExpenseItem(BaseModel):
+class ExpenseItem(TenantBaseModel):
     """
     Expense request line items.
     """
@@ -281,7 +281,7 @@ class ExpenseItem(BaseModel):
         self.expense_request.calculate_total()
 
 
-class ExpenseAdvance(BaseModel, AuditMixin):
+class ExpenseAdvance(TenantBaseModel, AuditMixin):
     """
     Cash advance for expenses (uang muka).
     """

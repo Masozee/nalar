@@ -86,6 +86,60 @@ export const attendanceColumns: ColumnDef<Attendance>[] = [
     size: 120,
   },
   {
+    accessorKey: "check_in_location",
+    header: "Check In Location",
+    cell: ({ row }) => {
+      const location = row.getValue("check_in_location") as string
+      const lat = row.original.check_in_latitude
+      const lng = row.original.check_in_longitude
+
+      if (location || (lat && lng)) {
+        return (
+          <div className="flex items-start gap-1 max-w-[200px]">
+            <Icon name="MapPin" size={12} className="text-muted-foreground mt-0.5 flex-shrink-0" />
+            <div className="text-sm">
+              {location && <div className="truncate" title={location}>{location}</div>}
+              {lat && lng && (
+                <div className="text-xs text-muted-foreground">
+                  {Number(lat).toFixed(5)}, {Number(lng).toFixed(5)}
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      }
+      return <span className="text-sm text-muted-foreground">-</span>
+    },
+    size: 220,
+  },
+  {
+    accessorKey: "check_out_location",
+    header: "Check Out Location",
+    cell: ({ row }) => {
+      const location = row.getValue("check_out_location") as string
+      const lat = row.original.check_out_latitude
+      const lng = row.original.check_out_longitude
+
+      if (location || (lat && lng)) {
+        return (
+          <div className="flex items-start gap-1 max-w-[200px]">
+            <Icon name="MapPin" size={12} className="text-muted-foreground mt-0.5 flex-shrink-0" />
+            <div className="text-sm">
+              {location && <div className="truncate" title={location}>{location}</div>}
+              {lat && lng && (
+                <div className="text-xs text-muted-foreground">
+                  {Number(lat).toFixed(5)}, {Number(lng).toFixed(5)}
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      }
+      return <span className="text-sm text-muted-foreground">-</span>
+    },
+    size: 220,
+  },
+  {
     accessorKey: "work_hours",
     header: "Work Hours",
     cell: ({ row }) => {

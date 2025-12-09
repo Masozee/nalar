@@ -7,14 +7,18 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Load .env from project root (parent of backend)
+# Load .env from project root (parent of backend) only if dotenv is available
 PROJECT_ROOT = BASE_DIR.parent
-load_dotenv(PROJECT_ROOT / '.env')
+try:
+    from dotenv import load_dotenv
+    load_dotenv(PROJECT_ROOT / '.env')
+except ImportError:
+    # dotenv not installed (e.g., in production), skip loading
+    pass
 
 # Application URLs
 FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
@@ -37,6 +41,8 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'drf_spectacular',  # OpenAPI/Swagger documentation
+    'storages',  # S3/RustFS storage backend
 ]
 
 LOCAL_APPS = [
@@ -70,6 +76,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'apps.core.middleware.TenantMiddleware',  # Multi-tenancy support
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -126,7 +133,7 @@ STORAGES = {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
 
@@ -170,6 +177,8 @@ REST_FRAMEWORK = {
         'anon': '100/hour',
         'user': '1000/hour',
     },
+    # OpenAPI Schema
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # Cache settings (override in dev/prod)
@@ -249,3 +258,120 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+
+# ===========================
+# Polar.sh Configuration
+# ===========================
+POLAR_ACCESS_TOKEN = os.environ.get("POLAR_ACCESS_TOKEN", "")
+POLAR_WEBHOOK_SECRET = os.environ.get("POLAR_WEBHOOK_SECRET", "")
+
+# Polar Product IDs for different plans
+POLAR_PRODUCT_STARTER = os.environ.get("POLAR_PRODUCT_STARTER", "")
+POLAR_PRODUCT_PROFESSIONAL = os.environ.get("POLAR_PRODUCT_PROFESSIONAL", "")
+POLAR_PRODUCT_ENTERPRISE = os.environ.get("POLAR_PRODUCT_ENTERPRISE", "")
+
+
+# ===========================
+# API Documentation (drf-spectacular)
+# ===========================
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Nalar ERP API',
+    'DESCRIPTION': '''
+    **Comprehensive Multi-Tenant ERP System**
+
+    Nalar is a modern, cloud-based ERP platform designed for small to medium enterprises.
+    Built with Django REST Framework and React, it provides complete business management
+    capabilities with enterprise-grade security and scalability.
+
+    ## Key Features
+
+    ### 🏢 Multi-Tenancy
+    - Complete data isolation between organizations
+    - Subscription-based access control
+    - Customizable branding per tenant
+
+    ### 💼 Core Modules
+    - **HR Management**: Employee records, payroll, attendance, leave
+    - **Finance**: Expense tracking, invoicing, payments
+    - **Organization**: Department structure, positions, teams
+    - **Assets**: Asset tracking, assignments, maintenance
+    - **Inventory**: Stock management, transfers, opname
+    - **Procurement**: Purchase orders, vendors, approvals
+    - **Documents**: File management with access control
+    - **Ticketing**: Issue tracking and support
+    - **Workflow**: Approval processes and automation
+
+    ### 🔐 Security
+    - JWT-based authentication
+    - Role-based access control (RBAC)
+    - Multi-factor authentication support
+    - Audit logging
+
+    ### 💳 Billing & Subscriptions
+    - Integrated with Polar.sh for payments
+    - Multiple subscription tiers
+    - Usage tracking and limits
+    - Automated invoicing
+
+    ## Getting Started
+
+    1. **Authentication**: Obtain JWT token via `/api/v1/auth/login/`
+    2. **Set Headers**: Include `Authorization: Bearer <token>` in all requests
+    3. **Explore**: Use Swagger UI to test endpoints interactively
+
+    ## Support
+
+    - Documentation: https://docs.nalar.io
+    - GitHub: https://github.com/yourusername/nalar
+    - Support: support@nalar.io
+    ''',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    'SERVE_PUBLIC': True,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+        'displayOperationId': True,
+        'filter': True,
+        'tryItOutEnabled': True,
+    },
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SCHEMA_PATH_PREFIX': '/api/v1',
+    'SERVERS': [
+        {'url': 'http://localhost:8000', 'description': 'Local Development'},
+        {'url': 'https://api.nalar.io', 'description': 'Production API'},
+    ],
+    'EXTERNAL_DOCS': {
+        'description': 'Full Documentation',
+        'url': 'https://docs.nalar.io'
+    },
+    'CONTACT': {
+        'name': 'Nalar Support',
+        'email': 'support@nalar.io',
+    },
+    'LICENSE': {
+        'name': 'Proprietary',
+    },
+    'TAGS': [
+        {'name': 'Authentication', 'description': 'User authentication and token management'},
+        {'name': 'Tenants', 'description': 'Multi-tenant organization management'},
+        {'name': 'Subscriptions', 'description': 'Subscription and plan management'},
+        {'name': 'Billing', 'description': 'Payment processing and billing operations'},
+        {'name': 'HR - Employees', 'description': 'Employee lifecycle and profile management'},
+        {'name': 'HR - Payroll', 'description': 'Salary processing and payslips'},
+        {'name': 'HR - Leave', 'description': 'Leave requests and attendance'},
+        {'name': 'Organization - Departments', 'description': 'Department hierarchy and structure'},
+        {'name': 'Organization - Teams', 'description': 'Team management and collaboration'},
+        {'name': 'Finance', 'description': 'Financial management and expense tracking'},
+        {'name': 'Assets', 'description': 'Asset tracking and lifecycle management'},
+        {'name': 'Inventory', 'description': 'Stock and inventory management'},
+        {'name': 'Procurement', 'description': 'Purchase orders and vendor management'},
+        {'name': 'Documents', 'description': 'Document management and file storage'},
+        {'name': 'Ticketing', 'description': 'Issue tracking and support tickets'},
+        {'name': 'Workflow', 'description': 'Approval workflows and automation'},
+        {'name': 'CRM', 'description': 'Customer relationship management'},
+        {'name': 'Research', 'description': 'Research projects and grants'},
+        {'name': 'Admin Operations', 'description': 'Facilities and operations management'},
+    ],
+}

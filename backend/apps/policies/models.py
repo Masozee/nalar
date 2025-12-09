@@ -1,5 +1,5 @@
 from django.db import models
-from apps.core.models import BaseModel
+from apps.core.models import TenantBaseModel
 from apps.users.models import User
 
 
@@ -17,7 +17,7 @@ class PolicyCategory(models.Model):
         return self.name
 
 
-class Policy(BaseModel):
+class Policy(TenantBaseModel):
     """Office policy document"""
 
     STATUS_CHOICES = [
@@ -77,7 +77,7 @@ class Policy(BaseModel):
         return f"{self.title} (v{self.version})"
 
 
-class PolicyApproval(BaseModel):
+class PolicyApproval(TenantBaseModel):
     """Approval workflow for policies"""
 
     APPROVAL_STATUS_CHOICES = [
@@ -115,7 +115,7 @@ class PolicyApproval(BaseModel):
         return f"{self.policy.title} - {self.approver_title} ({self.status})"
 
 
-class PolicyAcknowledgment(BaseModel):
+class PolicyAcknowledgment(TenantBaseModel):
     """Track employee acknowledgment of policies"""
 
     policy = models.ForeignKey(

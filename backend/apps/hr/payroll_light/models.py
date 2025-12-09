@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class PayrollStatus(models.TextChoices):
@@ -33,7 +33,7 @@ class DeductionType(models.TextChoices):
     OTHER = 'other', 'Potongan Lainnya'
 
 
-class SalaryComponent(BaseModel):
+class SalaryComponent(TenantBaseModel):
     """Salary component configuration."""
 
     employee = models.ForeignKey(
@@ -68,7 +68,7 @@ class SalaryComponent(BaseModel):
         return f"{self.employee.full_name} - {self.component_name}: Rp {self.amount:,.0f}"
 
 
-class PayrollPeriod(BaseModel, AuditMixin):
+class PayrollPeriod(TenantBaseModel, AuditMixin):
     """Monthly payroll period."""
 
     year = models.PositiveIntegerField()
@@ -102,7 +102,7 @@ class PayrollPeriod(BaseModel, AuditMixin):
         return f"Payroll {self.month}/{self.year}"
 
 
-class Payslip(BaseModel, AuditMixin):
+class Payslip(TenantBaseModel, AuditMixin):
     """Individual employee payslip."""
 
     payroll_period = models.ForeignKey(
@@ -189,7 +189,7 @@ class Payslip(BaseModel, AuditMixin):
         return self.net_salary
 
 
-class PayslipItem(BaseModel):
+class PayslipItem(TenantBaseModel):
     """Individual items in a payslip (allowances/deductions)."""
 
     payslip = models.ForeignKey(

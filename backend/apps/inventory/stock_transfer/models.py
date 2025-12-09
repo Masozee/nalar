@@ -5,7 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from decimal import Decimal
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 from apps.inventory.sku.models import SKU, Warehouse, StockRecord, StockMovement
 
 
@@ -29,7 +29,7 @@ class TransferPriority(models.TextChoices):
     URGENT = 'urgent', 'Urgent'
 
 
-class StockTransfer(BaseModel, AuditMixin):
+class StockTransfer(TenantBaseModel, AuditMixin):
     """
     Stock Transfer header - transfer between warehouses.
     """
@@ -233,7 +233,7 @@ class StockTransfer(BaseModel, AuditMixin):
         self.save(update_fields=['status', 'received_date', 'received_by'])
 
 
-class StockTransferItem(BaseModel):
+class StockTransferItem(TenantBaseModel):
     """
     Stock Transfer line item.
     """

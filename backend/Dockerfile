@@ -29,17 +29,13 @@ RUN uv sync --frozen --no-dev
 # Copy project
 COPY . .
 
-# Collect static files
-RUN uv run python manage.py collectstatic --noinput --settings=config.settings.prod || true
-
-# Create non-root user
-RUN adduser --disabled-password --gecos '' appuser && \
-    chown -R appuser:appuser /app
-USER appuser
+# Create logs directory and set permissions
+RUN mkdir -p /app/logs && \
+    chmod +x /app/scripts/entrypoint.sh
 
 # Expose port
 EXPOSE 8000
 
 # Run entrypoint
 ENTRYPOINT ["/app/scripts/entrypoint.sh"]
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
+CMD ["/app/.venv/bin/granian", "--interface", "asgi", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "config.asgi:application"]

@@ -64,7 +64,7 @@ const LOCKED_STATUSES: POStatus[] = ['received', 'closed', 'cancelled']
 export default function EditPOPage() {
   const params = useParams()
   const router = useRouter()
-  const { toast } = useToast()
+  
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [po, setPo] = useState<PurchaseOrder | null>(null)

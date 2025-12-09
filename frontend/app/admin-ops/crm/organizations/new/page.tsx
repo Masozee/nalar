@@ -48,7 +48,7 @@ const organizationTypeOptions: { value: OrganizationType; label: string }[] = [
 export default function NewOrganizationPage() {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { toast } = useToast()
+  
 
   const [formData, setFormData] = useState<Partial<OrganizationFormData>>({
     access_level: 'public',

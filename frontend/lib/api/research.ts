@@ -1,7 +1,8 @@
 /**
  * Research API client for grants, publications, and projects
  */
-import { apiClient, type ApiListResponse } from './client'
+import { apiClient } from './client'
+import type { PaginatedResponse } from './types'
 
 // Grant Management Types
 export type GrantType =
@@ -304,7 +305,7 @@ export interface ProjectUpdate {
 // API Clients
 export const grantApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<ApiListResponse<Grant>>('/research/grants/grants/', params),
+    apiClient.get<PaginatedResponse<Grant>>('/research/grants/grants/', params),
 
   retrieve: (id: string) =>
     apiClient.get<Grant>(`/research/grants/grants/${id}/`),
@@ -336,7 +337,7 @@ export const grantApi = {
 
 export const grantMilestoneApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<ApiListResponse<GrantMilestone>>('/research/grants/milestones/', params),
+    apiClient.get<PaginatedResponse<GrantMilestone>>('/research/grants/milestones/', params),
 
   retrieve: (id: string) =>
     apiClient.get<GrantMilestone>(`/research/grants/milestones/${id}/`),
@@ -356,7 +357,7 @@ export const grantMilestoneApi = {
 
 export const grantDisbursementApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<ApiListResponse<GrantDisbursement>>('/research/grants/disbursements/', params),
+    apiClient.get<PaginatedResponse<GrantDisbursement>>('/research/grants/disbursements/', params),
 
   retrieve: (id: string) =>
     apiClient.get<GrantDisbursement>(`/research/grants/disbursements/${id}/`),
@@ -379,7 +380,7 @@ export const grantDisbursementApi = {
 
 export const publicationApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<ApiListResponse<Publication>>('/research/publications/publications/', params),
+    apiClient.get<PaginatedResponse<Publication>>('/research/publications/publications/', params),
 
   retrieve: (id: string) =>
     apiClient.get<Publication>(`/research/publications/publications/${id}/`),
@@ -396,7 +397,7 @@ export const publicationApi = {
 
 export const projectApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<ApiListResponse<ResearchProject>>('/research/projects/projects/', params),
+    apiClient.get<PaginatedResponse<ResearchProject>>('/research/projects/projects/', params),
 
   retrieve: (id: string) =>
     apiClient.get<ResearchProject>(`/research/projects/projects/${id}/`),
@@ -413,7 +414,7 @@ export const projectApi = {
 
 export const projectTaskApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<ApiListResponse<ProjectTask>>('/research/projects/tasks/', params),
+    apiClient.get<PaginatedResponse<ProjectTask>>('/research/projects/tasks/', params),
 
   retrieve: (id: string) =>
     apiClient.get<ProjectTask>(`/research/projects/tasks/${id}/`),
@@ -430,7 +431,7 @@ export const projectTaskApi = {
 
 export const projectUpdateApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<ApiListResponse<ProjectUpdate>>('/research/projects/updates/', params),
+    apiClient.get<PaginatedResponse<ProjectUpdate>>('/research/projects/updates/', params),
 
   retrieve: (id: string) =>
     apiClient.get<ProjectUpdate>(`/research/projects/updates/${id}/`),

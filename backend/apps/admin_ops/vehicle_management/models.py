@@ -4,7 +4,7 @@ Vehicle Management models for operational vehicle booking and tracking.
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class VehicleType(models.TextChoices):
@@ -32,7 +32,7 @@ class BookingStatus(models.TextChoices):
     CANCELLED = 'cancelled', 'Dibatalkan'
 
 
-class Vehicle(BaseModel):
+class Vehicle(TenantBaseModel):
     """Operational vehicles available for booking."""
     name = models.CharField(max_length=100)
     plate_number = models.CharField(max_length=20, unique=True)
@@ -88,7 +88,7 @@ class Vehicle(BaseModel):
         return f"{self.name} ({self.plate_number})"
 
 
-class Driver(BaseModel):
+class Driver(TenantBaseModel):
     """Driver information for vehicle assignments."""
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -108,7 +108,7 @@ class Driver(BaseModel):
         return f"{self.user.get_full_name() or self.user.email} - {self.license_number}"
 
 
-class VehicleBooking(BaseModel, AuditMixin):
+class VehicleBooking(TenantBaseModel, AuditMixin):
     """Vehicle reservation records."""
     vehicle = models.ForeignKey(
         Vehicle,
@@ -209,7 +209,7 @@ class VehicleBooking(BaseModel, AuditMixin):
                 raise ValidationError('This vehicle is already booked for the selected time.')
 
 
-class VehicleMaintenance(BaseModel):
+class VehicleMaintenance(TenantBaseModel):
     """Vehicle maintenance records."""
     vehicle = models.ForeignKey(
         Vehicle,

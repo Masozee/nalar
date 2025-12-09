@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 from apps.core.enums import (
     EmploymentType,
     EmploymentStatus,
@@ -10,13 +10,16 @@ from apps.core.enums import (
 )
 
 
-class Employee(BaseModel, AuditMixin):
+class Employee(TenantBaseModel, AuditMixin):
     """Employee model containing all staff details."""
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='employee',
+        null=True,
+        blank=True,
+        help_text="Optional: Link to user account for system access"
     )
     employee_id = models.CharField(max_length=50, unique=True)
 
@@ -84,6 +87,22 @@ class Employee(BaseModel, AuditMixin):
     # Documents
     avatar = models.ImageField(upload_to='employees/avatars/', blank=True, null=True)
 
+    # Face Recognition
+    face_image = models.ImageField(
+        upload_to='employees/faces/',
+        blank=True,
+        null=True,
+        help_text='Reference face image for recognition'
+    )
+    face_encoding = models.TextField(
+        blank=True,
+        help_text='Encoded face data for recognition (JSON array)'
+    )
+    face_registered = models.BooleanField(
+        default=False,
+        help_text='Whether face recognition is registered for this employee'
+    )
+
     # Banking Information
     bank_name = models.CharField(max_length=100, blank=True)
     bank_account_number = models.CharField(max_length=50, blank=True)
@@ -115,7 +134,7 @@ class Employee(BaseModel, AuditMixin):
         return f"{self.first_name} {self.last_name}"
 
 
-class EmployeeFamily(BaseModel):
+class EmployeeFamily(TenantBaseModel):
     """Family members of an employee."""
 
     employee = models.ForeignKey(
@@ -152,7 +171,7 @@ class EmployeeFamily(BaseModel):
         return f"{self.employee.full_name} - {self.name} ({self.get_relation_display()})"
 
 
-class EmployeeEducation(BaseModel):
+class EmployeeEducation(TenantBaseModel):
     """Education history of an employee."""
 
     employee = models.ForeignKey(
@@ -177,7 +196,7 @@ class EmployeeEducation(BaseModel):
         return f"{self.employee.full_name} - {self.degree} at {self.institution}"
 
 
-class EmployeeWorkHistory(BaseModel):
+class EmployeeWorkHistory(TenantBaseModel):
     """Previous work experience of an employee."""
 
     employee = models.ForeignKey(

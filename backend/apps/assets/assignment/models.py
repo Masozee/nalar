@@ -4,7 +4,7 @@ Asset Assignment models for tracking asset assignments to employees.
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class AssignmentStatus(models.TextChoices):
@@ -21,7 +21,7 @@ class AssignmentType(models.TextChoices):
     PROJECT = 'project', 'Proyek'
 
 
-class AssetAssignment(BaseModel, AuditMixin):
+class AssetAssignment(TenantBaseModel, AuditMixin):
     """Track asset assignments to users."""
     asset = models.ForeignKey(
         'assets.Asset',
@@ -110,7 +110,7 @@ class AssetAssignment(BaseModel, AuditMixin):
             self.asset.save(update_fields=['current_holder'])
 
 
-class AssetTransfer(BaseModel, AuditMixin):
+class AssetTransfer(TenantBaseModel, AuditMixin):
     """Track asset transfers between users."""
     asset = models.ForeignKey(
         'assets.Asset',
@@ -155,7 +155,7 @@ class AssetTransfer(BaseModel, AuditMixin):
         return f"{self.asset.asset_code}: {self.from_user.email} -> {self.to_user.email}"
 
 
-class AssetCheckout(BaseModel):
+class AssetCheckout(TenantBaseModel):
     """Temporary asset checkout (e.g., projector for meeting)."""
     asset = models.ForeignKey(
         'assets.Asset',

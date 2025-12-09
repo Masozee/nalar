@@ -1,4 +1,5 @@
 import { apiClient } from './client'
+import type { PaginatedResponse } from './types'
 
 // ==================== SKU MANAGEMENT ====================
 
@@ -251,7 +252,7 @@ export interface TransferItem {
 
 export const skuApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: SKUListItem[], count: number }>('/inventory/sku/skus/', params),
+    apiClient.get<PaginatedResponse<SKUListItem>>('/inventory/sku/skus/', params),
 
   get: (id: string) =>
     apiClient.get<SKU>(`/inventory/sku/skus/${id}/`),
@@ -283,7 +284,7 @@ export const skuApi = {
 
 export const warehouseApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: Warehouse[], count: number }>('/inventory/sku/warehouses/', params),
+    apiClient.get<PaginatedResponse<Warehouse>>('/inventory/sku/warehouses/', params),
 
   get: (id: string) =>
     apiClient.get<Warehouse>(`/inventory/sku/warehouses/${id}/`),
@@ -303,7 +304,7 @@ export const warehouseApi = {
 
 export const stockRecordApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: StockRecord[], count: number }>('/inventory/sku/stock-records/', params),
+    apiClient.get<PaginatedResponse<StockRecord>>('/inventory/sku/stock-records/', params),
 
   get: (id: string) =>
     apiClient.get<StockRecord>(`/inventory/sku/stock-records/${id}/`),
@@ -311,7 +312,7 @@ export const stockRecordApi = {
 
 export const stockMovementApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: StockMovement[], count: number }>('/inventory/sku/movements/', params),
+    apiClient.get<PaginatedResponse<StockMovement>>('/inventory/sku/movements/', params),
 
   get: (id: string) =>
     apiClient.get<StockMovement>(`/inventory/sku/movements/${id}/`),
@@ -319,7 +320,7 @@ export const stockMovementApi = {
 
 export const stockOpnameApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: StockOpname[], count: number }>('/inventory/opname/opnames/', params),
+    apiClient.get<PaginatedResponse<StockOpname>>('/inventory/opname/opnames/', params),
 
   get: (id: string) =>
     apiClient.get<StockOpname>(`/inventory/opname/opnames/${id}/`),
@@ -357,7 +358,7 @@ export const stockOpnameApi = {
 
 export const stockTransferApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: StockTransfer[], count: number }>('/inventory/transfer/transfers/', params),
+    apiClient.get<PaginatedResponse<StockTransfer>>('/inventory/transfer/transfers/', params),
 
   get: (id: string) =>
     apiClient.get<StockTransfer>(`/inventory/transfer/transfers/${id}/`),

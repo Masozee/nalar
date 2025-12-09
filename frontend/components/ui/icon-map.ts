@@ -12,6 +12,7 @@ export const iconMap: Record<string, string> = {
   Home: "Home01Icon",
   User: "User01Icon",
   Users: "UserMultiple02Icon",
+  UserPlus: "UserAdd01Icon",
   Settings: "Settings01Icon",
   Search: "Search01Icon",
   Menu: "Menu01Icon",
@@ -25,7 +26,8 @@ export const iconMap: Record<string, string> = {
   Minus: "Subtract01Icon",
   Edit: "Edit01Icon",
   Trash: "Delete01Icon",
-  Save: "Save01Icon",
+  Trash2: "Delete02Icon",
+  Save: "FloppyDiskIcon",
   Download: "Download01Icon",
   Upload: "Upload01Icon",
   Mail: "Mail01Icon",
@@ -53,6 +55,7 @@ export const iconMap: Record<string, string> = {
   MoreHorizontal: "MoreHorizontal01Icon",
   Info: "InformationCircle01Icon",
   AlertCircle: "Alert01Icon",
+  AlertTriangle: "Alert02Icon",
   CheckCircle: "CheckmarkCircle01Icon",
   XCircle: "CancelCircleIcon",
   HelpCircle: "HelpCircle01Icon",
@@ -70,6 +73,7 @@ export const iconMap: Record<string, string> = {
 
   // UI Elements
   Loader: "Loading01Icon",
+  Loader2: "Loading02Icon",
   Spinner: "Loading02Icon",
   Loading: "Loading01Icon",
 
@@ -128,7 +132,7 @@ export const iconMap: Record<string, string> = {
   CalendarDays: "Calendar03Icon",
   CalendarRange: "Calendar04Icon",
   Car: "Car01Icon",
-  CheckSquare: "TickSquareIcon",
+  CheckSquare: "Tick02Icon",
   ChevronsUpDown: "SortingAZ01Icon",
   ChevronsLeft: "ArrowLeftDoubleIcon",
   ChevronsRight: "ArrowRightDoubleIcon",
@@ -188,6 +192,15 @@ export const iconMap: Record<string, string> = {
   Wrench: "Settings04Icon",
   Wifi: "Wifi01Icon",
   QrCode: "QrCodeIcon",
+
+  // Lightning/Speed icons
+  Zap: "Flash01Icon",
+  Lightning: "Flash01Icon",
+  Bolt: "Lightning01Icon",
+  Flash: "Flash01Icon",
+
+  // Security icons
+  Shield: "SecurityIcon",
 
   // Add more mappings as needed
   // Format: CommonName: "HugeIconName",

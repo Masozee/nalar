@@ -1,7 +1,8 @@
 /**
  * Finance API client for expense requests and advances
  */
-import { apiClient, type ApiListResponse } from './client'
+import { apiClient } from './client'
+import type { PaginatedResponse } from './types'
 
 // Enums and Types
 export type ExpenseCategory =
@@ -236,7 +237,7 @@ export interface ExpenseAdvanceSettleData {
 
 // API Methods - Expense Requests
 export const expenseRequestApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<ExpenseRequestListItem>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<ExpenseRequestListItem>> =>
     apiClient.get('/finance/expenses/requests/', { params }),
 
   get: (id: string): Promise<ExpenseRequest> =>
@@ -280,7 +281,7 @@ export const expenseRequestApi = {
 
 // API Methods - Expense Items
 export const expenseItemApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<ExpenseItem>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<ExpenseItem>> =>
     apiClient.get('/finance/expenses/items/', { params }),
 
   get: (id: string): Promise<ExpenseItem> =>
@@ -298,7 +299,7 @@ export const expenseItemApi = {
 
 // API Methods - Expense Advances
 export const expenseAdvanceApi = {
-  list: (params?: Record<string, any>): Promise<ApiListResponse<ExpenseAdvanceListItem>> =>
+  list: (params?: Record<string, any>): Promise<PaginatedResponse<ExpenseAdvanceListItem>> =>
     apiClient.get('/finance/expenses/advances/', { params }),
 
   get: (id: string): Promise<ExpenseAdvance> =>

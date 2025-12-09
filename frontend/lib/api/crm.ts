@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from './client'
+import type { PaginatedResponse } from './types'
 
 // ============================================================================
 // Types
@@ -50,6 +51,7 @@ export interface Organization {
   tags: string[]
   custom_fields: Record<string, any>
   contact_count?: number
+  is_active?: boolean
   created_at: string
   updated_at: string
 }
@@ -220,7 +222,7 @@ export interface JobPositionFormData {
 // ============================================================================
 
 export async function getOrganizations(params?: Record<string, any>) {
-  return await apiClient.get<{ count: number; results: Organization[]; next?: string; previous?: string }>(
+  return await apiClient.get<PaginatedResponse<Organization>>(
     '/admin-ops/crm/organizations/',
     { params }
   )
@@ -251,7 +253,7 @@ export async function getOrganizationsByType() {
 // ============================================================================
 
 export async function getContacts(params?: Record<string, any>) {
-  return await apiClient.get<{ count: number; results: Contact[]; next?: string; previous?: string }>(
+  return await apiClient.get<PaginatedResponse<Contact>>(
     '/admin-ops/crm/contacts/',
     { params }
   )
@@ -294,7 +296,7 @@ export async function updateLastContacted(id: string) {
 // ============================================================================
 
 export async function getJobPositions(params?: Record<string, any>) {
-  return await apiClient.get<{ count: number; results: JobPosition[]; next?: string; previous?: string }>(
+  return await apiClient.get<PaginatedResponse<JobPosition>>(
     '/admin-ops/crm/positions/',
     { params }
   )
@@ -321,7 +323,7 @@ export async function deleteJobPosition(id: string) {
 // ============================================================================
 
 export async function getContactNotes(params?: Record<string, any>) {
-  return await apiClient.get<{ count: number; results: ContactNote[]; next?: string; previous?: string }>(
+  return await apiClient.get<PaginatedResponse<ContactNote>>(
     '/admin-ops/crm/notes/',
     { params }
   )
@@ -348,7 +350,7 @@ export async function deleteContactNote(id: string) {
 // ============================================================================
 
 export async function getContactActivities(params?: Record<string, any>) {
-  return await apiClient.get<{ count: number; results: ContactActivity[]; next?: string; previous?: string }>(
+  return await apiClient.get<PaginatedResponse<ContactActivity>>(
     '/admin-ops/crm/activities/',
     { params }
   )

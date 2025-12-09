@@ -50,7 +50,7 @@ export default function EditOrganizationPage() {
   const router = useRouter()
   const organizationId = params.id as string
   const queryClient = useQueryClient()
-  const { toast } = useToast()
+  
 
   const [formData, setFormData] = useState<Partial<OrganizationFormData>>({})
   const [tagsInput, setTagsInput] = useState('')

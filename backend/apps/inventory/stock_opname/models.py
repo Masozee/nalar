@@ -5,7 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from decimal import Decimal
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 from apps.inventory.sku.models import SKU, Warehouse, StockRecord, StockMovement
 
 
@@ -20,7 +20,7 @@ class OpnameStatus(models.TextChoices):
     CANCELLED = 'cancelled', 'Dibatalkan'
 
 
-class StockOpname(BaseModel, AuditMixin):
+class StockOpname(TenantBaseModel, AuditMixin):
     """
     Stock Opname header - physical inventory count session.
     """
@@ -191,7 +191,7 @@ class StockOpname(BaseModel, AuditMixin):
         self.save(update_fields=['status', 'end_date'])
 
 
-class StockOpnameItem(BaseModel):
+class StockOpnameItem(TenantBaseModel):
     """
     Stock Opname line item - individual SKU count.
     """

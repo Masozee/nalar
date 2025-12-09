@@ -4,7 +4,7 @@ Room Booking models for meeting room and facility reservations.
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class RoomType(models.TextChoices):
@@ -24,7 +24,7 @@ class BookingStatus(models.TextChoices):
     COMPLETED = 'completed', 'Selesai'
 
 
-class Room(BaseModel):
+class Room(TenantBaseModel):
     """Meeting rooms and facilities available for booking."""
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=20, unique=True)
@@ -64,7 +64,7 @@ class Room(BaseModel):
         return f"{self.name} ({self.code})"
 
 
-class RoomBooking(BaseModel, AuditMixin):
+class RoomBooking(TenantBaseModel, AuditMixin):
     """Room reservation records."""
     room = models.ForeignKey(
         Room,

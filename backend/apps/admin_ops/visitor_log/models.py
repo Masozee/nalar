@@ -3,7 +3,7 @@ Visitor Log models for tracking visitors and guest management.
 """
 from django.db import models
 from django.conf import settings
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class VisitPurpose(models.TextChoices):
@@ -33,7 +33,7 @@ class IDType(models.TextChoices):
     OTHER = 'other', 'Lainnya'
 
 
-class Visitor(BaseModel):
+class Visitor(TenantBaseModel):
     """Visitor master data for recurring visitors."""
     name = models.CharField(max_length=200)
     company = models.CharField(max_length=200, blank=True)
@@ -69,7 +69,7 @@ class Visitor(BaseModel):
         return self.name
 
 
-class VisitLog(BaseModel, AuditMixin):
+class VisitLog(TenantBaseModel, AuditMixin):
     """Individual visit records."""
     visitor = models.ForeignKey(
         Visitor,
@@ -187,7 +187,7 @@ class VisitLog(BaseModel, AuditMixin):
         return None
 
 
-class VisitorBadge(BaseModel):
+class VisitorBadge(TenantBaseModel):
     """Visitor badges for tracking."""
     badge_number = models.CharField(max_length=20, unique=True)
     badge_type = models.CharField(max_length=50, default='Visitor')

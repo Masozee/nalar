@@ -43,7 +43,7 @@ export default function EditContactPage() {
   const router = useRouter()
   const contactId = params.id as string
   const queryClient = useQueryClient()
-  const { toast } = useToast()
+  
 
   const [formData, setFormData] = useState<Partial<ContactFormData>>({})
   const [tagsInput, setTagsInput] = useState('')

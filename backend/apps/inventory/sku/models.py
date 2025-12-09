@@ -5,7 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class ItemCategory(models.TextChoices):
@@ -37,7 +37,7 @@ class UnitOfMeasure(models.TextChoices):
     CARTON = 'carton', 'Karton'
 
 
-class SKU(BaseModel, AuditMixin):
+class SKU(TenantBaseModel, AuditMixin):
     """
     Stock Keeping Unit - master data for inventory items.
     """
@@ -173,7 +173,7 @@ class SKU(BaseModel, AuditMixin):
         self.save(update_fields=['current_stock'])
 
 
-class Warehouse(BaseModel):
+class Warehouse(TenantBaseModel):
     """Warehouse/storage location for inventory."""
     code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
@@ -208,7 +208,7 @@ class Warehouse(BaseModel):
         super().save(*args, **kwargs)
 
 
-class StockRecord(BaseModel, AuditMixin):
+class StockRecord(TenantBaseModel, AuditMixin):
     """
     Stock record for tracking inventory quantities per SKU and warehouse.
     """
@@ -255,7 +255,7 @@ class StockRecord(BaseModel, AuditMixin):
         self.sku.update_stock()
 
 
-class StockMovement(BaseModel, AuditMixin):
+class StockMovement(TenantBaseModel, AuditMixin):
     """
     Stock movement history for audit trail.
     """

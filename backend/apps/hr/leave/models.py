@@ -1,5 +1,5 @@
 from django.db import models
-from apps.core.models import BaseModel, AuditMixin
+from apps.core.models import TenantBaseModel, AuditMixin
 
 
 class LeaveType(models.TextChoices):
@@ -21,7 +21,7 @@ class LeaveStatus(models.TextChoices):
     CANCELLED = 'cancelled', 'Dibatalkan'
 
 
-class LeavePolicy(BaseModel):
+class LeavePolicy(TenantBaseModel):
     """Leave policy configuration per year."""
 
     name = models.CharField(max_length=100)
@@ -53,7 +53,7 @@ class LeavePolicy(BaseModel):
         return f"{self.name} - {self.year}"
 
 
-class LeaveBalance(BaseModel):
+class LeaveBalance(TenantBaseModel):
     """Employee leave balance per year."""
 
     employee = models.ForeignKey(
@@ -99,7 +99,7 @@ class LeaveBalance(BaseModel):
         return self.entitled_days + self.carried_over - self.used_days
 
 
-class LeaveRequest(BaseModel, AuditMixin):
+class LeaveRequest(TenantBaseModel, AuditMixin):
     """Employee leave request."""
 
     employee = models.ForeignKey(

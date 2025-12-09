@@ -1,4 +1,5 @@
 import { apiClient } from './client'
+import type { PaginatedResponse } from './types'
 
 // Employee Types
 export interface Employee {
@@ -43,6 +44,9 @@ export interface Employee {
   bank_account_name?: string
   room_number?: string
   phone_extension?: string
+  face_photo?: string
+  face_registered: boolean
+  face_registered_at?: string
   created_at: string
   updated_at: string
 }
@@ -64,6 +68,10 @@ export interface Attendance {
   notes?: string
   check_in_location?: string
   check_out_location?: string
+  check_in_latitude?: string
+  check_in_longitude?: string
+  check_out_latitude?: string
+  check_out_longitude?: string
   created_at: string
   updated_at: string
 }
@@ -243,10 +251,13 @@ export interface SalarySlip {
 // Employee APIs
 export const employeeApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: Employee[], count: number }>('/hr/employees/', params),
+    apiClient.get<PaginatedResponse<Employee>>('/hr/employees/', params),
 
   get: (id: string) =>
     apiClient.get<Employee>(`/hr/employees/${id}/`),
+
+  getCurrentEmployee: () =>
+    apiClient.get<Employee>('/hr/employees/me/'),
 
   create: (data: Partial<Employee>) =>
     apiClient.post<Employee>('/hr/employees/', data),
@@ -256,12 +267,24 @@ export const employeeApi = {
 
   delete: (id: string) =>
     apiClient.delete(`/hr/employees/${id}/`),
+
+  registerMyFace: (facePhoto: File) => {
+    const formData = new FormData()
+    formData.append('face_photo', facePhoto)
+    return apiClient.post<{
+      success: boolean
+      message: string
+      employee: Employee
+    }>('/hr/employees/me/register-face/', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
 }
 
 // Attendance APIs
 export const attendanceApi = {
   list: (params?: Record<string, any>) =>
-    apiClient.get<{ results: Attendance[], count: number }>('/hr/attendance/', params),
+    apiClient.get<PaginatedResponse<Attendance>>('/hr/attendance/', params),
 
   get: (id: string) =>
     apiClient.get<Attendance>(`/hr/attendance/${id}/`),
@@ -282,14 +305,14 @@ export const attendanceApi = {
     apiClient.post(`/hr/attendance/${attendanceId}/check-out/`, data),
 
   summary: (params?: Record<string, any>) =>
-    apiClient.get<{ results: AttendanceSummary[], count: number }>('/hr/attendance-summaries/', params),
+    apiClient.get<PaginatedResponse<AttendanceSummary>>('/hr/attendance-summaries/', params),
 }
 
 // Leave APIs
 export const leaveApi = {
   policies: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: LeavePolicy[], count: number }>('/hr/leave/policies/', params),
+      apiClient.get<PaginatedResponse<LeavePolicy>>('/hr/leave/policies/', params),
 
     get: (id: string) =>
       apiClient.get<LeavePolicy>(`/hr/leave/policies/${id}/`),
@@ -297,7 +320,7 @@ export const leaveApi = {
 
   balances: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: LeaveBalance[], count: number }>('/hr/leave/balances/', params),
+      apiClient.get<PaginatedResponse<LeaveBalance>>('/hr/leave/balances/', params),
 
     get: (id: string) =>
       apiClient.get<LeaveBalance>(`/hr/leave/balances/${id}/`),
@@ -305,7 +328,7 @@ export const leaveApi = {
 
   requests: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: LeaveRequest[], count: number }>('/hr/leave/requests/', params),
+      apiClient.get<PaginatedResponse<LeaveRequest>>('/hr/leave/requests/', params),
 
     get: (id: string) =>
       apiClient.get<LeaveRequest>(`/hr/leave/requests/${id}/`),
@@ -334,7 +357,7 @@ export const leaveApi = {
 export const payrollApi = {
   periods: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: PayrollPeriod[], count: number }>('/hr/payroll/periods/', params),
+      apiClient.get<PaginatedResponse<PayrollPeriod>>('/hr/payroll/periods/', params),
 
     get: (id: string) =>
       apiClient.get<PayrollPeriod>(`/hr/payroll/periods/${id}/`),
@@ -348,7 +371,7 @@ export const payrollApi = {
 
   salarySlips: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: SalarySlip[], count: number }>('/hr/payroll/salary-slips/', params),
+      apiClient.get<PaginatedResponse<SalarySlip>>('/hr/payroll/salary-slips/', params),
 
     get: (id: string) =>
       apiClient.get<SalarySlip>(`/hr/payroll/salary-slips/${id}/`),
@@ -368,7 +391,7 @@ export const payrollApi = {
 export const policyApi = {
   categories: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: PolicyCategory[], count: number }>('/policies/categories/', params),
+      apiClient.get<PaginatedResponse<PolicyCategory>>('/policies/categories/', params),
 
     get: (id: number) =>
       apiClient.get<PolicyCategory>(`/policies/categories/${id}/`),
@@ -376,7 +399,7 @@ export const policyApi = {
 
   policies: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: Policy[], count: number }>('/policies/policies/', params),
+      apiClient.get<PaginatedResponse<Policy>>('/policies/policies/', params),
 
     get: (id: string) =>
       apiClient.get<Policy>(`/policies/policies/${id}/`),
@@ -396,7 +419,7 @@ export const policyApi = {
 
   approvals: {
     list: (params?: Record<string, any>) =>
-      apiClient.get<{ results: PolicyApproval[], count: number }>('/policies/approvals/', params),
+      apiClient.get<PaginatedResponse<PolicyApproval>>('/policies/approvals/', params),
 
     get: (id: string) =>
       apiClient.get<PolicyApproval>(`/policies/approvals/${id}/`),

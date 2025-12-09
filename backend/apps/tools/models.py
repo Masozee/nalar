@@ -6,11 +6,11 @@ import string
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from apps.core.models import BaseModel
+from apps.core.models import TenantBaseModel
 from apps.core.models.audit import AuditMixin
 
 
-class ShortenedURL(BaseModel, AuditMixin):
+class ShortenedURL(TenantBaseModel, AuditMixin):
     """URL Shortener model."""
     original_url = models.URLField(max_length=2048, verbose_name='URL Asli')
     short_code = models.CharField(
@@ -73,7 +73,7 @@ class ShortenedURL(BaseModel, AuditMixin):
         return f"{base}{self.short_code}"
 
 
-class URLClickLog(BaseModel):
+class URLClickLog(TenantBaseModel):
     """Log of URL clicks for analytics."""
     shortened_url = models.ForeignKey(
         ShortenedURL, on_delete=models.CASCADE,
@@ -113,7 +113,7 @@ class URLClickLog(BaseModel):
         return f"Click on {self.shortened_url.short_code} at {self.clicked_at}"
 
 
-class QRCode(BaseModel, AuditMixin):
+class QRCode(TenantBaseModel, AuditMixin):
     """QR Code generation record."""
     class ContentType(models.TextChoices):
         URL = 'url', 'URL'
@@ -159,7 +159,7 @@ class QRCode(BaseModel, AuditMixin):
         return f"QR: {self.title or self.content[:30]}"
 
 
-class CompressedImage(BaseModel, AuditMixin):
+class CompressedImage(TenantBaseModel, AuditMixin):
     """Image compression record."""
     class OutputFormat(models.TextChoices):
         JPEG = 'jpeg', 'JPEG'
@@ -205,7 +205,7 @@ class CompressedImage(BaseModel, AuditMixin):
         return 0
 
 
-class PDFOperation(BaseModel, AuditMixin):
+class PDFOperation(TenantBaseModel, AuditMixin):
     """PDF merge/split operation record."""
     class OperationType(models.TextChoices):
         MERGE = 'merge', 'Gabung'
@@ -245,7 +245,7 @@ class PDFOperation(BaseModel, AuditMixin):
         return f"PDF {self.get_operation_type_display()}: {self.title or self.id}"
 
 
-class PDFInputFile(BaseModel):
+class PDFInputFile(TenantBaseModel):
     """Input files for PDF operations."""
     operation = models.ForeignKey(
         PDFOperation, on_delete=models.CASCADE,

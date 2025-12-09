@@ -99,13 +99,17 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Icon name="BadgeCheck" size={24} />
-                Account
+              <DropdownMenuItem asChild>
+                <a href="/account">
+                  <Icon name="BadgeCheck" size={24} />
+                  Account
+                </a>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Icon name="CreditCard" size={24} />
-                Billing
+              <DropdownMenuItem asChild>
+                <a href="/settings/billing">
+                  <Icon name="CreditCard" size={24} />
+                  Billing
+                </a>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Icon name="Bell" size={24} />
