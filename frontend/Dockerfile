@@ -20,10 +20,10 @@ ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=8192"
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build with verbose logging and error capture
+# Build with verbose logging and error capture (use webpack for stability)
 RUN set -e; \
-    echo "=== Starting Next.js Build ===" && \
-    npm run build 2>&1 | tee /tmp/build.log || { \
+    echo "=== Starting Next.js Build (webpack mode) ===" && \
+    npm run build -- --webpack 2>&1 | tee /tmp/build.log || { \
         echo "=== BUILD FAILED ===" && \
         echo "=== Last 50 lines of build log ===" && \
         tail -50 /tmp/build.log && \

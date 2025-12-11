@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['hugeicons-react', '@tanstack/react-table', '@tanstack/react-query'],
   },
+  // Add empty turbopack config to silence the error and use Turbopack by default
+  turbopack: {},
   webpack: (config, { isServer }) => {
     // Disable problematic packages
     config.resolve.alias = {
