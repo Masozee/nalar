@@ -296,20 +296,20 @@ services:
     networks:
       - nalar_network
 
-  # Promtail (Log Collector)
-  promtail:
-    image: grafana/promtail:latest
-    container_name: nalar_promtail
-    volumes:
-      - ./monitoring/promtail-config.yml:/etc/promtail/config.yml
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: -config.file=/etc/promtail/config.yml
-    depends_on:
-      - loki
-    restart: unless-stopped
-    networks:
-      - nalar_network
+  # Promtail (Log Collector) - DISABLED due to filesystem mount issues
+  # promtail:
+  #   image: grafana/promtail:latest
+  #   container_name: nalar_promtail
+  #   volumes:
+  #     - ./monitoring/promtail-config.yml:/etc/promtail/config.yml
+  #     - /var/lib/docker/containers:/var/lib/docker/containers:ro
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   command: -config.file=/etc/promtail/config.yml
+  #   depends_on:
+  #     - loki
+  #   restart: unless-stopped
+  #   networks:
+  #     - nalar_network
 
 volumes:
   postgres_data:
