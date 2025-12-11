@@ -1,5 +1,5 @@
-# Caddyfile - Reverse Proxy Configuration for Production
-# Set DOMAIN and EMAIL environment variables in .env.production
+# Caddyfile - Reverse Proxy Configuration
+# Works with both domain names and direct IP access
 
 {
     # Admin API configuration for metrics
@@ -10,8 +10,9 @@
 }
 
 # Frontend - Main Application
-{$DOMAIN:localhost} {
-    # Automatic HTTPS with Let's Encrypt (production only)
+# Works with: domain name, localhost, or IP address
+:80, {$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (only when DOMAIN is set)
     {$TLS_CONFIG}
 
     # Reverse proxy to Next.js frontend
@@ -22,8 +23,6 @@
 
     # Security headers
     header {
-        # Enable HSTS
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         # Prevent clickjacking
         X-Frame-Options "SAMEORIGIN"
         # Prevent MIME type sniffing
@@ -42,10 +41,14 @@
     }
 }
 
-# Backend API
-api.{$DOMAIN:localhost} {
-    # Automatic HTTPS with Let's Encrypt (production only)
+# Backend API - Accessible via /api path or api subdomain
+# http://IP/api/* or http://api.domain.com
+:80/api*, api.{$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (only when DOMAIN is set)
     {$TLS_CONFIG}
+
+    # Strip /api prefix if accessing via path
+    uri strip_prefix /api
 
     # Reverse proxy to Django backend
     reverse_proxy backend:8000 {
@@ -60,13 +63,12 @@ api.{$DOMAIN:localhost} {
 
     # Security headers
     header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Frame-Options "SAMEORIGIN"
         X-Content-Type-Options "nosniff"
         -Server
     }
 
-    # CORS headers (if needed for direct API access)
+    # CORS headers
     @options {
         method OPTIONS
     }
@@ -79,19 +81,16 @@ api.{$DOMAIN:localhost} {
 
     # Logging
     log {
-        output file /var/log/caddy/api-access.log {
-            roll_size 100mb
-            roll_keep 5
-            roll_keep_for 720h
-        }
+        output stdout
         format json
         level INFO
     }
 }
 
 # Grafana Monitoring Dashboard
-grafana.{$DOMAIN:localhost} {
-    # Automatic HTTPS with Let's Encrypt (production only)
+# http://IP:3002 or http://grafana.domain.com
+:3002, grafana.{$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (only when DOMAIN is set)
     {$TLS_CONFIG}
 
     # Reverse proxy to Grafana
@@ -102,7 +101,6 @@ grafana.{$DOMAIN:localhost} {
 
     # Security headers
     header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Frame-Options "SAMEORIGIN"
         X-Content-Type-Options "nosniff"
         -Server
@@ -110,10 +108,27 @@ grafana.{$DOMAIN:localhost} {
 
     # Logging
     log {
-        output file /var/log/caddy/grafana-access.log {
-            roll_size 100mb
-            roll_keep 5
-        }
+        output stdout
+        format json
+        level INFO
+    }
+}
+
+# Prometheus Metrics
+# http://IP:9090 or http://prometheus.domain.com
+:9090, prometheus.{$DOMAIN:localhost} {
+    # Automatic HTTPS with Let's Encrypt (only when DOMAIN is set)
+    {$TLS_CONFIG}
+
+    # Reverse proxy to Prometheus
+    reverse_proxy prometheus:9090
+
+    # Enable compression
+    encode gzip
+
+    # Logging
+    log {
+        output stdout
         format json
         level INFO
     }
