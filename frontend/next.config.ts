@@ -23,24 +23,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['hugeicons-react', '@tanstack/react-table', '@tanstack/react-query'],
-  },
-  webpack: (config, { isServer }) => {
-    // Disable problematic packages
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      canvas: false,
-      encoding: false,
-    };
-
-    // Externalize heavy packages for server
-    if (isServer) {
-      config.externals = config.externals || [];
-      if (Array.isArray(config.externals)) {
-        config.externals.push('pdfjs-dist', 'canvas');
-      }
-    }
-
-    return config;
+    // Disable turbopack for production builds
+    turbo: undefined,
   },
 };
 
