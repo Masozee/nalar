@@ -119,6 +119,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        BACKEND_URL: ${BACKEND_URL:-http://localhost:8000}
+        FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
     container_name: nalar_frontend
     environment:
       - NODE_ENV=production

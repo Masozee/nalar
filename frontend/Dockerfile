@@ -15,11 +15,17 @@ RUN npm ci --prefer-offline --no-audit --legacy-peer-deps
 # Copy source and build
 COPY . .
 
+# Accept build arguments for Next.js public env vars
+ARG BACKEND_URL=http://localhost:8000
+ARG FRONTEND_URL=http://localhost:3000
+
 # Set environment variables for build
 ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=8192"
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBOPACK=0
+ENV BACKEND_URL=${BACKEND_URL}
+ENV FRONTEND_URL=${FRONTEND_URL}
 
 # Build with verbose logging and error capture
 RUN set -e; \
