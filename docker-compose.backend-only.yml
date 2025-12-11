@@ -1,0 +1,150 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:17-alpine
+    container_name: nalar_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nalar}
+      POSTGRES_USER: ${POSTGRES_USER:-nalar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nalar_secret}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:-nalar}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # PgBouncer (PostgreSQL Connection Pooler)
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: nalar_pgbouncer
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER:-nalar}:${POSTGRES_PASSWORD:-nalar_secret}@postgres:5432/${POSTGRES_DB:-nalar}
+      - POOL_MODE=transaction
+      - MAX_CLIENT_CONN=1000
+      - DEFAULT_POOL_SIZE=25
+      - RESERVE_POOL_SIZE=5
+      - SERVER_IDLE_TIMEOUT=600
+      - MAX_DB_CONNECTIONS=100
+      - MAX_USER_CONNECTIONS=100
+      - STATS_USERS=${POSTGRES_USER:-nalar}
+      - ADMIN_USERS=${POSTGRES_USER:-nalar}
+      - AUTH_TYPE=scram-sha-256
+    ports:
+      - "${PGBOUNCER_PORT:-6432}:5432"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - nalar_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "localhost", "-p", "5432", "-U", "${POSTGRES_USER:-nalar}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache & Session Store
+  redis:
+    image: redis:8-alpine
+    container_name: nalar_redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-nalar_redis_secret}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Django Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nalar_backend
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.prod
+      - DEBUG=${DEBUG:-False}
+      - DJANGO_SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
+      - DJANGO_ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,backend}
+      - DB_HOST=pgbouncer
+      - DB_NAME=${POSTGRES_DB:-nalar}
+      - DB_USER=${POSTGRES_USER:-nalar}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-nalar_secret_change_in_production}
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nalar}:${POSTGRES_PASSWORD:-nalar_secret_change_in_production}@pgbouncer:5432/${POSTGRES_DB:-nalar}
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-nalar_redis_secret}@redis:6379/0
+      - CORS_ALLOW_ALL=${CORS_ALLOW_ALL:-True}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+      - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY:-rustfsadmin}
+      - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY:-rustfsadmin}
+      - RUSTFS_ENDPOINT_INTERNAL=${RUSTFS_ENDPOINT_INTERNAL:-http://rustfs:9000}
+      - RUSTFS_MEDIA_BUCKET=${RUSTFS_MEDIA_BUCKET:-nalar-media}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REKOGNITION_REGION=${AWS_REKOGNITION_REGION:-us-east-1}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/media:/app/media
+      - ./backend/staticfiles:/app/staticfiles
+    depends_on:
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # RustFS Object Storage (S3-compatible)
+  rustfs:
+    image: rustfs/rustfs:latest
+    container_name: nalar_rustfs
+    environment:
+      - RUSTFS_ROOT_USER=${RUSTFS_ROOT_USER:-rustfsadmin}
+      - RUSTFS_ROOT_PASSWORD=${RUSTFS_ROOT_PASSWORD:-rustfsadmin}
+      - MINIO_PROMETHEUS_AUTH_TYPE=public
+    ports:
+      - "9000:9000"  # S3 API
+      - "9001:9001"  # Console
+    volumes:
+      - rustfs_data:/data
+      - rustfs_logs:/logs
+    restart: unless-stopped
+    networks:
+      - nalar_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  rustfs_data:
+    driver: local
+  rustfs_logs:
+    driver: local
+
+networks:
+  nalar_network:
+    driver: bridge
