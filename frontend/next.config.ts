@@ -26,8 +26,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Turbopack configuration for faster builds
-  turbopack: {},
   experimental: {
     optimizePackageImports: ['hugeicons-react', '@tanstack/react-table', '@tanstack/react-query'],
   },
