@@ -20,8 +20,8 @@ ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=8192"
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Force webpack mode (more stable than turbopack for production builds)
-RUN npm run build -- --webpack
+# Build with webpack (no turbopack)
+RUN npm run build
 
 # Production image
 FROM node:23-alpine AS runner
