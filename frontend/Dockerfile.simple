@@ -37,13 +37,16 @@ RUN npm install -g pm2@latest
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copy everything needed
-COPY --from=builder --chown=nextjs:nodejs /app/package*.json ./
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./
-COPY --chown=nextjs:nodejs ecosystem.config.js ./
+# Copy everything needed (non-standalone build doesn't have server.js)
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.ts ./
+COPY ecosystem.config.js ./
+
+# Set ownership
+RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 

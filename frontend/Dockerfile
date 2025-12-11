@@ -56,15 +56,26 @@ RUN addgroup --system --gid 1001 nodejs && \
 # Copy built application
 COPY --from=builder /app/public ./public
 
-# Copy standalone output - this should exist after successful build
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Copy standalone output - this includes server.js
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# The standalone build puts server.js inside .next/standalone/
+# We need to copy it to /app/server.js for PM2 to find it
+RUN if [ -f "server.js" ]; then \
+        echo "✓ server.js found at /app/server.js"; \
+    else \
+        echo "⚠ No server.js found, will use npm start fallback"; \
+    fi
 
 # Copy package files and node_modules as fallback
-COPY --from=builder --chown=nextjs:nodejs /app/package*.json ./
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
 
-COPY --chown=nextjs:nodejs ecosystem.config.js ./
+COPY ecosystem.config.js ./
+
+# Set ownership after all files are copied
+RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
