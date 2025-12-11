@@ -1,0 +1,29 @@
+# Dead simple production Dockerfile - no fancy optimizations
+FROM node:23-alpine
+
+WORKDIR /app
+
+# Install PM2
+RUN npm install -g pm2@latest
+
+# Copy everything
+COPY package.json package-lock.json ./
+RUN npm ci --legacy-peer-deps
+
+COPY . .
+
+# Build (force webpack, disable turbopack)
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm run build
+
+# Create user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs && \
+    chown -R nextjs:nodejs /app
+
+USER nextjs
+EXPOSE 3000
+ENV PORT=3000
+
+CMD ["pm2-runtime", "start", "ecosystem.config.js"]
