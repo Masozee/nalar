@@ -81,12 +81,19 @@ echo "Logs will be saved to: $BUILD_LOG"
 echo ""
 
 if docker compose build --no-cache --progress=plain frontend 2>&1 | tee "$BUILD_LOG"; then
-    echo ""
-    echo -e "${GREEN}✓ Frontend build completed successfully${NC}"
-    BUILD_SUCCESS=true
+    # Double-check that build actually succeeded by looking for errors in log
+    if grep -q "failed to solve\|exit code: 1\|ERROR:" "$BUILD_LOG"; then
+        echo ""
+        echo -e "${RED}✗ Frontend build failed (errors detected in log)${NC}"
+        BUILD_SUCCESS=false
+    else
+        echo ""
+        echo -e "${GREEN}✓ Frontend build completed successfully${NC}"
+        BUILD_SUCCESS=true
+    fi
 else
     echo ""
-    echo -e "${RED}✗ Frontend build failed${NC}"
+    echo -e "${RED}✗ Frontend build failed (docker command failed)${NC}"
     BUILD_SUCCESS=false
 fi
 
@@ -129,6 +136,21 @@ if [ "$BUILD_SUCCESS" = false ]; then
         echo "Solutions:"
         echo "1. Clean up Docker: docker system prune -a"
         echo "2. Free up disk space"
+        echo ""
+    fi
+
+    if grep -q "exit code: 1" "$BUILD_LOG" && grep -q ".next/standalone.*not found" "$BUILD_LOG"; then
+        echo -e "${RED}Issue: Standalone Build Failing${NC}"
+        echo "Next.js is crashing before creating standalone output"
+        echo ""
+        echo "Solutions:"
+        echo "1. Switch to simple Dockerfile (RECOMMENDED):"
+        echo "   cd frontend && mv Dockerfile Dockerfile.standalone.backup && mv Dockerfile.simple Dockerfile"
+        echo ""
+        echo "2. Check for out of memory:"
+        echo "   grep -i 'memory\|heap\|oom' $BUILD_LOG"
+        echo ""
+        echo "3. Add more swap if needed"
         echo ""
     fi
 
