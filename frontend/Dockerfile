@@ -7,12 +7,13 @@ WORKDIR /app
 
 # Install dependencies only when needed
 COPY package.json package-lock.json* ./
-RUN npm ci --prefer-offline --no-audit
+RUN npm ci --prefer-offline --no-audit --legacy-peer-deps 2>&1 | tee npm-install.log
 
 # Copy source and build
 COPY . .
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN npm run build
+ENV NODE_OPTIONS="--max-old-space-size=8192"
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm run build 2>&1 | tee build.log || (echo "=== Build Failed ===" && cat build.log && exit 1)
 
 # Production stage
 FROM node:22-alpine AS runner
