@@ -18,11 +18,11 @@ echo "Redis started"
 # Run migrations (skip if SKIP_MIGRATIONS=1)
 if [ "${SKIP_MIGRATIONS}" != "1" ]; then
     echo "Running migrations..."
-    python manage.py migrate --noinput || echo "Migration failed, continuing..."
+    /app/.venv/bin/python manage.py migrate --noinput || echo "Migration failed, continuing..."
 
     # Collect static files
     echo "Collecting static files..."
-    python manage.py collectstatic --noinput || echo "Static collection failed, continuing..."
+    /app/.venv/bin/python manage.py collectstatic --noinput || echo "Static collection failed, continuing..."
 else
     echo "Skipping migrations (SKIP_MIGRATIONS=1)"
 fi
