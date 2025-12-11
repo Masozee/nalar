@@ -1,8 +1,5 @@
-# Use .env.production file for production environment variables
-# If .env.production doesn't exist, will fall back to .env
-# Create .env.production from .env.production.example and update values
-env_file:
-  - .env.production
+# Docker Compose automatically loads .env file from the same directory
+# Copy .env.production to .env and edit with your server IP before deploying
 
 services:
   # PostgreSQL Database
