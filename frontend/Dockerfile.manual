@@ -1,0 +1,39 @@
+# Dockerfile that mimics manual build process
+# Single-stage, simple, no optimizations
+
+FROM node:23-alpine
+
+WORKDIR /app
+
+# Install PM2 globally
+RUN npm install -g pm2@latest
+
+# Create user first
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install dependencies
+RUN npm ci --legacy-peer-deps
+
+# Copy all source files
+COPY . .
+
+# Build (same as manual: npm run build)
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm run build
+
+# Set ownership
+RUN chown -R nextjs:nodejs /app
+
+# Switch to non-root user
+USER nextjs
+
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["pm2-runtime", "start", "ecosystem.config.js"]
