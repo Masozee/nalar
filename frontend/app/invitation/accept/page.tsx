@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Icon } from "@/components/ui/icon"
@@ -12,7 +12,9 @@ import { useMutation } from "@tanstack/react-query"
 import { invitationApi } from "@/lib/api/tenants"
 import { toast } from "sonner"
 
-export default function AcceptInvitationPage() {
+export const dynamic = 'force-dynamic'
+
+function AcceptInvitationContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const invitationToken = searchParams.get("token")
@@ -233,5 +235,17 @@ export default function AcceptInvitationPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AcceptInvitationPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-black">
+        <Icon name="Loader2" className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    }>
+      <AcceptInvitationContent />
+    </Suspense>
   )
 }

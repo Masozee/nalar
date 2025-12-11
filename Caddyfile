@@ -1,6 +1,14 @@
 # Caddyfile - Reverse Proxy Configuration for Production
 # Set DOMAIN and EMAIL environment variables in .env.production
 
+{
+    # Admin API configuration for metrics
+    admin :2019
+    servers {
+        metrics
+    }
+}
+
 # Frontend - Main Application
 {$DOMAIN:localhost} {
     # Automatic HTTPS with Let's Encrypt (production only)

@@ -12,9 +12,9 @@ global:
 #     - static_configs:
 #         - targets: ['alertmanager:9093']
 
-# Rule files (optional)
-# rule_files:
-#   - "alerts/*.yml"
+# Rule files
+rule_files:
+  - "alerts/*.yml"
 
 # Scrape configurations
 scrape_configs:
@@ -49,7 +49,7 @@ scrape_configs:
           service: 'cache'
           db: 'redis'
 
-  # Caddy Exporter - Web server metrics (if enabled)
+  # Caddy Exporter - Web server metrics
   - job_name: 'caddy'
     static_configs:
       - targets: ['caddy:2019']
@@ -57,22 +57,76 @@ scrape_configs:
           service: 'webserver'
     metrics_path: /metrics
 
-  # Django Backend - Application metrics (if you add prometheus_client)
-  - job_name: 'backend'
+  # Blackbox Exporter - Service health probes
+  - job_name: 'blackbox'
     static_configs:
-      - targets: ['backend:8000']
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          service: 'blackbox'
+
+  # Django Backend - Health check probe
+  - job_name: 'backend'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        - http://backend:8000/api/v1/health/
         labels:
           service: 'backend'
           app: 'django'
-    metrics_path: /metrics
-    scrape_interval: 30s
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
 
-  # Next.js Frontend - Application metrics (if you add prometheus integration)
+  # Next.js Frontend - Health check probe
   - job_name: 'frontend'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
     static_configs:
-      - targets: ['frontend:3000']
+      - targets:
+        - http://frontend:3000/
         labels:
           service: 'frontend'
           app: 'nextjs'
-    metrics_path: /api/metrics
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # RustFS Object Storage - Health check probe
+  - job_name: 'rustfs'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        - http://rustfs:9000/minio/health/live
+        labels:
+          service: 'storage'
+          app: 's3'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # RustFS Metrics - Storage and API metrics
+  - job_name: 'rustfs-metrics'
+    static_configs:
+      - targets: ['rustfs:9000']
+        labels:
+          service: 'storage'
+          app: 's3'
+    metrics_path: /minio/v2/metrics/cluster
     scrape_interval: 30s

@@ -1,7 +1,7 @@
 services:
   # PostgreSQL Database
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     container_name: nalar_db
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-nalar}
@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nalar}"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:-nalar}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -20,9 +20,39 @@ services:
     networks:
       - nalar_network
 
+  # PgBouncer (PostgreSQL Connection Pooler)
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: nalar_pgbouncer
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER:-nalar}:${POSTGRES_PASSWORD:-nalar_secret}@postgres:5432/${POSTGRES_DB:-nalar}
+      - POOL_MODE=transaction
+      - MAX_CLIENT_CONN=1000
+      - DEFAULT_POOL_SIZE=25
+      - RESERVE_POOL_SIZE=5
+      - SERVER_IDLE_TIMEOUT=600
+      - MAX_DB_CONNECTIONS=100
+      - MAX_USER_CONNECTIONS=100
+      - STATS_USERS=${POSTGRES_USER:-nalar}
+      - ADMIN_USERS=${POSTGRES_USER:-nalar}
+      - AUTH_TYPE=scram-sha-256
+    ports:
+      - "${PGBOUNCER_PORT:-6432}:5432"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - nalar_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "localhost", "-p", "5432", "-U", "${POSTGRES_USER:-nalar}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # Redis Cache & Session Store
   redis:
-    image: redis:7-alpine
+    image: redis:8-alpine
     container_name: nalar_redis
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-nalar_redis_secret}
     ports:
@@ -49,13 +79,13 @@ services:
       - DEBUG=${DEBUG:-False}
       - DJANGO_SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
       - DJANGO_ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,backend}
-      - DB_HOST=postgres
+      - DB_HOST=pgbouncer
       - DB_NAME=${POSTGRES_DB:-nalar}
       - DB_USER=${POSTGRES_USER:-nalar}
       - DB_PASSWORD=${POSTGRES_PASSWORD:-nalar_secret_change_in_production}
       - DB_PORT=5432
       - REDIS_HOST=redis
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-nalar}:${POSTGRES_PASSWORD:-nalar_secret_change_in_production}@postgres:5432/${POSTGRES_DB:-nalar}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nalar}:${POSTGRES_PASSWORD:-nalar_secret_change_in_production}@pgbouncer:5432/${POSTGRES_DB:-nalar}
       - REDIS_URL=redis://:${REDIS_PASSWORD:-nalar_redis_secret}@redis:6379/0
       - CORS_ALLOW_ALL=${CORS_ALLOW_ALL:-True}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
@@ -73,7 +103,7 @@ services:
       - ./backend/media:/app/media
       - ./backend/staticfiles:/app/staticfiles
     depends_on:
-      postgres:
+      pgbouncer:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -91,8 +121,8 @@ services:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=http://localhost:${BACKEND_PORT:-8000}/api/v1
       - NEXT_PUBLIC_FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
-    expose:
-      - "3000"
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
     depends_on:
       - backend
     restart: unless-stopped
@@ -136,6 +166,7 @@ services:
       - "9090:9090"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/alerts:/etc/prometheus/alerts
       - prometheus_data:/prometheus
     restart: unless-stopped
     networks:
@@ -148,12 +179,14 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
-      - GF_SERVER_ROOT_URL=${GRAFANA_URL:-http://localhost:3001}
+      - GF_SERVER_ROOT_URL=${GRAFANA_URL:-http://localhost:3002}
     ports:
-      - "3001:3000"
+      - "${GRAFANA_PORT:-3002}:3000"
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./monitoring/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/provider.yml
+      - ./monitoring/dashboards:/var/lib/grafana/dashboards
     depends_on:
       - prometheus
     restart: unless-stopped
@@ -208,6 +241,20 @@ services:
     networks:
       - nalar_network
 
+  # Blackbox Exporter (Health Check Probes)
+  blackbox-exporter:
+    image: prom/blackbox-exporter:latest
+    container_name: nalar_blackbox_exporter
+    volumes:
+      - ./monitoring/blackbox.yml:/etc/blackbox_exporter/config.yml
+    command:
+      - '--config.file=/etc/blackbox_exporter/config.yml'
+    expose:
+      - "9115"
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
   # RustFS Object Storage (S3-compatible)
   rustfs:
     image: rustfs/rustfs:latest
@@ -215,6 +262,7 @@ services:
     environment:
       - RUSTFS_ROOT_USER=${RUSTFS_ROOT_USER:-rustfsadmin}
       - RUSTFS_ROOT_PASSWORD=${RUSTFS_ROOT_PASSWORD:-rustfsadmin}
+      - MINIO_PROMETHEUS_AUTH_TYPE=public
     ports:
       - "9000:9000"  # S3 API
       - "9001:9001"  # Console
@@ -230,6 +278,35 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
+
+  # Loki (Log Aggregation)
+  loki:
+    image: grafana/loki:latest
+    container_name: nalar_loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./monitoring/loki-config.yml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+    restart: unless-stopped
+    networks:
+      - nalar_network
+
+  # Promtail (Log Collector)
+  promtail:
+    image: grafana/promtail:latest
+    container_name: nalar_promtail
+    volumes:
+      - ./monitoring/promtail-config.yml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+    networks:
+      - nalar_network
 
 volumes:
   postgres_data:
@@ -247,6 +324,8 @@ volumes:
   rustfs_data:
     driver: local
   rustfs_logs:
+    driver: local
+  loki_data:
     driver: local
 
 networks:

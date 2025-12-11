@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Build stage
-FROM node:22-alpine AS builder
+FROM node:23-alpine AS builder
 
 WORKDIR /app
 
@@ -40,7 +40,7 @@ RUN set -e; \
     echo "=== Standalone build verified successfully ==="
 
 # Production stage
-FROM node:22-alpine AS runner
+FROM node:23-alpine AS runner
 
 WORKDIR /app
 

@@ -1,0 +1,65 @@
+groups:
+  - name: rustfs_storage_alerts
+    interval: 30s
+    rules:
+      # Storage capacity alerts
+      - alert: StorageAlmostFull
+        expr: |
+          (sum(minio_cluster_capacity_usable_total_bytes) - sum(minio_cluster_capacity_usable_free_bytes))
+          / sum(minio_cluster_capacity_usable_total_bytes) > 0.80
+        for: 5m
+        labels:
+          severity: warning
+          service: storage
+        annotations:
+          summary: "RustFS storage is almost full"
+          description: "Storage usage is {{ $value | humanizePercentage }}. Less than 20% free space remaining."
+
+      - alert: StorageCriticallyFull
+        expr: |
+          (sum(minio_cluster_capacity_usable_total_bytes) - sum(minio_cluster_capacity_usable_free_bytes))
+          / sum(minio_cluster_capacity_usable_total_bytes) > 0.90
+        for: 5m
+        labels:
+          severity: critical
+          service: storage
+        annotations:
+          summary: "RustFS storage is critically full"
+          description: "Storage usage is {{ $value | humanizePercentage }}. Less than 10% free space remaining. Immediate action required!"
+
+      # API error rate alerts
+      - alert: HighS3ErrorRate
+        expr: |
+          rate(minio_s3_requests_errors_total[5m]) / rate(minio_s3_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: storage
+        annotations:
+          summary: "High S3 API error rate"
+          description: "S3 API error rate is {{ $value | humanizePercentage }} (> 5%)."
+
+      # Service availability alerts
+      - alert: RustFSDown
+        expr: up{job="rustfs"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: storage
+        annotations:
+          summary: "RustFS is down"
+          description: "RustFS storage service has been down for more than 1 minute."
+
+      # Bucket growth alerts
+      - alert: RapidStorageGrowth
+        expr: |
+          (sum(minio_cluster_capacity_usable_total_bytes) - sum(minio_cluster_capacity_usable_free_bytes)
+          - (sum(minio_cluster_capacity_usable_total_bytes) - sum(minio_cluster_capacity_usable_free_bytes) offset 1h))
+          / (sum(minio_cluster_capacity_usable_total_bytes) - sum(minio_cluster_capacity_usable_free_bytes) offset 1h) > 0.20
+        for: 10m
+        labels:
+          severity: warning
+          service: storage
+        annotations:
+          summary: "Rapid storage growth detected"
+          description: "Storage usage increased by more than 20% in the last hour."
