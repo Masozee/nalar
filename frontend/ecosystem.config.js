@@ -2,7 +2,9 @@ module.exports = {
   apps: [
     {
       name: 'nalar-frontend',
-      script: './server.js',
+      // Use server.js if it exists (standalone mode), otherwise use next start
+      script: require('fs').existsSync('./server.js') ? './server.js' : 'npm',
+      args: require('fs').existsSync('./server.js') ? undefined : 'start',
       instances: 'max',
       exec_mode: 'cluster',
       env: {
