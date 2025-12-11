@@ -1,3 +1,9 @@
+# Use .env.production file for production environment variables
+# If .env.production doesn't exist, will fall back to .env
+# Create .env.production from .env.production.example and update values
+env_file:
+  - .env.production
+
 services:
   # PostgreSQL Database
   postgres:
