@@ -48,7 +48,7 @@ class TenantMiddleware(MiddlewareMixin):
         if len(subdomain_parts) > 2:  # subdomain.nalar.app
             subdomain = subdomain_parts[0]
             try:
-                tenant = Tenant.objects.get(subdomain=subdomain, is_active=True)
+                tenant = Tenant.objects.get(subdomain=subdomain, status='active')
             except Tenant.DoesNotExist:
                 pass
 
