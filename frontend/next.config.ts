@@ -1,9 +1,4 @@
 import type { NextConfig } from "next";
-import path from "path";
-import dotenv from "dotenv";
-
-// Load .env from project root (parent of frontend)
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -30,13 +25,19 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['hugeicons-react', '@tanstack/react-table', '@tanstack/react-query'],
   },
   webpack: (config, { isServer }) => {
-    config.resolve.alias.canvas = false;
-    config.resolve.alias.encoding = false;
+    // Disable problematic packages
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      canvas: false,
+      encoding: false,
+    };
 
-    // Exclude pdfjs-dist from server-side rendering
+    // Externalize heavy packages for server
     if (isServer) {
       config.externals = config.externals || [];
-      config.externals.push('pdfjs-dist');
+      if (Array.isArray(config.externals)) {
+        config.externals.push('pdfjs-dist', 'canvas');
+      }
     }
 
     return config;

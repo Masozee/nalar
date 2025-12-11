@@ -20,11 +20,24 @@ ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=8192"
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build with verbose logging
-RUN npm run build && \
+# Build with verbose logging and error capture
+RUN set -e; \
+    echo "=== Starting Next.js Build ===" && \
+    npm run build 2>&1 | tee /tmp/build.log || { \
+        echo "=== BUILD FAILED ===" && \
+        echo "=== Last 50 lines of build log ===" && \
+        tail -50 /tmp/build.log && \
+        exit 1; \
+    } && \
+    echo "=== Build completed, checking output ===" && \
     ls -la .next/ && \
-    echo "Checking standalone output..." && \
-    ls -la .next/standalone/ || echo "No standalone directory found"
+    if [ ! -d ".next/standalone" ]; then \
+        echo "ERROR: .next/standalone directory not found!" && \
+        echo "Contents of .next:" && \
+        ls -la .next/ && \
+        exit 1; \
+    fi && \
+    echo "=== Standalone build verified successfully ==="
 
 # Production stage
 FROM node:22-alpine AS runner
